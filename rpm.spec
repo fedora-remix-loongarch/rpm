@@ -1,9 +1,6 @@
 %define with_python_version     2.5%{nil}
 %define with_apidocs            1%{nil}
 
-# XXX legacy requires './' payload prefix to be omitted from rpm packages.
-%define _noPayloadPrefix        1
-
 %define __prefix        %{?_prefix}%{!?_prefix:/usr}
 %{?!_lib: %define _lib lib}
 %{expand: %%define __share %(if [ -d %{__prefix}/share/man ]; then echo /share ; else echo %%{nil} ; fi)}
@@ -15,64 +12,33 @@
 
 Summary: The RPM package management system
 Name: rpm
-Version: 4.4.2
+Version: 4.4.2.1
 %{expand: %%define rpm_version %{version}}
-Release: 46%{?dist}
+Release: 1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source: rpm-%{rpm_version}.tar.gz
-Source1: mono-find-provides
-Source2: mono-find-requires
-Patch0: rpm-4.4.1-hkp-disable.patch
-Patch1: rpm-4.4.1-fileconflicts.patch 
-Patch2: rpm-4.4.1-prereq.patch
-Patch3: rpm-4.4.1-nonmerged.patch
-Patch4: rpm-4.4.1-prepostun.patch
-Patch5: rpm-4.4.1-ordererase.patch
+Patch1: rpm-4.4.1-prereq.patch
+Patch2: rpm-4.4.2-ghost-conflicts.patch
+Patch3: rpm-4.4.2-trust.patch
+Patch4: rpm-4.4.2-devel-autodep.patch
+Patch5: rpm-4.4.2-rpmfc-skip.patch
 Patch6: rpm-4.4.2-matchpathcon.patch
-Patch7: rpm-4.4.2-perlreq.patch
-Patch8: rpm-4.4.2-db3-param.patch
-Patch9: rpm-4.4.2-contextverify.patch
-Patch10: rpm-4.4.2-popt-charset.patch
-Patch11: rpm-4.4.2-ghost-conflicts.patch
-Patch12: rpm-4.4.2-exclude.patch
-Patch13: rpm-4.4.2-excluded-size.patch
-Patch14: rpm-4.4.2-cronpath.patch
-Patch15: rpm-4.4.2-mono.patch
-Patch16: rpm-4.4.2-file-softmagic.patch
-Patch17: rpm-4.4.2-no-large-mmap.patch
-Patch18: rpm-4.4.2-perlmainprov.patch
-Patch19: rpm-4.4.2-rpmsq-deadlock.patch
-Patch20: rpm-4.4.2-netsharedpath.patch
-Patch21: rpm-4.4.2-userlock.patch
-Patch22: rpm-4.4.2-vercmp.patch
-Patch23: rpm-4.4.2-doxy.patch
-Patch24: rpm-4.4.2-trust.patch
-Patch25: rpm-4.4.2-devel-autodep.patch
-Patch26: rpm-4.4.2-rpmfc-skip.patch
-Patch27: rpm-4.4.2-noselinux-verify.patch
-Patch28: rpm-4.4.2-python-aslist.patch
-Patch29: rpm-4.4.2-rpmio-ipv6.patch
-Patch30: rpm-4.4.2-gnuhash.patch
-Patch31: rpm-4.4.2-debugedit-ppc-reloc.patch
-Patch32: rpm-4.4.2-debugpaths.patch
-Patch33: rpm-4.4.2-transaction-order.patch
-Patch34: rpm-4.4.2-debugopt.patch
-Patch35: rpm-4.4.2-query-flushbuffer.patch
-Patch36: rpm-4.4.2-unicodekey.patch
-Patch37: rpm-4.4.2-noneon.patch
-Patch38: rpm-4.4.2-debugedit-canonicalize-path.patch
-Patch39: rpm-4.4.2-no-ppc-asm.patch
-Patch40: rpm-4.4.2-forkfailed.patch
-Patch41: rpm-4.4.2-cdiff.patch
-Patch42: rpm-4.4.2-docflags.patch
-Patch43: rpm-debugedit-incremental-fix.patch
-Patch44: rpm-4.4.2-prefer-elf32.patch
-License: GPL
-Requires: patch > 2.5
-Prereq: shadow-utils
-Requires: popt = 1.10.2
+Patch7: rpm-4.4.2.1-checksignals.patch
+Patch8: rpm-4.4.2.1-checkterminate.patch
+Patch9: rpm-4.4.2.1-python-exithook.patch
+Patch10: rpm-4.4.2.1-checkterminate-noexit.patch
+Patch11: rpm-4.4.2.1-config-mtime.patch
+Patch12: rpm-4.4.2.1-strict-docdir.patch
+# XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
+# and several different components with their own licenses included...
+License: (GPLv2 and LGPLv2 with exceptions) and BSD and MIT and Sleepycat
+Requires(pre): shadow-utils
+Requires(postun): shadow-utils
+Requires(post): coreutils
+Requires: popt >= 1.10.2.1
 Requires: crontabs
+Requires: logrotate
 
 BuildRequires: autoconf
 BuildRequires: elfutils-devel >= 0.112
@@ -90,8 +56,9 @@ BuildRequires: libselinux-devel
 BuildRequires: ncurses-devel
 BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: python-devel >= %{with_python_version}
+BuildRequires: doxygen
 
-BuildRoot: %{_tmppath}/%{name}-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 The RPM Package Manager (RPM) is a powerful command line driven
@@ -103,7 +70,7 @@ the package like its version, a description, etc.
 %package libs
 Summary:  Libraries for manipulating RPM packages
 Group: Development/Libraries
-Requires: rpm = %{rpm_version}-%{release}
+Requires: rpm = %{version}-%{release}
 
 %description libs
 This package contains the RPM shared libraries.
@@ -111,7 +78,7 @@ This package contains the RPM shared libraries.
 %package devel
 Summary:  Development files for manipulating RPM packages
 Group: Development/Libraries
-Requires: rpm = %{rpm_version}-%{release}
+Requires: rpm = %{version}-%{release}
 Requires: beecrypt >= 4.1.2
 Requires: sqlite-devel
 Requires: libselinux-devel
@@ -131,7 +98,8 @@ will manipulate RPM packages and databases.
 %package build
 Summary: Scripts and executable programs used to build packages
 Group: Development/Tools
-Requires: rpm = %{rpm_version}-%{release}, patch >= 2.5, file, elfutils
+Requires: rpm = %{version}-%{release}, patch >= 2.5, file
+Requires: elfutils >= 0.128
 Requires: findutils
 Provides: rpmbuild(VendorConfig) = 4.1-1
 
@@ -142,7 +110,7 @@ that are used to build packages using the RPM Package Manager.
 %package python
 Summary: Python bindings for apps which will manipulate RPM packages
 Group: Development/Libraries
-Requires: rpm = %{rpm_version}-%{release}
+Requires: rpm = %{version}-%{release}
 
 %description python
 The rpm-python package contains a module that permits applications
@@ -155,7 +123,8 @@ programs that will manipulate RPM packages and databases.
 %package -n popt
 Summary: A C library for parsing command line parameters
 Group: Development/Libraries
-Version: 1.10.2
+Version: 1.10.2.1
+License: MIT
 
 %description -n popt
 Popt is a C library for parsing command line parameters. Popt was
@@ -168,55 +137,19 @@ functions for parsing arbitrary strings into argv[] arrays using
 shell-like rules.
 
 %prep
-%setup -q
-%patch0 -p1  -b .nohkp
-%patch1 -p1  -b .fileconflicts
-%patch2 -p1  -b .prereq
-%patch3 -p1  -b .rpmal
-%patch4 -p1  -b .prepostun
-%patch5 -p1  -b .ordererase
-# patch 6 moved
-%patch7 -p1  -b .perlreq
-%patch8 -p1  -b .param
-%patch10 -p1  -b .charset
-%patch11 -p1  -b .ghostconflicts
-#patch12 -p1  -b .exclude
-%patch13 -p1  -b .excludedsize
-%patch14 -p1  -b .cronpath
-%patch15 -p1  -b .mono
-%patch16 -p1 -b .magic
-%patch17 -p1 -b .no_large_mmap
-%patch18 -p1 -b .perlmainprov
-%patch19 -p1 -b .deadlock
-%patch20 -p1 -b .netsharedpath
-%patch21 -p1 -b .userlock
-%patch22 -p1 -b .vercmp
-%patch23 -p1 -b .doxy
-%patch24 -p1 -b .trust
-%patch25 -p1 -b .develdeps
-%patch26 -p1 -b .fcskip
-%patch27 -p0 -b .nosever
-%patch6 -p1  -b .matchpathcon
-%patch28 -p1 -b .aslist
-%patch29 -p1 -b .ipv6
-%patch30 -p1 -b .gnuhash
-%patch31 -p0 -b .dbgppc
-%patch32 -p1 -b .dbgpaths
-%patch33 -p1 -b .order
-%patch34 -p1 -b .dbgopt
-%patch35 -p1 -b .flush
-%patch36 -p1 -b .unicode
-%patch37 -p1 -b .noneon
-%patch38 -p0 -b .debugcan
-%patch39 -p1 -b .noppcasm
-%patch40 -p0 -b .forkfail
-%patch41 -p1 -b .cdiff
-%patch42 -p1 -b .docflags
-%patch43 -p1 -b .debugcan2
-%patch44 -p1 -b .elfprefer
-
-# rebuild configure for ipv6
-autoconf
+%setup -q -n %{name}-%{rpm_version}
+%patch1 -p1 -b .prereq
+%patch2 -p1 -b .ghostconflicts
+%patch3 -p1 -b .trust
+%patch4 -p1 -b .develdeps
+%patch5 -p1 -b .fcskip
+%patch6 -p1 -b .matchpathcon
+%patch7 -p1 -b .checksignals
+%patch8 -p1 -b .checkterminate
+%patch9 -p1 -b .py-exithook
+%patch10 -p1 -b .checkterminate-noexit
+%patch11 -p1 -b .config-mtime
+%patch12 -p1 -b .strict-docdir
 
 %build
 
@@ -230,8 +163,6 @@ CFLAGS="$RPM_OPT_FLAGS"; export CFLAGS
         --localstatedir=/var --infodir='${prefix}%{__share}/info' \
         --mandir='${prefix}%{__share}/man' \
         $WITH_PYTHON --enable-posixmutexes --without-javaglue
-
-make -C zlib || :
 
 make %{?_smp_mflags}
 
@@ -284,34 +215,28 @@ do
     touch $RPM_BUILD_ROOT/var/lib/rpm/$dbi
 done
 
+%find_lang %{name}
+%find_lang popt
+
+# copy db and file/libmagic license info to distinct names
+cp -p db/LICENSE LICENSE-bdb
+cp -p file/LEGAL.NOTICE LEGAL.NOTICE-file
+cp -p lua/COPYRIGHT COPYRIGHT-lua
+
 # Get rid of unpackaged files
 { cd $RPM_BUILD_ROOT
   rm -f .%{_libdir}/lib*.la
-  rm -f .%{__prefix}/lib/rpm/{Specfile.pm,cpanflute,cpanflute2,rpmdiff,rpmdiff.cgi,sql.prov,sql.req,tcl.req}
+  rm -f .%{__prefix}/lib/rpm/{Specfile.pm,cpanflute,cpanflute2,rpmdiff,rpmdiff.cgi,sql.prov,sql.req,tcl.req,rpm.*}
   rm -rf .%{__mandir}/{fr,ko}
   rm -f .%{__libdir}/python%{with_python_version}/site-packages/*.{a,la}
   rm -f .%{__libdir}/python%{with_python_version}/site-packages/rpm/*.{a,la}
   rm -f .%{__libdir}/python%{with_python_version}/site-packages/rpmdb/*.{a,la}
 }
 
-# Install mono find-provides/requires
-install -m 755 %{SOURCE1} $RPM_BUILD_ROOT/usr/lib/rpm
-install -m 755 %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/rpm
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -f /var/lib/rpm/packages.rpm ]; then
-    echo "
-You have (unsupported)
-        /var/lib/rpm/packages.rpm       db1 format installed package headers
-Please install rpm-4.0.4 first, and do
-        rpm --rebuilddb
-to convert your database from db1 to db3 format.
-"
-    exit 1
-fi
 /usr/sbin/groupadd -g 37 rpm                            > /dev/null 2>&1
 /usr/sbin/useradd  -r -d /var/lib/rpm -u 37 -g 37 rpm -s /sbin/nologin  > /dev/null 2>&1
 exit 0
@@ -349,13 +274,10 @@ exit 0
 
 %define rpmattr         %attr(0755, rpm, rpm)
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc RPM-PGP-KEY RPM-GPG-KEY BETA-GPG-KEY CHANGES GROUPS doc/manual/[a-z]*
-# XXX comment these lines out if building with rpm that knows not %pubkey attr
-%pubkey RPM-PGP-KEY
-%pubkey RPM-GPG-KEY
-%pubkey BETA-GPG-KEY
+%doc CHANGES GROUPS COPYING LICENSE-bdb LEGAL.NOTICE-file CREDITS ChangeLog
+%doc COPYRIGHT-lua doc/manual/[a-z]*
 %attr(0755, rpm, rpm)   /bin/rpm
 
 /etc/cron.daily/rpm
@@ -383,7 +305,6 @@ exit 0
 %rpmattr        %{__prefix}/lib/rpm/freshen.sh
 %attr(0644, rpm, rpm)   %{__prefix}/lib/rpm/macros
 %rpmattr        %{__prefix}/lib/rpm/mkinstalldirs
-%rpmattr        %{__prefix}/lib/rpm/rpm.*
 %rpmattr        %{__prefix}/lib/rpm/rpm2cpio.sh
 %rpmattr        %{__prefix}/lib/rpm/rpm[deiukqv]
 %rpmattr        %{__prefix}/lib/rpm/tgpg
@@ -424,27 +345,6 @@ exit 0
 %rpmattr        %{__prefix}/lib/rpm/rpmdb_*
 %rpmattr        %{__prefix}/lib/rpm/rpmfile
 
-%lang(cs)       %{__prefix}/*/locale/cs/LC_MESSAGES/rpm.mo
-%lang(da)       %{__prefix}/*/locale/da/LC_MESSAGES/rpm.mo
-%lang(de)       %{__prefix}/*/locale/de/LC_MESSAGES/rpm.mo
-%lang(fi)       %{__prefix}/*/locale/fi/LC_MESSAGES/rpm.mo
-%lang(fr)       %{__prefix}/*/locale/fr/LC_MESSAGES/rpm.mo
-%lang(gl)       %{__prefix}/*/locale/gl/LC_MESSAGES/rpm.mo
-%lang(is)       %{__prefix}/*/locale/is/LC_MESSAGES/rpm.mo
-%lang(ja)       %{__prefix}/*/locale/ja/LC_MESSAGES/rpm.mo
-%lang(ko)       %{__prefix}/*/locale/ko/LC_MESSAGES/rpm.mo
-%lang(no)       %{__prefix}/*/locale/no/LC_MESSAGES/rpm.mo
-%lang(pl)       %{__prefix}/*/locale/pl/LC_MESSAGES/rpm.mo
-%lang(pt)       %{__prefix}/*/locale/pt/LC_MESSAGES/rpm.mo
-%lang(pt_BR)    %{__prefix}/*/locale/pt_BR/LC_MESSAGES/rpm.mo
-%lang(ro)       %{__prefix}/*/locale/ro/LC_MESSAGES/rpm.mo
-%lang(ru)       %{__prefix}/*/locale/ru/LC_MESSAGES/rpm.mo
-%lang(sk)       %{__prefix}/*/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sl)       %{__prefix}/*/locale/sl/LC_MESSAGES/rpm.mo
-%lang(sr)       %{__prefix}/*/locale/sr/LC_MESSAGES/rpm.mo
-%lang(sv)       %{__prefix}/*/locale/sv/LC_MESSAGES/rpm.mo
-%lang(tr)       %{__prefix}/*/locale/tr/LC_MESSAGES/rpm.mo
-
 %{__mandir}/man1/gendiff.1*
 %{__mandir}/man8/rpm.8*
 %{__mandir}/man8/rpm2cpio.8*
@@ -471,9 +371,11 @@ exit 0
 %{__prefix}/src/redhat/RPMS/*
 %rpmattr        %{__bindir}/rpmbuild
 %rpmattr        %{__prefix}/lib/rpm/brp-*
+%rpmattr        %{__prefix}/lib/rpm/check-buildroot
 %rpmattr        %{__prefix}/lib/rpm/check-files
 %rpmattr        %{__prefix}/lib/rpm/check-prereqs
-%rpmattr        %{__prefix}/lib/rpm/config.site
+%rpmattr        %{__prefix}/lib/rpm/check-rpaths*
+%attr(0644, rpm, rpm) %{__prefix}/lib/rpm/config.site
 %rpmattr        %{__prefix}/lib/rpm/cross-build
 %rpmattr        %{__prefix}/lib/rpm/debugedit
 %rpmattr        %{__prefix}/lib/rpm/find-debuginfo.sh
@@ -488,10 +390,10 @@ exit 0
 %rpmattr        %{__prefix}/lib/rpm/getpo.sh
 %rpmattr        %{__prefix}/lib/rpm/http.req
 %rpmattr        %{__prefix}/lib/rpm/javadeps
-%rpmattr        %{__prefix}/lib/rpm/magic
-%rpmattr        %{__prefix}/lib/rpm/magic.mgc
-%rpmattr        %{__prefix}/lib/rpm/magic.mime
-%rpmattr        %{__prefix}/lib/rpm/magic.mime.mgc
+%attr(0644, rpm, rpm) %{__prefix}/lib/rpm/magic
+%attr(0644, rpm, rpm) %{__prefix}/lib/rpm/magic.mgc
+%attr(0644, rpm, rpm) %{__prefix}/lib/rpm/magic.mime
+%attr(0644, rpm, rpm) %{__prefix}/lib/rpm/magic.mime.mgc
 %rpmattr        %{__prefix}/lib/rpm/magic.prov
 %rpmattr        %{__prefix}/lib/rpm/magic.req
 %rpmattr        %{__prefix}/lib/rpm/mono-find-provides
@@ -534,40 +436,10 @@ exit 0
 %rpmattr        %{__prefix}/lib/rpm/rpmcache
 %rpmattr        %{__bindir}/rpmgraph
 
-%files -n popt
+%files -n popt -f popt.lang
 %defattr(-,root,root)
 %{__libdir}/libpopt.so.*
 %{__mandir}/man3/popt.3*
-%lang(cs)       %{__prefix}/*/locale/cs/LC_MESSAGES/popt.mo
-%lang(da)       %{__prefix}/*/locale/da/LC_MESSAGES/popt.mo
-%lang(de)       %{__prefix}/*/locale/de/LC_MESSAGES/popt.mo
-%lang(es)       %{__prefix}/*/locale/es/LC_MESSAGES/popt.mo
-%lang(eu_ES)    %{__prefix}/*/locale/eu_ES/LC_MESSAGES/popt.mo
-%lang(fi)       %{__prefix}/*/locale/fi/LC_MESSAGES/popt.mo
-%lang(fr)       %{__prefix}/*/locale/fr/LC_MESSAGES/popt.mo
-%lang(gl)       %{__prefix}/*/locale/gl/LC_MESSAGES/popt.mo
-%lang(hu)       %{__prefix}/*/locale/hu/LC_MESSAGES/popt.mo
-%lang(id)       %{__prefix}/*/locale/id/LC_MESSAGES/popt.mo
-%lang(is)       %{__prefix}/*/locale/is/LC_MESSAGES/popt.mo
-%lang(it)       %{__prefix}/*/locale/it/LC_MESSAGES/popt.mo
-%lang(ja)       %{__prefix}/*/locale/ja/LC_MESSAGES/popt.mo
-%lang(ko)       %{__prefix}/*/locale/ko/LC_MESSAGES/popt.mo
-%lang(no)       %{__prefix}/*/locale/no/LC_MESSAGES/popt.mo
-%lang(pl)       %{__prefix}/*/locale/pl/LC_MESSAGES/popt.mo
-%lang(pt)       %{__prefix}/*/locale/pt/LC_MESSAGES/popt.mo
-%lang(pt_BR)    %{__prefix}/*/locale/pt_BR/LC_MESSAGES/popt.mo
-%lang(ro)       %{__prefix}/*/locale/ro/LC_MESSAGES/popt.mo
-%lang(ru)       %{__prefix}/*/locale/ru/LC_MESSAGES/popt.mo
-%lang(sk)       %{__prefix}/*/locale/sk/LC_MESSAGES/popt.mo
-%lang(sl)       %{__prefix}/*/locale/sl/LC_MESSAGES/popt.mo
-%lang(sr)       %{__prefix}/*/locale/sr/LC_MESSAGES/popt.mo
-%lang(sv)       %{__prefix}/*/locale/sv/LC_MESSAGES/popt.mo
-%lang(tr)       %{__prefix}/*/locale/tr/LC_MESSAGES/popt.mo
-%lang(uk)       %{__prefix}/*/locale/uk/LC_MESSAGES/popt.mo
-%lang(wa)       %{__prefix}/*/locale/wa/LC_MESSAGES/popt.mo
-%lang(zh)       %{__prefix}/*/locale/zh/LC_MESSAGES/popt.mo
-%lang(zh_CN)    %{__prefix}/*/locale/zh_CN/LC_MESSAGES/popt.mo
-%lang(zh_TW)    %{__prefix}/*/locale/zh_TW/LC_MESSAGES/popt.mo
 
 # XXX These may end up in popt-devel but it hardly seems worth the effort.
 %{__libdir}/libpopt.a
@@ -575,6 +447,30 @@ exit 0
 %{__includedir}/popt.h
 
 %changelog
+* Mon Aug 13 2007 Panu Matilainen <pmatilai@redhat.com> - 4.4.2.1-1
+- update to 4.4.2.1 (#247749 and others)
+- drop upstreamed patches and sources
+- loosen up popt-dependency to prepare for splitting it off
+- avoid unnecessary .rpmsave / .rpmnew files by Tomas Mraz (#29470, #128622)
+- stricter docdir checking by Ralf S. Engelschall (#246819)
+- license clarifications
+- include full ChangeLog as doc
+- require logrotate (#248629)
+- allow checking for pending signals from python (#181434)
+- add hook to python for cleaning up on unclean exit (#245389)
+- spec / package (review) cleanups:
+- use find_lang instead of manually listing translations
+- remove useless rpm 3.x upgrade check from preinstall script
+- use Fedora recommended buildroot
+- don't include useless, ancient GPG keys
+- add rpm, db, file and lua licenses to docs
+- use scriptlet dependency markers instead of PreReq
+- post scriptlet requires coreutils
+- main package doesn't require patch, rpm-build does
+- buildrequire doxygen once more to resurrect apidocs
+- remove useless/doubly packaged files from /usr/lib/rpm
+- fix bunch of file permissions
+
 * Tue May 01 2007 Paul Nasrat <pnasrat@redhat.com> - 4.4.2-46
 - Configurable policy for prefered ELF (#235757)
 
