@@ -98,9 +98,10 @@ will manipulate RPM packages and databases.
 %package build
 Summary: Scripts and executable programs used to build packages
 Group: Development/Tools
-Requires: rpm = %{version}-%{release}, patch >= 2.5, file
-Requires: elfutils >= 0.128
-Requires: findutils
+Requires: rpm = %{version}-%{release}
+Requires: elfutils >= 0.128 binutils
+Requires: findutils sed grep gawk diffutils file patch >= 2.5
+Requires: zip gzip bzip2 cpio
 Provides: rpmbuild(VendorConfig) = 4.1-1
 
 %description build
@@ -447,6 +448,9 @@ exit 0
 %{__includedir}/popt.h
 
 %changelog
+* Wed Oct 03 2007 Panu Matilainen <pmatilai@redhat.com> 
+- add bunch of previously implicit dependencies for rpm-build (#316201)
+
 * Mon Aug 13 2007 Panu Matilainen <pmatilai@redhat.com> - 4.4.2.1-1
 - update to 4.4.2.1 (#247749 and others)
 - drop upstreamed patches and sources
