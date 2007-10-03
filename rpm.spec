@@ -12,7 +12,7 @@
 
 Summary: The RPM package management system
 Name: rpm
-Version: 4.4.2.1
+Version: 4.4.2.2
 %{expand: %%define rpm_version %{version}}
 Release: 1%{?dist}
 Group: System Environment/Base
@@ -24,12 +24,6 @@ Patch3: rpm-4.4.2-trust.patch
 Patch4: rpm-4.4.2-devel-autodep.patch
 Patch5: rpm-4.4.2-rpmfc-skip.patch
 Patch6: rpm-4.4.2-matchpathcon.patch
-Patch7: rpm-4.4.2.1-checksignals.patch
-Patch8: rpm-4.4.2.1-checkterminate.patch
-Patch9: rpm-4.4.2.1-python-exithook.patch
-Patch10: rpm-4.4.2.1-checkterminate-noexit.patch
-Patch11: rpm-4.4.2.1-config-mtime.patch
-Patch12: rpm-4.4.2.1-strict-docdir.patch
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
 # and several different components with their own licenses included...
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
@@ -151,12 +145,6 @@ shell-like rules.
 %patch4 -p1 -b .develdeps
 %patch5 -p1 -b .fcskip
 %patch6 -p1 -b .matchpathcon
-%patch7 -p1 -b .checksignals
-%patch8 -p1 -b .checkterminate
-%patch9 -p1 -b .py-exithook
-%patch10 -p1 -b .checkterminate-noexit
-%patch11 -p1 -b .config-mtime
-%patch12 -p1 -b .strict-docdir
 
 %build
 
@@ -187,24 +175,9 @@ rm -rf $RPM_BUILD_ROOT
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 
-# Working around breakage from the -L$(RPM_BUILD_ROOT)... -L$(DESTDIR)...
-# workaround to #132435,
-# and from linking to included zlib
-for i in librpm.la librpmbuild.la librpmdb.la librpmio.la ; do
-        sed -i -e 's~-L'"$RPM_BUILD_ROOT"'[^ ]* ~~g' \
-                -e 's~-L'"$RPM_BUILD_DIR"'[^ ]* ~~g' \
-                "$RPM_BUILD_ROOT%{__libdir}/$i"
-done
-
-# Clean up dangling symlinks
-# XXX Fix in rpm tree
-for i in /usr/bin/rpme /usr/bin/rpmi /usr/bin/rpmu; do
-    rm -f "$RPM_BUILD_ROOT"/"$i" 
-done
-
-# Clean up dangling symlinks
-for i in /usr/lib/rpmpopt /usr/lib/rpmrc; do
-    rm -f "$RPM_BUILD_ROOT"/"$i" 
+# Clean up useless symlinks
+for i in rpme rpmi rpmu; do
+    rm -f $RPM_BUILD_ROOT%{_bindir}/$i
 done
 
 # Save list of packages through cron
@@ -352,6 +325,8 @@ exit 0
 %endif
 %ifarch x86_64
 %attr(-, rpm, rpm)              %{__prefix}/lib/rpm/x86_64*
+%attr(-, rpm, rpm)              %{__prefix}/lib/rpm/ia32e*
+%attr(-, rpm, rpm)              %{__prefix}/lib/rpm/amd64*
 %endif
 %attr(-, rpm, rpm)              %{__prefix}/lib/rpm/noarch*
 
@@ -460,7 +435,8 @@ exit 0
 %{__includedir}/popt.h
 
 %changelog
-* Wed Oct 03 2007 Panu Matilainen <pmatilai@redhat.com> 
+* Wed Oct 03 2007 Panu Matilainen <pmatilai@redhat.com> 4.4.2.2-1
+- rebase to 4.4.2.2
 - add bunch of previously implicit dependencies for rpm-build (#316201)
 - pull in updated config.guess to get _host macro correct (#259761)
 - explicitly buildrequire redhat-rpm-config for the config.guess hack
