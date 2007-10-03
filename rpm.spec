@@ -40,6 +40,9 @@ Requires: popt >= 1.10.2.1
 Requires: crontabs
 Requires: logrotate
 
+# explicit due to config.guess hackery
+BuildRequires: redhat-rpm-config
+
 BuildRequires: autoconf
 BuildRequires: elfutils-devel >= 0.112
 BuildRequires: elfutils-libelf-devel-static
@@ -158,6 +161,12 @@ shell-like rules.
 unset LD_ASSUME_KERNEL || :
 
 WITH_PYTHON="--with-python=%{with_python_version}"
+
+# XXX pull in updated config.guess and config.sub as done by %%configure
+# which cannot be used to build rpm itself due to makefile brokenness
+for i in $(find . -name config.guess -o -name config.sub) ; do
+    [ -f /usr/lib/rpm/redhat/$(basename $i) ] && %{__rm} -f $i && %{__cp} -fv /usr/lib/rpm/redhat/$(basename $i) $i
+done 
 
 CFLAGS="$RPM_OPT_FLAGS"; export CFLAGS
 ./configure --prefix=%{__prefix} --sysconfdir=/etc \
@@ -450,6 +459,8 @@ exit 0
 %changelog
 * Wed Oct 03 2007 Panu Matilainen <pmatilai@redhat.com> 
 - add bunch of previously implicit dependencies for rpm-build (#316201)
+- pull in updated config.guess to get _host macro correct (#259761)
+- explicitly buildrequire redhat-rpm-config for the config.guess hack
 
 * Mon Aug 13 2007 Panu Matilainen <pmatilai@redhat.com> - 4.4.2.1-1
 - update to 4.4.2.1 (#247749 and others)
