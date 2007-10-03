@@ -32,7 +32,10 @@ Patch11: rpm-4.4.2.1-config-mtime.patch
 Patch12: rpm-4.4.2.1-strict-docdir.patch
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
 # and several different components with their own licenses included...
-License: (GPLv2 and LGPLv2 with exceptions) and BSD and MIT and Sleepycat
+# XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
+# and several different components with their own licenses included...
+# SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD and MIT and Sleepycat
+License: GPLv2+
 Requires(pre): shadow-utils
 Requires(postun): shadow-utils
 Requires(post): coreutils
@@ -461,6 +464,7 @@ exit 0
 - add bunch of previously implicit dependencies for rpm-build (#316201)
 - pull in updated config.guess to get _host macro correct (#259761)
 - explicitly buildrequire redhat-rpm-config for the config.guess hack
+- further license clarification per fedora guidelines
 
 * Mon Aug 13 2007 Panu Matilainen <pmatilai@redhat.com> - 4.4.2.1-1
 - update to 4.4.2.1 (#247749 and others)
