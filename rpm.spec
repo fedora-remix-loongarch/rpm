@@ -23,7 +23,7 @@ Patch2: rpm-4.4.2-ghost-conflicts.patch
 Patch3: rpm-4.4.2-trust.patch
 Patch4: rpm-4.4.2-devel-autodep.patch
 Patch5: rpm-4.4.2-rpmfc-skip.patch
-Patch6: rpm-4.4.2-matchpathcon.patch
+Patch6: rpm-4.4.2.2-matchpathcon.patch
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
 # and several different components with their own licenses included...
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
@@ -435,12 +435,13 @@ exit 0
 %{__includedir}/popt.h
 
 %changelog
-* Wed Oct 03 2007 Panu Matilainen <pmatilai@redhat.com> 4.4.2.2-1
+* Fri Oct 12 2007 Panu Matilainen <pmatilai@redhat.com> 4.4.2.2-1
 - rebase to 4.4.2.2
 - add bunch of previously implicit dependencies for rpm-build (#316201)
 - pull in updated config.guess to get _host macro correct (#259761)
 - explicitly buildrequire redhat-rpm-config for the config.guess hack
 - further license clarification per fedora guidelines
+- improved matchpathcon patch (#259421)
 
 * Mon Aug 13 2007 Panu Matilainen <pmatilai@redhat.com> - 4.4.2.1-1
 - update to 4.4.2.1 (#247749 and others)
