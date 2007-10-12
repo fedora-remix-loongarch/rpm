@@ -14,7 +14,7 @@ Summary: The RPM package management system
 Name: rpm
 Version: 4.4.2.2
 %{expand: %%define rpm_version %{version}}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source: rpm-%{rpm_version}.tar.gz
@@ -124,7 +124,7 @@ programs that will manipulate RPM packages and databases.
 %package -n popt
 Summary: A C library for parsing command line parameters
 Group: Development/Libraries
-Version: 1.10.2.1
+Version: 1.10.2.2
 License: MIT
 
 %description -n popt
@@ -435,6 +435,9 @@ exit 0
 %{__includedir}/popt.h
 
 %changelog
+* Fri Oct 12 2007 Panu Matilainen <pmatilai@redhat.com> 4.4.2.2-2
+- remember to bump popt version too
+
 * Fri Oct 12 2007 Panu Matilainen <pmatilai@redhat.com> 4.4.2.2-1
 - rebase to 4.4.2.2
 - add bunch of previously implicit dependencies for rpm-build (#316201)
