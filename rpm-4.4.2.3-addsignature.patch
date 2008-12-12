@@ -1,0 +1,76 @@
+commit 4a72b894a369a75f10706683b7fddfba07749d36
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Thu May 8 09:07:06 2008 +0300
+
+    Check rpmAddSignature() return codes (rhbz#442761)
+    - headerGetEntry() on RPMTAG_HEADERIMMUTABLE already caught the corrupted
+      package, we just didn't paying attention
+    - make the hge failed error message a bit more meaningful
+    
+    Backported from HEAD cb36d48351ea944d445db29635750042f445ec3d
+
+diff --git a/lib/rpmchecksig.c b/lib/rpmchecksig.c
+index b4d377e..d145d3a 100644
+--- a/lib/rpmchecksig.c
++++ b/lib/rpmchecksig.c
+@@ -288,12 +288,18 @@ static int rpmReSign(/*@unused@*/ rpmts ts,
+ 	xx = headerRemoveEntry(sigh, RPMSIGTAG_BADSHA1_2);
+ 
+ 	/* Toss and recalculate header+payload size and digests. */
+-	xx = headerRemoveEntry(sigh, RPMSIGTAG_SIZE);
+-	xx = rpmAddSignature(sigh, sigtarget, RPMSIGTAG_SIZE, qva->passPhrase);
+-	xx = headerRemoveEntry(sigh, RPMSIGTAG_MD5);
+-	xx = rpmAddSignature(sigh, sigtarget, RPMSIGTAG_MD5, qva->passPhrase);
+-	xx = headerRemoveEntry(sigh, RPMSIGTAG_SHA1);
+-	xx = rpmAddSignature(sigh, sigtarget, RPMSIGTAG_SHA1, qva->passPhrase);
++	{
++	    enum rpmtagSignature const sigs[] = { RPMSIGTAG_SIZE, 
++						  RPMSIGTAG_MD5,
++						  RPMSIGTAG_SHA1,
++						};
++	    int i, nsigs = sizeof(sigs) / sizeof(enum rpmtagSignature);
++	    for (i = 0; i < nsigs; i++) {
++		(void) headerRemoveEntry(sigh, sigs[i]);
++		if (rpmAddSignature(sigh, sigtarget, sigs[i], qva->passPhrase))
++		    goto exit;
++	    }
++	}
+ 
+ 	if (deleting) {	/* Nuke all the signature tags. */
+ 	    xx = headerRemoveEntry(sigh, RPMSIGTAG_GPG);
+@@ -326,7 +332,9 @@ static int rpmReSign(/*@unused@*/ rpmts ts,
+ 	    }
+ 
+ 	    xx = headerRemoveEntry(sigh, sigtag);
+-	    xx = rpmAddSignature(sigh, sigtarget, sigtag, qva->passPhrase);
++	    if (rpmAddSignature(sigh, sigtarget, sigtag, qva->passPhrase)) {
++		goto exit;
++	    }
+ 
+ 	    /* If package was previously signed, check for same signer. */
+ 	    memset(newsignid, 0, sizeof(newsignid));
+@@ -665,7 +673,9 @@ static int readFile(FD_t fd, const char * fn, pgpDig dig)
+ 	    ||   uh == NULL)
+ 	    {
+ 		h = headerFree(h);
+-		rpmError(RPMERR_FREAD, _("%s: headerGetEntry failed\n"), fn);
++		rpmlog(RPMERR_FREAD, 
++			_("%s: Immutable header region could not be read. "
++			"Corrupted package?\n"), fn);
+ 		goto exit;
+ 	    }
+ 	    dig->hdrsha1ctx = rpmDigestInit(PGPHASHALGO_SHA1, RPMDIGEST_NONE);
+diff --git a/lib/signature.c b/lib/signature.c
+index 5617e32..684846f 100644
+--- a/lib/signature.c
++++ b/lib/signature.c
+@@ -732,6 +732,9 @@ static int makeHDRSignature(Header sigh, const char * file, int_32 sigTag,
+ 	    if (!headerGetEntry(h, RPMTAG_HEADERIMMUTABLE, &uht, &uh, &uhc)
+ 	     ||  uh == NULL)
+ 	    {
++		rpmlog(RPMERR_FREAD, 
++				_("Immutable header region could not be read. "
++				"Corrupted package?\n"));
+ 		h = headerFree(h);
+ 		goto exit;
+ 	    }

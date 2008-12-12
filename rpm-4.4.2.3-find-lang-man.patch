@@ -1,0 +1,29 @@
+commit 3c441dc5a1f257ecc114ea72da618e12f22d3ef1
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Tue Apr 15 13:27:43 2008 +0300
+
+    Make find-lang.sh --with-man brp-compress friendly (rhbz#440994)
+    
+    Patch from Ville Skyttä
+
+diff --git a/scripts/find-lang.sh b/scripts/find-lang.sh
+index 7a74e02..0ca4707 100755
+--- a/scripts/find-lang.sh
++++ b/scripts/find-lang.sh
+@@ -153,14 +153,14 @@ s:%lang(C) ::
+ find $TOP_DIR -type d|sed '
+ s:'"$TOP_DIR"'::
+ '"$ALL_NAME$MAN"'s:\(.*/man/\([^/_]\+\).*/man[a-z0-9]\+/\)::
+-'"$ALL_NAME$MAN"'s:\(.*/man/\([^/_]\+\).*/man[a-z0-9]\+$\):%lang(\2) \1:
++'"$ALL_NAME$MAN"'s:\(.*/man/\([^/_]\+\).*/man[a-z0-9]\+$\):%lang(\2) \1*:
+ s:^\([^%].*\)::
+ s:%lang(C) ::
+ /^$/d' >> $MO_NAME
+ 
+ find $TOP_DIR -type f -o -type l|sed '
+ s:'"$TOP_DIR"'::
+-'"$NO_ALL_NAME$MAN"'s:\(.*/man/\([^/_]\+\).*/man[a-z0-9]\+/'"$NAME"'\.[a-z0-9].*\):%lang(\2) \1:
++'"$NO_ALL_NAME$MAN"'s:\(.*/man/\([^/_]\+\).*/man[a-z0-9]\+/'"$NAME"'\.[a-z0-9].*\):%lang(\2) \1*:
+ s:^\([^%].*\)::
+ s:%lang(C) ::
+ /^$/d' >> $MO_NAME

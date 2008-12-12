@@ -1,0 +1,37 @@
+commit 2b82ada80fd8352abadb3bb1fcd4c64961abed3b
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Wed Aug 13 15:38:19 2008 +0300
+
+    Force FD_CLOEXEC on all potentially open descriptors
+    - instead of just "100 should be large enough", use sysconf() to grab
+      number of max open files and do them all. If sysconf() fails,
+      use 1024 as "should be enough for everybody"
+    - backported from HEAD aa9a791d808f504781d0b75255df3387383a1809
+
+diff --git a/lib/psm.c b/lib/psm.c
+index 0f53c7f..e09fb27 100644
+--- a/lib/psm.c
++++ b/lib/psm.c
+@@ -806,6 +806,7 @@ static rpmRC runScript(rpmpsm psm, Header h, const char * sln,
+ 	int pipes[2];
+ 	int flag;
+ 	int fdno;
++	int open_max;
+ 
+ 	pipes[0] = pipes[1] = 0;
+ 	/* make stdin inaccessible */
+@@ -814,8 +815,12 @@ static rpmRC runScript(rpmpsm psm, Header h, const char * sln,
+ 	xx = dup2(pipes[0], STDIN_FILENO);
+ 	xx = close(pipes[0]);
+ 
+-	/* XXX Force FD_CLOEXEC on 1st 100 inherited fdno's. */
+-	for (fdno = 3; fdno < 100; fdno++) {
++	/* XXX Force FD_CLOEXEC on all inherited fdno's. */
++	open_max = sysconf(_SC_OPEN_MAX);
++	if (open_max == -1) {
++	    open_max = 1024;
++	}
++	for (fdno = 3; fdno < open_max; fdno++) {
+ 	    flag = fcntl(fdno, F_GETFD);
+ 	    if (flag == -1 || (flag & FD_CLOEXEC))
+ 		continue;

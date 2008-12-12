@@ -6,7 +6,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: 4.4.2.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source: http://rpm.org/releases/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -23,6 +23,16 @@ Patch10: rpm-4.4.2.2-pkgconfig-path.patch
 Patch11: rpm-4.4.2.3-queryformat-arch.patch
 Patch12: rpm-4.4.2.3-no-order-rescan-limit.patch
 Patch13: rpm-4.4.2.3-fix-find-requires.patch
+Patch14: rpm-4.4.2.3-addsignature.patch
+Patch15: rpm-4.4.2.3-bzip-uncompress.patch
+Patch16: rpm-4.4.2.3-cloexec.patch
+Patch17: rpm-4.4.2.3-find-lang-man.patch
+Patch18: rpm-4.4.2.3-headerload-err.patch
+Patch19: rpm-4.4.2.3-nodirtokens.patch
+Patch20: rpm-4.4.2.3-no-jar-exclude.patch
+Patch21: rpm-4.4.2.3-no-rdtsc.patch
+Patch22: rpm-4.4.2.3-proxy.patch
+Patch23: rpm-4.4.2.3-sigpipe.patch
 Patch50: rpm-4.4.2.3-rc1-sparc-mcpu.patch
 
 # XXX Beware, this is one murky license, partially GPL/LGPL dual-licensed
@@ -148,6 +158,17 @@ that will manipulate RPM packages and databases.
 %patch11 -p1 -b .qfmt-arch
 %patch12 -p1 -b .no-order-limit
 %patch13 -p1 -b .requires
+%patch14 -p1 -b .addsig
+%patch15 -p1 -b .bzip
+%patch16 -p1 -b .cloexec
+%patch17 -p1 -b .findlang
+%patch18 -p1 -b .hdrload
+%patch19 -p1 -b .nodirtoken
+%patch20 -p1 -b .jar
+%patch21 -p1 -b .nordtsc
+%patch22 -p1 -b .proxy
+%patch23 -p1 -b .sigpipe
+
 %patch50 -p1 -b .sparc-mcpu
 
 # force external popt
@@ -401,6 +422,19 @@ exit 0
 %endif
 
 %changelog
+* Fri Dec 12 2008 Panu Matilainen <pmatilai@redhat.com> 4.4.2.3-3
+- abort transaction on python callback crash
+- package signing fixes (#442761, #463482)
+- fix uncompress macro wrt bzip
+- force cloexec all open descriptors on scriptlet execution
+- make find-lang --with-man brp-compress friendly
+- handle headerLoad() failure in rpmReadHeader() correctly
+- fix --nodirtokens build option (#462391)
+- drop no longer necessary jar.so.debug kludge (#442264)
+- remove buggy, i386-specific RDTSC timing code (#435309)
+- fix retrieval of multiple package through a proxy (#450205)
+- ensure default SIGPIPE handler for --pipe (#444389)
+
 * Fri Apr 18 2008 Bill Nottingham <notting@redhat.com> 4.4.2.3-2
 - fix find-requires (#443015)
 

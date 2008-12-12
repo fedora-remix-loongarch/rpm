@@ -1,0 +1,18 @@
+commit 0dbf5280540ed78faaa509d8653526cb0f334190
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Thu Sep 18 14:34:42 2008 +0300
+
+    Force error return if headerLoad() fails
+
+diff --git a/lib/package.c b/lib/package.c
+index 09571b0..d026226 100644
+--- a/lib/package.c
++++ b/lib/package.c
+@@ -721,6 +721,7 @@ rpmRC rpmReadHeader(rpmts ts, FD_t fd, Header *hdrp, const char ** msg)
+     h = headerLoad(ei);
+     if (h == NULL) {
+ 	(void) snprintf(buf, sizeof(buf), _("hdr load: BAD\n"));
++	rc = RPMRC_FAIL;
+         goto exit;
+     }
+     h->flags |= HEADERFLAG_ALLOCATED;

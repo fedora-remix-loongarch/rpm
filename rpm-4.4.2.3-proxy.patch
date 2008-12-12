@@ -1,0 +1,28 @@
+commit afb12a466d632ef2479a7a705c41cbd230e1e750
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Fri Sep 19 11:16:06 2008 +0300
+
+    Fix retrieval of multiple packages through a proxy (rhbz#450205)
+    - update url cache to contain the actual url we requested on cache hit
+
+diff --git a/rpmio/url.c b/rpmio/url.c
+index 3f947f5..daceeb5 100644
+--- a/rpmio/url.c
++++ b/rpmio/url.c
+@@ -236,7 +236,15 @@ static void urlFind(/*@null@*/ /*@in@*/ /*@out@*/ urlinfo * uret, int mustAsk)
+ 	    continue;
+ 	if (urlStrcmp(u->portstr, ou->portstr))
+ 	    continue;
+-	break;	/* Found item in cache */
++	/* 
++ 	 * Found item in cache.
++	 * Now ensure the url actually points to the requested path.
++	 */
++	if (urlStrcmp(u->url, ou->url) != 0) {
++	    _free(ou->url);
++	    ou->url = xstrdup(u->url);
++	}
++	break;
+     }
+ 
+     if (i == _url_count) {

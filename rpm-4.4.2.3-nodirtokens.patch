@@ -1,0 +1,46 @@
+commit 7739cb6fffb2371266371ec58486a3cde4fca155
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Tue Sep 16 12:03:26 2008 +0300
+
+    Resurrect --nodirtokens build option
+    - this gets somewhat hysterical: we create the filelist as uncompressed,
+      then compress it for rpmfi which only understands compressed filelist,
+      and if nodirtokens is used, expand the list again after initializing
+      rpmfi for cpio/fsm...
+
+diff --git a/build/files.c b/build/files.c
+index 83f67cd..d58c88b 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -1358,14 +1358,8 @@ static void genCpioListAndHeader(/*@partial@*/ FileList fl,
+     if (_addDotSlash)
+ 	(void) rpmlibNeedsFeature(h, "PayloadFilesHavePrefix", "4.0-1");
+ 
+-    /* Choose how filenames are represented. */
+-    if (_noDirTokens)
+-	expandFilelist(h);
+-    else {
+-	compressFilelist(h);
+-	/* Binary packages with dirNames cannot be installed by legacy rpm. */
+-	(void) rpmlibNeedsFeature(h, "CompressedFileNames", "3.0.4-1");
+-    }
++    /* rpmfi only groks compressed filelists */
++    compressFilelist(h);
+ 
+   { int scareMem = 0;
+     rpmts ts = NULL;	/* XXX FIXME drill rpmts ts all the way down here */
+@@ -1467,6 +1461,14 @@ static void genCpioListAndHeader(/*@partial@*/ FileList fl,
+ 	fi = rpmfiFree(fi);
+     /*@=branchstate =compdef@*/
+   }
++
++    /* Convert back to expanded filelist if legacy format requested */
++    if (_noDirTokens)
++	expandFilelist(h);
++    else {
++	/* Binary packages with dirNames cannot be installed by legacy rpm. */
++	(void) rpmlibNeedsFeature(h, "CompressedFileNames", "3.0.4-1");
++    }
+ }
+ /*@=bounds@*/
+ 

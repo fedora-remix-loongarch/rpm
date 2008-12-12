@@ -1,0 +1,19 @@
+commit f2466c6304907a76ab8a8e2e20ca639d027bf968
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Fri Apr 4 15:52:52 2008 +0300
+
+    Missing decompression arguments for bzip in uncompress macro
+
+diff --git a/rpmio/macro.c b/rpmio/macro.c
+index 6dd58ce..1a6ef12 100644
+--- a/rpmio/macro.c
++++ b/rpmio/macro.c
+@@ -1176,7 +1176,7 @@ doFoo(MacroBuf mb, int negate, const char * f, size_t fn,
+ 	    sprintf(be, "%%_gzip -dc %s", b);
+ 	    break;
+ 	case COMPRESSED_BZIP2:
+-	    sprintf(be, "%%_bzip2 %s", b);
++	    sprintf(be, "%%_bzip2 -dc %s", b);
+ 	    break;
+ 	case COMPRESSED_ZIP:
+ 	    sprintf(be, "%%_unzip %s", b);

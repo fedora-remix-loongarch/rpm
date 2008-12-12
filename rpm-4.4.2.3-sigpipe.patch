@@ -1,0 +1,18 @@
+commit 0bbd26299bd892617f5af1a50049e4606abca70d
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Fri May 2 11:40:29 2008 +0300
+
+    Ensure default SIGPIPE handler for --pipe (rhbz#444389)
+
+diff --git a/rpmqv.c b/rpmqv.c
+index 251dd3f..c12ae80 100644
+--- a/rpmqv.c
++++ b/rpmqv.c
+@@ -614,6 +614,7 @@ int main(int argc, const char ** argv)
+ 	(void) pipe(p);
+ 
+ 	if (!(pipeChild = fork())) {
++	    (void) signal(SIGPIPE, SIG_DFL);
+ 	    (void) close(p[1]);
+ 	    (void) dup2(p[0], STDIN_FILENO);
+ 	    (void) close(p[0]);
