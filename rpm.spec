@@ -10,7 +10,7 @@
 %define rpmhome /usr/lib/rpm
 
 %define rpmver 4.6.0
-%define snapver rc1
+%define snapver rc3
 %define srcver %{rpmver}-%{snapver}
 
 %define bdbver 4.5.20
@@ -18,7 +18,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 0.%{snapver}.8
+Release: 0.%{snapver}.1{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -33,13 +33,7 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
 # Patches already in upstream
-Patch200: rpm-4.6.0-rc1-permit-tab.patch
-Patch201: rpm-4.6.0-rc1-skip-equal-nevr.patch
-Patch202: rpm-4.6.0-rc1-noarch-subpkg.patch
-Patch203: rpm-4.6.0-rc1-defaultdocdir.patch
-Patch204: rpm-4.6.0-rc1-fp-hash.patch
-Patch205: rpm-4.6.0-rc1-file-debuginfo.patch
-Patch206: rpm-4.6.0-rc1-rpmfileutil.patch
+Patch200: rpm-4.6.0-rc1-defaultdocdir.patch
 
 # These are not yet upstream
 Patch300: rpm-4.5.90-posttrans.patch
@@ -173,13 +167,7 @@ that will manipulate RPM packages and databases.
 %patch2 -p1 -b .gstreamer-prov
 %patch100 -p1 -b .pkgconfig-deps
 
-%patch200 -p1 -b .permit-tab
-%patch201 -p1 -b .skip-equal-nevr
-%patch202 -p1 -b .noarch-subpkg
-%patch203 -p1 -b .defaultdocdir
-%patch204 -p1 -b .fp-hash
-%patch205 -p1 -b .file-debuginfo
-%patch206 -p1 -b .rpmfileutil
+%patch200 -p1 -b .defaultdocdir
 
 # needs a bit of upstream love first...
 #%patch300 -p1 -b .posttrans
@@ -370,6 +358,19 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Dec 12 2008 Panu Matilainen <pmatilai@redhat.com>
+- update to 4.6.0-rc3
+- fixes segfault on oddball, legacy packages (#475214)
+- fixes segfault on package relocation (#468319)
+- fixes oddball package causing summary presented as list to python (#473239)
+- fixes segfault on some queryformat tag extensions (#474550)
+- fixes non-32bit integer type query formats, including --setperms (#471820)
+- read default popt files again (#473167)
+- remove extranuous slash in rpm.pc (#469355)
+- fixes memory fragmentation affecting especially yum (#472507)
+- fix build-time package size calculation wrt excludes and duplicates (#247374)
+- makes verification on multilib systems saner
+
 * Mon Dec 01 2008 Jindrich Novy <jnovy@redhat.com> 
 - include rpmfileutil.h from rpmmacro.h, unbreaks
   net-snmp (#473420)
