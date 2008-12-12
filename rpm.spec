@@ -18,7 +18,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 0.%{snapver}.1{?dist}
+Release: 0.%{snapver}.1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
