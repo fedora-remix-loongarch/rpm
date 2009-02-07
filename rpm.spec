@@ -10,15 +10,14 @@
 %define rpmhome /usr/lib/rpm
 
 %define rpmver 4.6.0
-%define snapver rc3
-%define srcver %{rpmver}-%{snapver}
+%define srcver %{rpmver}
 
 %define bdbver 4.5.20
 
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 0.%{snapver}.1%{?dist}
+Release: 1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -29,14 +28,15 @@ Source1: db-%{bdbver}.tar.gz
 Patch0: rpm-4.5.90-devel-autodep.patch
 Patch1: rpm-4.5.90-pkgconfig-path.patch
 Patch2: rpm-4.5.90-gstreamer-provides.patch
+# Fedora specspo is setup differently than what rpm expects, considering
+# this as Fedora-specific patch for now
+Patch3: rpm-4.6.0-fedora-specspo.patch
+
 # XXX only create provides for pkgconfig and libtool initially
 Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
 # Patches already in upstream
 Patch200: rpm-4.6.0-rc1-defaultdocdir.patch
-
-# These are not yet upstream
-Patch300: rpm-4.5.90-posttrans.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -166,12 +166,10 @@ that will manipulate RPM packages and databases.
 %patch0 -p1 -b .devel-autodep
 %patch1 -p1 -b .pkgconfig-path
 %patch2 -p1 -b .gstreamer-prov
+%patch3 -p1 -b .fedora.specspo
 %patch100 -p1 -b .pkgconfig-deps
 
 %patch200 -p1 -b .defaultdocdir
-
-# needs a bit of upstream love first...
-#%patch300 -p1 -b .posttrans
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -368,6 +366,13 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Sat Feb 07 2009 Panu Matilainen <pmatilai@redhat.com>
+- update to 4.6.0 final: http://rpm.org/wiki/Releases/4.6.0, fixing
+  #475582, #478907, #476737, #479869, #476201
+- change platform sharedstatedir to something more sensible (#185862)
+- fixup rpm translation lookup to match Fedora specspo (#436941)
+- add rpmdb_foo links to db utils for documentation compatibility
+
 * Fri Dec 12 2008 Panu Matilainen <pmatilai@redhat.com>
 - update to 4.6.0-rc3
 - fixes segfault on oddball, legacy packages (#475214)
