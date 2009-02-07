@@ -44,7 +44,8 @@ License: GPLv2+
 
 Requires(post): coreutils
 %if %{without int_bdb}
-Requires(post): compat-db45
+# normally db4-utils = %{bdbver} for the rpmdb_foo symlinks
+Requires: compat-db45
 %endif
 Requires: popt >= 1.10.2.1
 Requires: crontabs
@@ -191,6 +192,7 @@ export CPPFLAGS CFLAGS LDFLAGS
     --prefix=%{_usr} \
     --sysconfdir=%{_sysconfdir} \
     --localstatedir=%{_var} \
+    --sharedstatedir=%{_var}/lib \
     --libdir=%{_libdir} \
     %{!?with_int_bdb: --with-external-db} \
     %{?with_sqlite: --enable-sqlite3} \
@@ -225,6 +227,18 @@ do
     touch $RPM_BUILD_ROOT/var/lib/rpm/$dbi
 done
 
+# plant links to db utils as rpmdb_foo so existing documantion is usable
+%if %{without int_bdb}
+dbprefix=db45
+for dbutil in \
+    archive deadlock dump load printlog \
+    recover stat upgrade verify
+do
+    ln -s ../../bin/${dbprefix}_${dbutil} $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_${dbutil}
+done
+ln -s ../../bin/berkeley_${dbprefix}_svc $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_svc
+%endif
+
 %find_lang %{name}
 
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
@@ -240,11 +254,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %posttrans
 # XXX this is klunky and ugly, rpm itself should handle this
-%if %{with int_bdb}
 dbstat=/usr/lib/rpm/rpmdb_stat
-%else
-dbstat=%{_bindir}/db45_stat
-%endif
 if [ -x "$dbstat" ]; then
     if "$dbstat" -e -h /var/lib/rpm 2>&1 | grep -q "doesn't match environment version \| Invalid argument"; then
         rm -f /var/lib/rpm/__db.* 
