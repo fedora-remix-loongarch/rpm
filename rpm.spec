@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -37,6 +37,10 @@ Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
 # Patches already in upstream
 Patch200: rpm-4.6.0-rc1-defaultdocdir.patch
+Patch201: rpm-4.6.0-dssingle-null.patch
+Patch202: rpm-4.6.0-utf-depnames.patch
+Patch203: rpm-4.6.0-alpha-isa.patch
+Patch204: rpm-4.6.0-rsa-v4.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -170,6 +174,10 @@ that will manipulate RPM packages and databases.
 %patch100 -p1 -b .pkgconfig-deps
 
 %patch200 -p1 -b .defaultdocdir
+%patch201 -p1 -b .dssingle-null
+%patch202 -p1 -b .utf-depnames
+%patch203 -p1 -b .alpha-isa
+%patch204 -p1 -b .rsa-v4
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -366,6 +374,12 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Mar 12 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.0-2
+- handle NULL as EVR to rpmdsSingle() (#487881, #485616)
+- permit UTF-8 as first char of dependency names (#455119)
+- handle RSA V4 signatures (#436812)
+- add alpha arch ISA-bits
+
 * Sat Feb 07 2009 Panu Matilainen <pmatilai@redhat.com>
 - update to 4.6.0 final: http://rpm.org/wiki/Releases/4.6.0, fixing
   #475582, #478907, #476737, #479869, #476201
