@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -31,6 +31,9 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 # Fedora specspo is setup differently than what rpm expects, considering
 # this as Fedora-specific patch for now
 Patch3: rpm-4.6.0-fedora-specspo.patch
+
+# Fix sparcv9v and sparc64v targets
+Patch4: rpm-4.6.0-niagara.patch
 
 # XXX only create provides for pkgconfig and libtool initially
 Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
@@ -374,6 +377,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> - 4.6.0-3
+- Fix sparcv9v and sparc64v targets
+
 * Thu Mar 12 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.0-2
 - handle NULL as EVR to rpmdsSingle() (#487881, #485616)
 - permit UTF-8 as first char of dependency names (#455119)
