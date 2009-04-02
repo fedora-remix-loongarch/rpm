@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 3%{?dist}
+Release: 4%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -32,9 +32,6 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 # this as Fedora-specific patch for now
 Patch3: rpm-4.6.0-fedora-specspo.patch
 
-# Fix sparcv9v and sparc64v targets
-Patch4: rpm-4.6.0-niagara.patch
-
 # XXX only create provides for pkgconfig and libtool initially
 Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
@@ -44,6 +41,9 @@ Patch201: rpm-4.6.0-dssingle-null.patch
 Patch202: rpm-4.6.0-utf-depnames.patch
 Patch203: rpm-4.6.0-alpha-isa.patch
 Patch204: rpm-4.6.0-rsa-v4.patch
+
+# Patches not yet upstream
+Patch300: rpm-4.6.0-niagara.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -181,6 +181,8 @@ that will manipulate RPM packages and databases.
 %patch202 -p1 -b .utf-depnames
 %patch203 -p1 -b .alpha-isa
 %patch204 -p1 -b .rsa-v4
+
+%patch300 -p1 -b .niagara
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -377,6 +379,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> - 4.6.0-4
+- actually apply niagara patch
+
 * Thu Apr  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> - 4.6.0-3
 - Fix sparcv9v and sparc64v targets
 
