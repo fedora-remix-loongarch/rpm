@@ -9,7 +9,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.6.0
+%define rpmver 4.6.1
 %define srcver %{rpmver}
 
 %define bdbver 4.5.20
@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 4%{?dist}
+Release: 1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -25,7 +25,7 @@ Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
 Source1: db-%{bdbver}.tar.gz
 %endif
 
-Patch0: rpm-4.5.90-devel-autodep.patch
+Patch0: rpm-4.6.1-devel-autodep.patch
 Patch1: rpm-4.5.90-pkgconfig-path.patch
 Patch2: rpm-4.5.90-gstreamer-provides.patch
 # Fedora specspo is setup differently than what rpm expects, considering
@@ -36,11 +36,6 @@ Patch3: rpm-4.6.0-fedora-specspo.patch
 Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
 # Patches already in upstream
-Patch200: rpm-4.6.0-rc1-defaultdocdir.patch
-Patch201: rpm-4.6.0-dssingle-null.patch
-Patch202: rpm-4.6.0-utf-depnames.patch
-Patch203: rpm-4.6.0-alpha-isa.patch
-Patch204: rpm-4.6.0-rsa-v4.patch
 
 # Patches not yet upstream
 Patch300: rpm-4.6.0-niagara.patch
@@ -176,12 +171,6 @@ that will manipulate RPM packages and databases.
 %patch3 -p1 -b .fedora.specspo
 %patch100 -p1 -b .pkgconfig-deps
 
-%patch200 -p1 -b .defaultdocdir
-%patch201 -p1 -b .dssingle-null
-%patch202 -p1 -b .utf-depnames
-%patch203 -p1 -b .alpha-isa
-%patch204 -p1 -b .rsa-v4
-
 %patch300 -p1 -b .niagara
 
 %if %{with int_bdb}
@@ -282,7 +271,7 @@ exit 0
 %dir                            %{_sysconfdir}/rpm
 
 %attr(0755, root, root)   %dir /var/lib/rpm
-%attr(0644, rpm, rpm) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
+%attr(0644, root, root) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
 %attr(0755, root, root) %dir %{rpmhome}
 
 /bin/rpm
@@ -379,6 +368,12 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 18 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.1-1
+- update to rpm 4.6.1 (http://rpm.org/wiki/Releases/4.6.1)
+- fixes #487855, #493157 and several others already fixed in F11/rawhide
+- drop patches merged upstream
+- eliminate bogus leftover rpm:rpm rpmdb ownership
+
 * Thu Apr  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> - 4.6.0-4
 - actually apply niagara patch
 
