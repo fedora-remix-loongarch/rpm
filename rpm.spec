@@ -47,6 +47,8 @@ Patch200: rpm-4.7.0-findlang-kde3.patch
 Patch201: rpm-4.7.0-prtsig.patch
 Patch202: rpm-4.7.0-python-altnevr.patch
 Patch203: rpm-4.7.0-hardlink-sizes.patch
+Patch204: rpm-4.7.0-fp-symlink.patch
+Patch205: rpm-4.7.0-fp-findbyfile.patch
 
 # These are not yet upstream
 Patch300: rpm-4.7.0-extra-provides.patch
@@ -192,6 +194,8 @@ that will manipulate RPM packages and databases.
 %patch201 -p1 -b .prtsig
 %patch202 -p1 -b .py-altnevr
 %patch203 -p1 -b .hardlink-sizes
+%patch204 -p1 -b .fp-symlink
+%patch205 -p1 -b .fp-findbyfile
 
 %patch300 -p1 -b .extra-prov
 %patch301 -p1 -b .niagara
@@ -410,6 +414,8 @@ exit 0
 - fix pgp pubkey signature tag parsing
 - don't mess up problem altNEVR in python ts.check() (#501068)
 - fix hardlink size calculation on build (#503020)
+- fix segfault in symlink fingerprinting (#505777)
+- fix invalid memory access causing bogus file dependency errors (#506323)
 
 * Thu Apr 16 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.0-1
 - update to 4.7.0 final (http://rpm.org/wiki/Releases/4.7.0)
