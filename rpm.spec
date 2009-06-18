@@ -45,6 +45,7 @@ Patch3: rpm-4.6.0-fedora-specspo.patch
 # Patches already in upstream
 Patch200: rpm-4.7.0-findlang-kde3.patch
 Patch201: rpm-4.7.0-prtsig.patch
+Patch202: rpm-4.7.0-python-altnevr.patch
 
 # These are not yet upstream
 Patch300: rpm-4.7.0-extra-provides.patch
@@ -188,6 +189,7 @@ that will manipulate RPM packages and databases.
 
 %patch200 -p1 -b .findlang-kde3
 %patch201 -p1 -b .prtsig
+%patch202 -p1 -b .py-altnevr
 
 %patch300 -p1 -b .extra-prov
 %patch301 -p1 -b .niagara
@@ -404,6 +406,7 @@ exit 0
   - consistently classify all text as such and include description
 - fix find-lang --with-kde with KDE3 (#466009)
 - fix pgp pubkey signature tag parsing
+- don't mess up problem altNEVR in python ts.check() (#501068)
 
 * Thu Apr 16 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.0-1
 - update to 4.7.0 final (http://rpm.org/wiki/Releases/4.7.0)
