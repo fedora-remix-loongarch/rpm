@@ -307,7 +307,7 @@ exit 0
 %dir                            %{_sysconfdir}/rpm
 
 %attr(0755, root, root)   %dir /var/lib/rpm
-%attr(0644, rpm, rpm) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
+%attr(0644, root, root) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
 %attr(0755, root, root) %dir %{rpmhome}
 
 /bin/rpm
@@ -416,6 +416,7 @@ exit 0
 - fix hardlink size calculation on build (#503020)
 - fix segfault in symlink fingerprinting (#505777)
 - fix invalid memory access causing bogus file dependency errors (#506323)
+- eliminate bogus leftover rpm:rpm rpmdb ownership
 
 * Thu Apr 16 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.0-1
 - update to 4.7.0 final (http://rpm.org/wiki/Releases/4.7.0)
