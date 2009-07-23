@@ -1,5 +1,5 @@
-# rawhide doesn't have new enough lzma yet
-%bcond_with lzma
+# build against xz?
+%bcond_without xz
 # sqlite backend is broken atm, disabled for now
 %bcond_with sqlite
 # just for giggles, option to build with internal Berkeley DB
@@ -15,7 +15,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.7.0
+%define rpmver 4.7.1
 %define snapver {nil}
 %define srcver %{rpmver}
 
@@ -25,10 +25,10 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 2%{?dist}
+Release: 1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
-Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
+Source0: http://rpm.org/releases/rpm-4.7.x/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %endif
@@ -43,12 +43,6 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 Patch3: rpm-4.6.0-fedora-specspo.patch
 
 # Patches already in upstream
-Patch200: rpm-4.7.0-findlang-kde3.patch
-Patch201: rpm-4.7.0-prtsig.patch
-Patch202: rpm-4.7.0-python-altnevr.patch
-Patch203: rpm-4.7.0-hardlink-sizes.patch
-Patch204: rpm-4.7.0-fp-symlink.patch
-Patch205: rpm-4.7.0-fp-findbyfile.patch
 
 # These are not yet upstream
 Patch300: rpm-4.7.0-extra-provides.patch
@@ -93,8 +87,8 @@ BuildRequires: ncurses-devel
 BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: python-devel >= 2.2
 BuildRequires: lua-devel >= 5.1
-%if %{with lzma}
-BuildRequires: lzma-devel >= 4.42
+%if %{with xz}
+BuildRequires: xz-devel >= 4.999.8
 %endif
 %if %{with sqlite}
 BuildRequires: sqlite-devel
@@ -130,8 +124,8 @@ Requires: nss-devel
 Requires: libselinux-devel
 Requires: elfutils-libelf-devel
 Requires: popt-devel
-%if %{with lzma}
-Requires: lzma-devel >= 4.42
+%if %{with xz}
+Requires: xz-devel >= 4.999.8
 %endif
 %if %{with sqlite}
 Requires: sqlite-devel
@@ -154,7 +148,7 @@ Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
-Requires: unzip gzip bzip2 cpio lzma
+Requires: unzip gzip bzip2 cpio lzma xz
 Requires: pkgconfig
 
 %description build
@@ -189,13 +183,6 @@ that will manipulate RPM packages and databases.
 %patch1 -p1 -b .pkgconfig-path
 %patch2 -p1 -b .gstreamer-prov
 %patch3 -p1 -b .fedora-specspo
-
-%patch200 -p1 -b .findlang-kde3
-%patch201 -p1 -b .prtsig
-%patch202 -p1 -b .py-altnevr
-%patch203 -p1 -b .hardlink-sizes
-%patch204 -p1 -b .fp-symlink
-%patch205 -p1 -b .fp-findbyfile
 
 %patch300 -p1 -b .extra-prov
 %patch301 -p1 -b .niagara
@@ -406,6 +393,12 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jul 23 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.1-1
+- update to 4.7.1 (http://rpm.org/wiki/Releases/4.7.1)
+- fixes #461353, #475359, #502269, #508021, #509637, #511101
+- enable XZ support
+- fix source url
+
 * Thu Jun 18 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.0-2
 - file classification tweaks for text files (#494817)
   - disable libmagic text token checks, it's way too error-prone
