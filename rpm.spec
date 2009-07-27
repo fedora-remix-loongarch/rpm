@@ -25,7 +25,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.7.x/%{name}-%{srcver}.tar.bz2
@@ -393,6 +393,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jul 27 2009 Bill Nottingham <notting@redhat.com> - 4.7.1-2
+- bump release
+
 * Thu Jul 23 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.1-1
 - update to 4.7.1 (http://rpm.org/wiki/Releases/4.7.1)
 - fixes #461353, #475359, #502269, #508021, #509637, #511101
