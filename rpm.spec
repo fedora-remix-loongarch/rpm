@@ -1,5 +1,5 @@
-# rawhide doesn't have new enough lzma yet
-%bcond_with lzma
+# enable xz payload support
+%bcond_without xz
 # sqlite backend is broken atm, disabled for now
 %bcond_with sqlite
 # just for giggles, option to build with internal Berkeley DB
@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -39,6 +39,8 @@ Patch100: rpm-4.6.x-no-pkgconfig-reqs.patch
 
 # Patches not yet upstream
 Patch300: rpm-4.6.0-niagara.patch
+Patch301: rpm-4.6.1-xz-support.patch
+Patch302: rpm-4.6.1-pkgconfig-nover.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -77,8 +79,8 @@ BuildRequires: ncurses-devel
 BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: python-devel >= 2.2
 BuildRequires: lua-devel >= 5.1
-%if %{with lzma}
-BuildRequires: lzma-devel >= 4.42
+%if %{with xz}
+BuildRequires: xz-devel >= 4.999.8
 %endif
 %if %{with sqlite}
 BuildRequires: sqlite-devel
@@ -112,8 +114,8 @@ Requires: nss-devel
 Requires: libselinux-devel
 Requires: elfutils-libelf-devel
 Requires: popt-devel
-%if %{with lzma}
-Requires: lzma-devel >= 4.42
+%if %{with xz}
+Requires: xz-devel >= 4.999.8
 %endif
 %if %{with sqlite}
 Requires: sqlite-devel
@@ -136,7 +138,7 @@ Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
-Requires: unzip gzip bzip2 cpio lzma
+Requires: unzip gzip bzip2 cpio lzma xz
 
 %description build
 The rpm-build package contains the scripts and executable programs
@@ -172,6 +174,8 @@ that will manipulate RPM packages and databases.
 %patch100 -p1 -b .pkgconfig-deps
 
 %patch300 -p1 -b .niagara
+%patch301 -p1 -b .xz
+%patch302 -p1 -b .pkgconfig-nover
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -368,6 +372,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Sep 15 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.1-2
+- add support for XZ payloads and sources (#514480)
+- handle empty version in pkg-config files (#505351)
+
 * Mon May 18 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.1-1
 - update to rpm 4.6.1 (http://rpm.org/wiki/Releases/4.6.1)
 - fixes #487855, #493157 and several others already fixed in F11/rawhide
