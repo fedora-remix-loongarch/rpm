@@ -25,7 +25,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.7.x/%{name}-%{srcver}.tar.bz2
@@ -43,6 +43,14 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 Patch3: rpm-4.6.0-fedora-specspo.patch
 
 # Patches already in upstream
+Patch200: rpm-4.7.1-abs-filelist.patch
+Patch201: rpm-4.7.1-debug-perms.patch
+Patch202: rpm-4.7.1-duplicate-deps.patch
+Patch203: rpm-4.7.1-chroot-env-paths.patch
+Patch204: rpm-4.7.1-rpm2cpio-init.patch
+Patch205: rpm-4.7.1-filedep-dnevr.patch
+Patch206: rpm-4.7.1-chroot-remove-env.patch
+Patch207: rpm-4.7.1-perl-heredoc.patch
 
 # These are not yet upstream
 Patch300: rpm-4.7.0-extra-provides.patch
@@ -183,6 +191,15 @@ that will manipulate RPM packages and databases.
 %patch1 -p1 -b .pkgconfig-path
 %patch2 -p1 -b .gstreamer-prov
 %patch3 -p1 -b .fedora-specspo
+
+%patch200 -p1 -b .abs-filelist
+%patch201 -p1 -b .debug-perms
+%patch202 -p1 -b .duplicate-deps
+%patch203 -p1 -b .chroot-env-paths
+%patch204 -p1 -b .rpm2cpio.init
+%patch205 -p1 -b .filedep-dnevr
+%patch206 -p1 -b .chroot-remove-env
+%patch207 -p1 -b .perl-heredoc
 
 %patch300 -p1 -b .extra-prov
 %patch301 -p1 -b .niagara
@@ -393,6 +410,16 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 08 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.1-3
+- use relative paths within db environment (related to #507309, #507309...)
+- remove db environment on close in chrooted operation (related to above)
+- initialize rpmlib earlier in rpm2cpio (#523260)
+- fix file dependency tag extension formatting (#523282)
+- fix duplicate dependency filtering on build (#490378)
+- permit absolute paths in file lists again (#521760)
+- use permissions 444 for all .debug files (#522194)
+- perl dep extractor heredoc parsing improvements (#524929)
+
 * Mon Jul 27 2009 Bill Nottingham <notting@redhat.com> - 4.7.1-2
 - bump release
 
