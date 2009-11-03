@@ -17,7 +17,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -80,6 +80,7 @@ BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: python-devel >= 2.2
 BuildRequires: lua-devel >= 5.1
 %if %{with xz}
+BuildRequires: autoconf
 BuildRequires: xz-devel >= 4.999.8
 %endif
 %if %{with sqlite}
@@ -174,7 +175,9 @@ that will manipulate RPM packages and databases.
 %patch100 -p1 -b .pkgconfig-deps
 
 %patch300 -p1 -b .niagara
+%if %{with xz}
 %patch301 -p1 -b .xz
+%endif
 %patch302 -p1 -b .pkgconfig-nover
 
 %if %{with int_bdb}
@@ -190,6 +193,9 @@ CPPFLAGS="$CPPFLAGS `pkg-config --cflags nss`"
 CFLAGS="$RPM_OPT_FLAGS"
 export CPPFLAGS CFLAGS LDFLAGS
 
+%if %{with xz}
+autoconf
+%endif
 # Using configure macro has some unwanted side-effects on rpm platform
 # setup, use the old-fashioned way for now only defining minimal paths.
 ./configure \
@@ -372,6 +378,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Nov 03 2009 Jindrich Novy <jnovy@redhat.com> - 4.6.1-3
+- regenerate configure when xz support is enabled (#532503)
+
 * Tue Sep 15 2009 Panu Matilainen <pmatilai@redhat.com> - 4.6.1-2
 - add support for XZ payloads and sources (#514480)
 - handle empty version in pkg-config files (#505351)
