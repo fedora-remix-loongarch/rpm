@@ -1,0 +1,22 @@
+commit 545304577f0ac82b2e4c1caa97f02d87f41324f7
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Wed Dec 2 15:30:27 2009 +0200
+
+    Fix the posix chown test for selinux enabled systems (RhBug:543035)
+    - on selinux enabled systems, 'ls -l' mode string is longer than
+      expected here, just trim the ls output to our expected length
+    (cherry picked from commit 46d1ba04483af09590ed070186a1be10b57c5977)
+
+diff --git a/configure.ac b/configure.ac
+index 967566c..2274080 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -61,7 +61,7 @@ AC_MSG_CHECKING(POSIX chmod)
+ touch foo.chmodtest
+ chmod 744 foo.chmodtest
+ chmod +X foo.chmodtest 2>/dev/null
+-a=`ls -l foo.chmodtest | awk '{print $1}'`
++a=`ls -l foo.chmodtest | awk '{print substr($1,1,10)}'`
+ rm -f foo.chmodtest
+ if test "$a" = "-rwxr-xr-x"; then
+     AC_MSG_RESULT(yes)

@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.7.1
+%define rpmver 4.7.2
 %define snapver {nil}
 %define srcver %{rpmver}
 
@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 6%{?dist}
+Release: 1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.7.x/%{name}-%{srcver}.tar.bz2
@@ -40,16 +40,14 @@ Patch3: rpm-4.6.0-fedora-specspo.patch
 
 # Patches already in upstream
 Patch200: rpm-4.7.1-bugurl.patch
-Patch201: rpm-4.7.1-abs-filelist.patch
-Patch202: rpm-4.7.1-debug-perms.patch
-Patch203: rpm-4.7.1-duplicate-deps.patch
-Patch204: rpm-4.7.1-chroot-env-paths.patch
-Patch205: rpm-4.7.1-rpm2cpio-init.patch
-Patch206: rpm-4.7.1-filedep-dnevr.patch
-Patch207: rpm-4.7.1-chroot-remove-env.patch
+Patch201: rpm-4.7.0-extra-provides.patch
+Patch202: rpm-4.7.1-pgp-subkeys.patch
+Patch203: rpm-4.7.1-sign-passcheck.patch
+Patch204: rpm-4.7.1-rpmfc-data.patch
+Patch205: rpm-4.7.1-chmod-test.patch
+Patch206: rpm-4.7.1-python-types.patch
 
 # These are not yet upstream
-Patch300: rpm-4.7.0-extra-provides.patch
 Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
 
@@ -98,6 +96,8 @@ BuildRequires: xz-devel >= 4.999.8
 %if %{with sqlite}
 BuildRequires: sqlite-devel
 %endif
+# XXX temporarily for chmod-test patch
+BuildRequires: autoconf automake
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -201,15 +201,13 @@ packages on a system.
 %patch3 -p1 -b .fedora-specspo
 
 %patch200 -p1 -b .bugurl
-%patch201 -p1 -b .abs-filelist
-%patch202 -p1 -b .debug-perms
-%patch203 -p1 -b .duplicate-deps
-%patch204 -p1 -b .chroot-env-paths
-%patch205 -p1 -b .rpm2cpio.init
-%patch206 -p1 -b .filedep-dnevr
-%patch207 -p1 -b .chroot-remove-env
+%patch201 -p1 -b .extra-prov
+%patch202 -p1 -b .pgp-subkey
+%patch203 -p1 -b .sign-passcheck
+%patch204 -p1 -b .rpmfc-data
+%patch205 -p1 -b .chmod-test
+%patch206 -p1 -b .python-types
 
-%patch300 -p1 -b .extra-prov
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
 
@@ -423,6 +421,16 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Dec 08 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.2-1
+- update to 4.7.2 (http://rpm.org/wiki/Releases/4.7.2)
+- fix posix chmod test to unbreak %%fixperms macro (#543035)
+- avoid looking into OpenPGP subkeys (#436812)
+- dont fail build on unrecognized non-executable files (#532489)
+- fix password check result when gpg is missing (#496754)
+- permit python to handle 64bit integer types from headers
+- all header integer types are unsigned, match this in python too
+- return python long objects where ints are not sufficient (#531243)
+
 * Mon Sep 21 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.1-6
 - use relative paths within db environment (related to #507309, #507309...)
 - remove db environment on close in chrooted operation (related to above)
