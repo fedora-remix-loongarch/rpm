@@ -15,7 +15,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.7.1
+%define rpmver 4.7.2
 %define snapver {nil}
 %define srcver %{rpmver}
 
