@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 10%{?dist}
+Release: 14%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -36,10 +36,9 @@ Patch2: rpm-4.5.90-gstreamer-provides.patch
 # this as Fedora-specific patch for now
 Patch3: rpm-4.7.90-fedora-specspo.patch
 # Postscript driver provides extraction is Fedora specific for now
-# TODO: merge these when things stabilize
-Patch4: rpm-4.8.0-psdriver.patch
-Patch5: rpm-4.8.0-psdriver-fixes.patch
-Patch6: rpm-4.8.0-psdriver-more-fixes.patch
+Patch4: rpm-4.8.0-psdriver-deps.patch
+# In current Fedora, man-pages pkg owns all the localized man directories
+Patch5: rpm-4.8.0-no-man-dirs.patch
 
 # Patches already in upstream
 Patch200: rpm-4.8.0-url-segfault.patch
@@ -48,6 +47,9 @@ Patch202: rpm-4.8.0-pythondeps-parallel.patch
 Patch203: rpm-4.8.0-python-bytecompile.patch
 Patch204: rpm-4.8.0-lazy-statfs.patch
 Patch205: rpm-4.8.0-erasure-dsi.patch
+Patch206: rpm-4.8.0-prep-keep-empty.patch
+Patch207: rpm-4.8.0-python-nocontexts.patch
+Patch208: rpm-4.8.0-python-mibool.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -191,9 +193,8 @@ packages on a system.
 %patch1 -p1 -b .pkgconfig-path
 %patch2 -p1 -b .gstreamer-prov
 %patch3 -p1 -b .fedora-specspo
-%patch4 -p1 -b .psdriver
-%patch5 -p1 -b .psdriver-fixes
-%patch6 -p1 -b .psdriver-more-fixes
+%patch4 -p1 -b .psdriver-deps
+%patch5 -p1 -b .no-man-dirs
 
 %patch200 -p1 -b .url-segfault
 %patch201 -p1 -b .verify-exitcode
@@ -201,6 +202,9 @@ packages on a system.
 %patch203 -p1 -b .python-bytecompile
 %patch204 -p1 -b .lazy-statfs
 %patch205 -p1 -b .erasure-dsi
+%patch206 -p1 -b .prep-keep-empty
+%patch207 -p1 -b .python-nocontexts
+%patch208 -p1 -b .python-mibool
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -269,7 +273,6 @@ for dbutil in \
 do
     ln -s ../../bin/%{dbprefix}_${dbutil} $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_${dbutil}
 done
-ln -s ../../bin/berkeley_%{dbprefix}_svc $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_svc
 %endif
 
 %find_lang %{name}
@@ -417,6 +420,22 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Apr 23 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.0-14
+- lose dangling symlink to extinct (and useless) berkeley_db_svc (#585174)
+
+* Wed Mar 24 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.0-13
+- fix python match iterator regression wrt boolean representation
+
+* Wed Mar 17 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.0-12
+- unbreak find-lang --with-man from yesterdays braindamage
+
+* Tue Mar 16 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.0-11
+- support single PPD providing driver for devices (#568351)
+- merge the psdriver patch pile into one
+- preserve empty lines in spec prep section (#573339)
+- teach python bindings about RPMTRANS_FLAG_NOCONTEXTS (related to #573111)
+- dont own localized man directories through find_lang (#569536)
+
 * Mon Feb 15 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.0-10
 - drop bogus dependency on lzma, xz is used to handle the lzma format too
 
