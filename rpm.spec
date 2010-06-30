@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.8.x/%{name}-%{srcver}.tar.bz2
@@ -43,6 +43,7 @@ Patch5: rpm-4.8.0-no-man-dirs.patch
 # Patches already in upstream
 Patch200: rpm-4.8.0-pythondeps-parallel.patch
 Patch201: rpm-4.8.0-python-bytecompile.patch
+Patch202: rpm-4.8.1-nlinks-race.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -191,6 +192,7 @@ packages on a system.
 
 %patch200 -p1 -b .pythondeps-parallel
 %patch201 -p1 -b .python-bytecompile
+%patch202 -p1 -b .nlinks-race
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -406,6 +408,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 30 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.1-2
+- plug a tiny race on sbit/capability removal
+
 * Fri Jun 14 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.1-1
 - update to 4.8.1 (http://rpm.org/wiki/Releases/4.8.1)
 - drop no longer needed patches
