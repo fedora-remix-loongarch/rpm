@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.7.x/%{name}-%{srcver}.tar.bz2
@@ -46,6 +46,7 @@ Patch203: rpm-4.7.1-sign-passcheck.patch
 Patch204: rpm-4.7.1-rpmfc-data.patch
 Patch205: rpm-4.7.1-chmod-test.patch
 Patch206: rpm-4.7.1-python-types.patch
+Patch207: rpm-4.7.2-remove-sbits.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -207,6 +208,7 @@ packages on a system.
 %patch204 -p1 -b .rpmfc-data
 %patch205 -p1 -b .chmod-test
 %patch206 -p1 -b .python-types
+%patch207 -p1 -b .remove-sbits
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -421,6 +423,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 30 2010 Panu Matilainen <pmatilai@redhat.com> - 4.7.2-2
+- Fix CVE-2010-2059 (#598775) and CVE-2010-2198 (#601955)
+
 * Tue Dec 08 2009 Panu Matilainen <pmatilai@redhat.com> - 4.7.2-1
 - update to 4.7.2 (http://rpm.org/wiki/Releases/4.7.2)
 - fix posix chmod test to unbreak %%fixperms macro (#543035)
