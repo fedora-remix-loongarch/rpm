@@ -52,7 +52,7 @@ Patch205: rpm-4.8.1-find-debuginfo-gdb-index.patch
 Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
 Patch303: rpm-4.8.0-pkgconfig-private.patch
-Patch304: rpm-4.8.1-meego-arm.patch
+Patch304: rpm-4.8.1-fixarm.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -206,7 +206,7 @@ packages on a system.
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
 %patch303 -p1 -b .pkgconfig-private
-%patch304 -p1 -b .arm
+%patch304 -p1 -b .fixarm
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
