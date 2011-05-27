@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.8.x/%{name}-%{srcver}.tar.bz2
@@ -48,6 +48,7 @@ Patch202: rpm-4.8.1-nlinks-race.patch
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
+Patch303: rpm-4.8.1-fixarm.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -196,6 +197,7 @@ packages on a system.
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
+%patch303 -p1 -b .arm
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -408,6 +410,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri May 27 2011 Paul Whalen <paul.whalen@senecac.on.ca> - 4.8.1-3
+- Added patch for ARM builds
+
 * Wed Jun 30 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.1-2
 - plug a tiny race on sbit/capability removal
 
