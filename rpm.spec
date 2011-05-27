@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: 5%{?dist}
+Release: 6%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.8.x/%{name}-%{srcver}.tar.bz2
@@ -52,6 +52,7 @@ Patch205: rpm-4.8.1-find-debuginfo-gdb-index.patch
 Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
 Patch303: rpm-4.8.0-pkgconfig-private.patch
+Patch304: rpm-4.8.1-meego-arm.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -205,6 +206,7 @@ packages on a system.
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
 %patch303 -p1 -b .pkgconfig-private
+%patch304 -p1 -b .arm
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -417,6 +419,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Fri May 27 2011 Paul Whalen <paul.whalen@senecac.on.ca> - 4.8.1-6
+- Added meego patch for ARM macros
+
 * Tue Aug 10 2010 Panu Matilainen <pmatilai@redhat.com> - 4.8.1-5
 - create gdb index on debuginfo generation (#617166)
 - rpm-build now requires /usr/bin/gdb-add-index for consistent index creation
