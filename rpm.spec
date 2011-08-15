@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.9.1
+%define rpmver 4.9.1.1
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 
 %define bdbname db4
@@ -40,13 +40,14 @@ Patch3: rpm-4.8.0-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 
 # Patches already in upstream
-Patch200: rpm-4.9.1-recurse-dir.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
 # To be upstreamed after rawhide-testdrive (#641377)
 Patch303: rpm-4.9.0-debuginfo-allnames.patch
+# Probably to be upstreamed in slightly different form
+Patch304: rpm-4.9.1.1-ld-flags.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -208,11 +209,10 @@ packages on a system.
 %patch3 -p1 -b .no-man-dirs
 %patch4 -p1 -b .use-gpg2
 
-%patch200 -p1 -b .recurse-dir
-
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
 %patch303 -p1 -b .debuginfo-allnames
+%patch304 -p1 -b .ldflags
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -426,6 +426,12 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Mon Aug 08 2011 Adam Jackson <ajax@redhat.com> 4.9.1.1-2
+- Add RPM_LD_FLAGS to build environment (#728974)
+
+* Tue Aug 02 2011 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.1-1
+- update to 4.9.1.1
+
 * Tue Jul 19 2011 Panu Matilainen <pmatilai@redhat.com> - 4.9.1-2
 - fix recursion of directories with trailing slash in file list (#722474)
 
