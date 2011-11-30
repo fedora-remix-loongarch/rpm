@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}.1
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -430,7 +430,7 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
-* Tue Nov 30 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-2
+* Tue Nov 30 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-2.1
 - conditionally apply arm patch for hardfp on all arches but arm softfp ones
 
 * Fri Sep 30 2011 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.2-1
