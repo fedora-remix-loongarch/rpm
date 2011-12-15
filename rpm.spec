@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}
+Release: %{?snapver:0.%{snapver}.}4%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -437,7 +437,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
-* Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 4.9.1.2-.3
+* Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 4.9.1.2-4
+- bump release
+
+* Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 4.9.1.2-3
 - warn but dont fail the build if STABS encountered by debugedit 
   (#725378, Panu Matilainen)
 
