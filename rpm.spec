@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -40,6 +40,8 @@ Patch3: rpm-4.8.0-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 #conditionally applied patch for arm hardware floating point
 Patch5: rpm-4.9.0-armhfp.patch
+#apply patch for PPC stubs
+Patch6: rpm-4.9.x-debugedit-stabs-warn.patch
 
 # Patches already in upstream
 
@@ -220,6 +222,8 @@ packages on a system.
 %ifnarch armv3l armv4b armv4l armv4tl armv5tel armv5tejl armv6l armv7l
 %patch5 -p1 -b .armhfp
 %endif
+
+%patch6 -p1 -b .stubs_warn
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -433,6 +437,11 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 4.9.1.2-.3
+- warn but dont fail the build if STABS encountered by debugedit 
+  (#725378, Panu Matilainen)
+
+
 * Tue Nov 30 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-2
 - conditionally apply arm patch for hardfp on all arches but arm softfp ones
 
