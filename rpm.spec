@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}4%{?dist}
+Release: %{?snapver:0.%{snapver}.}4%{?dist}.1
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -52,6 +52,8 @@ Patch302: rpm-4.7.1-geode-i686.patch
 Patch303: rpm-4.9.0-debuginfo-allnames.patch
 # Probably to be upstreamed in slightly different form
 Patch304: rpm-4.9.1.1-ld-flags.patch
+# Temporary Patch to provide support for updates
+Patch400: rpm-4.9.1.2-rpmlib-filesystem-check.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -217,6 +219,8 @@ packages on a system.
 %patch302 -p1 -b .geode
 %patch303 -p1 -b .debuginfo-allnames
 %patch304 -p1 -b .ldflags
+
+%patch400 -p1 -b .rpmlib-filesystem-check
 
 # this patch cant be applied on softfp builds
 %ifnarch armv3l armv4b armv4l armv4tl armv5tel armv5tejl armv6l armv7l
@@ -437,6 +441,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Tue Jan 24 2012 Harald Hoyer <harald@redhat.com> 4.9.1.2-4.1
+- add temporary rpmlib patch to support filesystem transition
+  https://fedoraproject.org/wiki/Features/UsrMove
+
 * Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 4.9.1.2-4
 - bump release
 
