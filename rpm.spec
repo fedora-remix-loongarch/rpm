@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}.2
+Release: %{?snapver:0.%{snapver}.}3%{?dist}.3
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -49,6 +49,8 @@ Patch301: rpm-4.6.0-niagara.patch
 Patch302: rpm-4.7.1-geode-i686.patch
 # To be upstreamed after rawhide-testdrive (#641377)
 Patch303: rpm-4.9.0-debuginfo-allnames.patch
+# Temporary Patch to provide support for updates
+Patch400: rpm-4.9.1.2-rpmlib-filesystem-check.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -215,6 +217,9 @@ packages on a system.
 %patch303 -p1 -b .debuginfo-allnames
 
 %patch5 -p1 -b .armhfp
+
+%patch400 -p1 -b .rpmlib-filesystem-check
+
 # this patch cant be applied on softfp builds
 %ifnarch armv3l armv4b armv4l armv4tl armv5tel armv5tejl armv6l armv7l
 %patch6 -p1 -b .armhfp-logic
@@ -432,6 +437,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Tue Jan 24 2012 Harald Hoyer <harald@redhat.com> 4.9.1.2-3.3
+- add temporary rpmlib patch to support filesystem transition
+  https://fedoraproject.org/wiki/Features/UsrMove
+
 * Wed Dec 21 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-3.2
 - only conditionally apply the armhfp logic code we do need the hfp macros everywhere
 
