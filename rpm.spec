@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}3%{?dist}.2
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -40,6 +40,7 @@ Patch3: rpm-4.8.0-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 #conditionally applied patch for arm hardware floating point
 Patch5: rpm-4.9.0-armhfp.patch
+Patch6: rpm-4.9.0-armhfp-logic.patch
 
 # Patches already in upstream
 
@@ -213,9 +214,10 @@ packages on a system.
 %patch302 -p1 -b .geode
 %patch303 -p1 -b .debuginfo-allnames
 
+%patch5 -p1 -b .armhfp
 # this patch cant be applied on softfp builds
 %ifnarch armv3l armv4b armv4l armv4tl armv5tel armv5tejl armv6l armv7l
-%patch5 -p1 -b .armhfp
+%patch6 -p1 -b .armhfp-logic
 %endif
 
 %if %{with int_bdb}
@@ -430,7 +432,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
-* Tue Nov 30 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-2.1
+* Wed Dec 21 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-3.2
+- only conditionally apply the armhfp logic code we do need the hfp macros everywhere
+
+* Tue Nov 30 2011 Dennis Gilmore <dennis@ausil.us> - 4.9.1.2-3.1
 - conditionally apply arm patch for hardfp on all arches but arm softfp ones
 
 * Fri Sep 30 2011 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.2-1
