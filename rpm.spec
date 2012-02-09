@@ -44,6 +44,9 @@ Patch5: rpm-4.9.0-armhfp.patch
 Patch6: rpm-4.9.x-debugedit-stabs-warn.patch
 
 # Patches already in upstream
+Patch100: rpm-4.9.x-fontattr.patch
+Patch101: rpm-4.9.x-elfattr.patch
+Patch102: rpm-4.9.x-mpsize.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -214,6 +217,10 @@ packages on a system.
 %patch2 -p1 -b .fedora-specspo
 %patch3 -p1 -b .no-man-dirs
 %patch4 -p1 -b .use-gpg2
+
+%patch100 -p1 -b .fontattr
+%patch101 -p1 -b .elfattr
+%patch102 -p1 -b .mpsize
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -441,6 +448,11 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Thu Feb 09 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.2-5
+- adjust font detection rules for libmagic change (#757105)
+- fix classification of ELF binaries with setuid/setgid bit (#758251)
+- switch back to smaller BDB cache default (#752897)
+
 * Tue Jan 24 2012 Harald Hoyer <harald@redhat.com> 4.9.1.2-4.1
 - add temporary rpmlib patch to support filesystem transition
   https://fedoraproject.org/wiki/Features/UsrMove
