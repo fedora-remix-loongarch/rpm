@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.9.1.2
+%define rpmver 4.9.1.3
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 
 %define bdbname db4
@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}4%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -444,6 +444,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Tue Apr 03 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-1
+- update to 4.1.9.3 (http://rpm.org/wiki/Releases/4.9.1.3)
+- fixes CVE-2012-0060, CVE-2012-0061 and CVE-2012-0815
+ 
 * Thu Feb 09 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.2-4
 - adjust font detection rules for libmagic change (#757105)
 - fix classification of ELF binaries with setuid/setgid bit (#758251)
