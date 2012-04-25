@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}
+Release: %{?snapver:0.%{snapver}.}4%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -476,6 +476,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Wed Apr 25 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-4
+- Fixed an issue with the ppc64p7 support where on 32bit ppc the detection would go horribly wrong
+
 * Wed Apr 25 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-3
 - Fixed missing ppc64p7 detection in installplatform
 
