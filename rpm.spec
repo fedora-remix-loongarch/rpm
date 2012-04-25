@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -41,6 +41,9 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.9.0-armhfp.patch
 #conditionally applied patch for arm hardware floating point
 Patch6: rpm-4.9.0-armhfp-logic.patch
+# Fix installplatform for ppc64p7
+Patch7: rpm-4.9.1.3-ppc64p7-platform.patch
+
 
 # Patches already in upstream
 Patch100: rpm-4.9.x-fontattr.patch
@@ -259,6 +262,8 @@ packages on a system.
 %patch6 -p1 -b .armhfp-logic
 %endif
 
+%patch7 -p1 -b .ppc64p7-platform
+
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
 %endif
@@ -471,6 +476,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Wed Apr 25 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-3
+- Fixed missing ppc64p7 detection in installplatform
+
 * Wed Apr 18 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-2
 - Added upstream patch for general /proc/self/auxv parsing and ppc64p7 support
 
