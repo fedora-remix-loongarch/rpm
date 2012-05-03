@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}5%{?dist}
+Release: %{?snapver:0.%{snapver}.}6%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -43,6 +43,8 @@ Patch5: rpm-4.9.0-armhfp.patch
 Patch6: rpm-4.9.0-armhfp-logic.patch
 # Fix installplatform for ppc64p7
 Patch7: rpm-4.9.1.3-ppc64p7-platform.patch
+# Arch macro for all IBM Power 64bit archs
+Patch8: rpm-4.9.1.3-power64.patch
 
 
 # Patches already in upstream
@@ -263,6 +265,7 @@ packages on a system.
 %endif
 
 %patch7 -p1 -b .ppc64p7-platform
+%patch8 -p1 -b .power64
 
 %if %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -476,6 +479,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Thu May 03 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-6
+- Arch macro for all supported PowerPC 64 processors (#818320)
+
 * Mon Apr 30 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-5
 - Fixed missing lib64 library support for ppc64p7 (#817282)
 
