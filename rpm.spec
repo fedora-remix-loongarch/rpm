@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}6%{?dist}
+Release: %{?snapver:0.%{snapver}.}7%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -59,6 +59,7 @@ Patch107: rpm-4.9.x-include-cond.patch
 Patch108: rpm-4.9.x-exclude-warn.patch
 Patch109: rpm-4.9.x-tstest-fileinfo.patch
 Patch110: rpm-4.9.1.2-ppc64p7.patch
+Patch111: rpm-4.9.x-db-einval.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -247,6 +248,7 @@ packages on a system.
 %patch108 -p1 -b .exclude-warn
 %patch109 -p1 -b .tstest-fileinfo
 %patch110 -p1 -b .ppc64p7
+%patch111 -p1 -b .db-einval
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -364,7 +366,7 @@ make check
 # XXX this is klunky and ugly, rpm itself should handle this
 dbstat=/usr/lib/rpm/rpmdb_stat
 if [ -x "$dbstat" ]; then
-    if "$dbstat" -e -h /var/lib/rpm 2>&1 | grep -q "doesn't match environment version \| Invalid argument"; then
+    if "$dbstat" -e -h /var/lib/rpm 2>&1 | grep -q "doesn't match library version \| Invalid argument"; then
         rm -f /var/lib/rpm/__db.* 
     fi
 fi
@@ -479,6 +481,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Mon May 07 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-7
+- Fall back to private db environment on filesystems not supporting mmap()
+- Adjust posttrans script wrt bdb string change (#803866, #805613)
+
 * Thu May 03 2012 Phil Knirsch <pknirsch@redhat.com> 4.9.1.3-6
 - Arch macro for all supported PowerPC 64 processors (#818320)
 

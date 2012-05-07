@@ -1,0 +1,37 @@
+commit 58c5eb28d5f267313294486c6f8a7a6c84984d86
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Thu May 3 16:15:59 2012 +0300
+
+    Fall back to private db environment on system level EINVAL
+    
+    - BDB wants to use mmap() for its environment by default, but not
+      all (file)systems support this, as pointed out by Daniel Drak.
+      However env->open() can return EINVAL for a number of reasons,
+      require all the fallback reasons to be system level errors to
+      differentiate from "logical" errors such as incompatible flags
+      to (possibly pre-existing) db environment, in which case we better
+      just error out.
+
+diff --git a/lib/backend/db3.c b/lib/backend/db3.c
+index 30ed7ac..bbf9577 100644
+--- a/lib/backend/db3.c
++++ b/lib/backend/db3.c
+@@ -177,7 +177,8 @@ static int db_init(rpmdb rdb, const char * dbhome)
+ 
+     /*
+      * Actually open the environment. Fall back to private environment
+-     * if we dont have permission to join/create shared environment.
++     * if we dont have permission to join/create shared environment or
++     * system doesn't support it..
+      */
+     while (retry_open) {
+ 	char *fstr = prDbiOpenFlags(eflags, 1);
+@@ -185,7 +186,7 @@ static int db_init(rpmdb rdb, const char * dbhome)
+ 	free(fstr);
+ 
+ 	rc = (dbenv->open)(dbenv, dbhome, eflags, rdb->db_perms);
+-	if (rc == EACCES || rc == EROFS) {
++	if ((rc == EACCES || rc == EROFS || rc == EINVAL) && errno == rc) {
+ 	    eflags |= DB_PRIVATE;
+ 	    retry_open--;
+ 	} else {
