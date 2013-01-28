@@ -45,6 +45,7 @@ Patch5: rpm-4.9.90-armhfp.patch
 Patch6: rpm-4.9.0-armhfp-logic.patch
 
 # Patches already in upstream
+Patch100: rpm-4.10.2-skip-ghost.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -217,6 +218,8 @@ packages on a system.
 %patch2 -p1 -b .fedora-specspo
 %patch3 -p1 -b .no-man-dirs
 %patch4 -p1 -b .use-gpg2
+
+%patch100 -p1 -b .skip-ghost
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -450,6 +453,7 @@ exit 0
 %changelog
 * Mon Jan 28 2013 Panu Matilainen <pmatilai@redhat.com> - 4.10.2-2
 - armv7hl and armv7hnl should not have -mthumb (#901901)
+- fix regression on paths shared between a real file/dir and a ghost
 
 * Mon Dec 10 2012 Panu Matilainen <pmatilai@redhat.com> - 4.10.2-1
 - update to 4.10.2 (http://rpm.org/wiki/Releases/4.10.2)
