@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}8%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.9.x/%{name}-%{srcver}.tar.bz2
@@ -481,6 +481,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Wed Mar 27 2013 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-8
+- armv7hl and armv7hnl should not have -mthumb (#901901)
+
 * Mon May 07 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-7
 - Fall back to private db environment on filesystems not supporting mmap()
 - Adjust posttrans script wrt bdb string change (#803866, #805613)
