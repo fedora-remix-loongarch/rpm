@@ -290,6 +290,8 @@ export CPPFLAGS CFLAGS LDFLAGS
     --localstatedir=%{_var} \
     --sharedstatedir=%{_var}/lib \
     --libdir=%{_libdir} \
+    --build=%{_target_platform} \
+    --host=%{_target_platform} \
     %{!?with_int_bdb: --with-external-db} \
     %{!?with_plugins: --disable-plugins} \
     --with-lua \
@@ -483,6 +485,7 @@ exit 0
 %changelog
 * Wed Mar 27 2013 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-8
 - armv7hl and armv7hnl should not have -mthumb (#901901)
+- force _host_vendor to redhat to better match toolchain etc (#893381)
 
 * Mon May 07 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-7
 - Fall back to private db environment on filesystems not supporting mmap()
