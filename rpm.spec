@@ -61,6 +61,7 @@ Patch109: rpm-4.9.x-tstest-fileinfo.patch
 Patch110: rpm-4.9.1.2-ppc64p7.patch
 Patch111: rpm-4.9.x-db-einval.patch
 Patch112: rpm-4.9.x-doc-quotes.patch
+Patch113: rpm-4.9.x-rpm2cpio-foo.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -251,6 +252,7 @@ packages on a system.
 %patch110 -p1 -b .ppc64p7
 %patch111 -p1 -b .db-einval
 %patch112 -p1 -b .doc-quotes
+%patch113 -p1 -b .rpm2cpio.foo
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -489,6 +491,7 @@ exit 0
 - armv7hl and armv7hnl should not have -mthumb (#901901)
 - force _host_vendor to redhat to better match toolchain etc (#893381)
 - make double-quoting work for special %%doc (#928110)
+- teach rpm2cpio about XZ, fix error exit on unknown compression (#746376)
 
 * Mon May 07 2012 Panu Matilainen <pmatilai@redhat.com> - 4.9.1.3-7
 - Fall back to private db environment on filesystems not supporting mmap()
