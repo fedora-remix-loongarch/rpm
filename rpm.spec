@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
@@ -45,6 +45,10 @@ Patch5: rpm-4.9.90-armhfp.patch
 Patch6: rpm-4.9.0-armhfp-logic.patch
 
 # Patches already in upstream
+# Check for stale locks when opening write-cursors
+Patch100: rpm-4.11.x-cursor-failchk.patch
+# Serialize BDB environment open+close
+Patch101: rpm-4.11.x-dbenv-serialize.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -217,6 +221,9 @@ packages on a system.
 %patch2 -p1 -b .fedora-specspo
 %patch3 -p1 -b .no-man-dirs
 %patch4 -p1 -b .use-gpg2
+
+%patch100 -p1 -b .cursor-failchk
+%patch101 -p1 -b .dbenv-serialize
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -450,6 +457,10 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Tue May 28 2013 Panu Matilainen <pmatilai@redhat.com> - 4.11.0.1-2
+- check for stale locks when opening write-cursors (#860500, #962750...)
+- serialize BDB environment open/close (#924417)
+
 * Mon Feb 04 2013 Panu Matilainen <pmatilai@redhat.com> - 4.11.0.1-1
 - update to 4.11.0.1 (http://rpm.org/wiki/Releases/4.11.0.1)
 
