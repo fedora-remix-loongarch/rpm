@@ -21,10 +21,10 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
-Source0: http://rpm.org/releases/testing/%{name}-%{srcver}.tar.bz2
+Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %else
@@ -45,6 +45,9 @@ Patch6: rpm-4.9.0-armhfp-logic.patch
 
 # Patches already in upstream
 Patch100: rpm-4.11.1-instprefix.patch
+Patch101: rpm-4.11.1-file-triplet-check.patch
+Patch102: rpm-4.11.1-caps-double-free.patch
+Patch103: rpm-4.11.1-empty-lua-script.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -222,6 +225,9 @@ packages on a system.
 %patch4 -p1 -b .use-gpg2
 
 %patch100 -p1 -b .instprefix
+%patch101 -p1 -b .file-triplet-check
+%patch102 -p1 -b .caps-double-free
+%patch103 -p1 -b .empty-lua-script
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -457,6 +463,12 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Mon Sep 09 2013 Matilainen <pmatilai@redhat.com> - 4.11.1-2
+- fix build-time double-free on file capability processing (#956190)
+- fix relocation related regression on file sanity check (#1001553)
+- fix segfault on empty -p <lua> scriptlet body (#1004062)
+- fix source url, once again
+
 * Fri Jul 05 2013 Panu Matilainen <pmatilai@redhat.com> - 4.11.1-1
 - update to 4.11.1 (http://rpm.org/wiki/Releases/4.11.1)
 - drop upstreamed patches
