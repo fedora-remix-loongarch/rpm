@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.10.x/%{name}-%{srcver}.tar.bz2
@@ -48,6 +48,7 @@ Patch6: rpm-4.9.0-armhfp-logic.patch
 Patch100: rpm-4.10.x-caps-double-free.patch
 Patch101: rpm-4.10.x-cursor-failchk.patch
 Patch102: rpm-4.10.x-db-serialize.patch
+Patch103: rpm-4.10.x-empty-lua-script.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -224,6 +225,7 @@ packages on a system.
 %patch100 -p1 -b .caps-double-free
 %patch101 -p1 -b .cursor-failchk
 %patch102 -p1 -b .db-serialize
+%patch103 -p1 -b .empty-lua-script
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -455,6 +457,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Mon Sep 09 2013 Panu Matilainen <pmatilai@redhat.com> - 4.10.3.1-3
+- fix segfault on empty -p <lua> scriptlet body (#1004062)
+
 * Mon Aug 26 2013 Panu Matilainen <pmatilai@redhat.com> - 4.10.3.1-2
 - fix build-time double-free on file capability processing (#956190)
 - check for stale locks when opening write-cursors (#860500)

@@ -1,0 +1,12 @@
+diff -up rpm-4.10.3.1/rpmio/rpmlua.c.empty-lua-script rpm-4.10.3.1/rpmio/rpmlua.c
+--- rpm-4.10.3.1/rpmio/rpmlua.c.empty-lua-script	2012-10-31 14:23:49.000000000 +0200
++++ rpm-4.10.3.1/rpmio/rpmlua.c	2013-09-09 14:13:49.844888464 +0300
+@@ -492,6 +492,8 @@ int rpmluaRunScript(rpmlua _lua, const c
+     int ret = 0;
+     if (name == NULL)
+ 	name = "<lua>";
++    if (script == NULL)
++	script = "";
+     if (luaL_loadbuffer(L, script, strlen(script), name) != 0) {
+ 	rpmlog(RPMLOG_ERR, _("invalid syntax in lua script: %s\n"),
+ 		 lua_tostring(L, -1));
