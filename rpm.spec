@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -169,7 +169,7 @@ Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
-Requires: unzip gzip bzip2 cpio xz
+Requires: unzip gzip bzip2 cpio xz tar
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
 Conflicts: ocaml-runtime < 3.11.1-7
@@ -463,6 +463,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Mon Sep 09 2013 Matilainen <pmatilai@redhat.com> - 4.11.1-3
+- add missing dependency on tar to rpm-build (#986539)
+
 * Mon Sep 09 2013 Matilainen <pmatilai@redhat.com> - 4.11.1-2
 - fix build-time double-free on file capability processing (#956190)
 - fix relocation related regression on file sanity check (#1001553)
