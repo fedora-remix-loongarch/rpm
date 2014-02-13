@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.11.1
+%define rpmver 4.11.2
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 
 %define bdbname libdb
@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -46,13 +46,9 @@ Patch5: rpm-4.9.90-armhfp.patch
 Patch6: rpm-4.9.0-armhfp-logic.patch
 
 # Patches already in upstream
-# Filter soname dependencies by name
+# Filter soname dependencies by name (these are upstream but not in 4.11.x)
 Patch100: rpm-4.11.x-filter-soname-deps.patch
-Patch101: rpm-4.11.1-instprefix.patch
 Patch102: rpm-4.11.x-do-not-filter-ld64.patch
-Patch103: rpm-4.11.1-file-triplet-check.patch
-Patch104: rpm-4.11.1-caps-double-free.patch
-Patch105: rpm-4.11.1-empty-lua-script.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -118,6 +114,8 @@ BuildRequires: xz-devel%{_isa} >= 4.999.8
 %endif
 # Only required by sepdebugcrcfix patch
 BuildRequires: binutils-devel
+# Couple of patches change makefiles so, require for now...
+BuildRequires: automake libtool
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -252,11 +250,7 @@ packages on a system.
 %patch4 -p1 -b .use-gpg2
 
 %patch100 -p1 -b .filter-soname-deps
-%patch101 -p1 -b .instprefix
 %patch102 -p1 -b .dont-filter-ld64
-%patch103 -p1 -b .file-triplet-check
-%patch104 -p1 -b .caps-double-free
-%patch105 -p1 -b .empty-lua-script
 
 %patch301 -p1 -b .niagara
 %patch302 -p1 -b .geode
@@ -286,6 +280,8 @@ ln -s db-%{bdbver} db
 CPPFLAGS="$CPPFLAGS `pkg-config --cflags nss`"
 CFLAGS="$RPM_OPT_FLAGS"
 export CPPFLAGS CFLAGS LDFLAGS
+
+autoreconf -i -f
 
 # Using configure macro has some unwanted side-effects on rpm platform
 # setup, use the old-fashioned way for now only defining minimal paths.
@@ -513,6 +509,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Thu Feb 13 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.2-1
+- update to 4.11.2 (http://rpm.org/wiki/Releases/4.11.2)
+
 * Mon Sep 09 2013 Matilainen <pmatilai@redhat.com> - 4.11.1-7
 - fix build-time double-free on file capability processing (#956190)
 - fix relocation related regression on file sanity check (#1001553)
