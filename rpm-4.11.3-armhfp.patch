@@ -1,7 +1,7 @@
-diff -uNr rpm-4.9.0-orig//macros.in rpm-4.9.0/macros.in
---- rpm-4.9.0-orig//macros.in	2011-08-05 12:23:04.000000000 -0500
-+++ rpm-4.9.0/macros.in	2011-08-05 12:25:13.000000000 -0500
-@@ -1032,7 +1032,7 @@
+diff -up rpm-4.11.3/macros.in.armhfp rpm-4.11.3/macros.in
+--- rpm-4.11.3/macros.in.armhfp	2014-09-05 16:09:00.595885788 +0300
++++ rpm-4.11.3/macros.in	2014-09-05 16:09:00.602885768 +0300
+@@ -999,7 +999,7 @@ done \
  
  #------------------------------------------------------------------------------
  # arch macro for all supported ARM processors
@@ -10,19 +10,19 @@ diff -uNr rpm-4.9.0-orig//macros.in rpm-4.9.0/macros.in
  
  #------------------------------------------------------------------------------
  # arch macro for all supported Sparc processors
-diff -uNr rpm-4.9.0-orig//rpmrc.in rpm-4.9.0/rpmrc.in
---- rpm-4.9.0-orig//rpmrc.in	2011-08-05 12:23:04.000000000 -0500
-+++ rpm-4.9.0/rpmrc.in	2011-08-05 12:26:34.000000000 -0500
-@@ -66,6 +66,8 @@
+diff -up rpm-4.11.3/rpmrc.in.armhfp rpm-4.11.3/rpmrc.in
+--- rpm-4.11.3/rpmrc.in.armhfp	2014-09-05 16:09:00.590885802 +0300
++++ rpm-4.11.3/rpmrc.in	2014-09-05 16:09:00.602885768 +0300
+@@ -68,6 +68,8 @@ optflags: armv5tel -O2 -g -march=armv5te
  optflags: armv5tejl -O2 -g -march=armv5te
  optflags: armv6l -O2 -g -march=armv6
  optflags: armv7l -O2 -g -march=armv7
 +optflags: armv7hl -O2 -g -march=armv7-a -mfloat-abi=hard -mfpu=vfpv3-d16
 +optflags: armv7hnl -O2 -g -march=armv7-a -mfloat-abi=hard -mfpu=neon
  
- optflags: atarist -O2 -g -fomit-frame-pointer
- optflags: atariste -O2 -g -fomit-frame-pointer
-@@ -140,6 +142,8 @@
+ optflags: m68k -O2 -g -fomit-frame-pointer
+ 
+@@ -185,6 +187,8 @@ arch_canon:     armv5tel: armv5tel 	12
  arch_canon:     armv5tejl: armv5tejl 	12
  arch_canon:     armv6l: armv6l 	12
  arch_canon:     armv7l: armv7l 	12
@@ -31,25 +31,25 @@ diff -uNr rpm-4.9.0-orig//rpmrc.in rpm-4.9.0/rpmrc.in
  
  arch_canon:	m68kmint: m68kmint	13
  arch_canon:	atarist: m68kmint	13
-@@ -248,6 +252,8 @@
+@@ -298,6 +302,8 @@ buildarchtranslate: armv5tel: armv5tel
  buildarchtranslate: armv5tejl: armv5tejl
  buildarchtranslate: armv6l: armv6l
  buildarchtranslate: armv7l: armv7l
 +buildarchtranslate: armv7hl: armv7hl
 +buildarchtranslate: armv7hnl: armv7hnl
  
- buildarchtranslate: atarist: m68kmint
- buildarchtranslate: atariste: m68kmint
-@@ -336,6 +342,8 @@
+ buildarchtranslate: m68k: m68k
+ 
+@@ -392,6 +398,8 @@ arch_compat: armv5tel: armv4tl
  arch_compat: armv4tl: armv4l
  arch_compat: armv4l: armv3l
  arch_compat: armv3l: noarch
 +arch_compat: armv7hnl: armv7hl
 +arch_compat: armv7hl: noarch
  
- arch_compat: atarist: m68kmint noarch
- arch_compat: atariste: m68kmint noarch
-@@ -441,6 +449,9 @@
+ arch_compat: m68k: noarch
+ 
+@@ -505,6 +513,9 @@ buildarch_compat: armv4tl: armv4l
  buildarch_compat: armv4l: armv3l
  buildarch_compat: armv3l: noarch
  
