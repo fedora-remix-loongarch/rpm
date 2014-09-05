@@ -39,7 +39,7 @@ Patch2: rpm-4.9.90-fedora-specspo.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 # gnupg2 comes installed by default, avoid need to drag in gnupg too
 Patch4: rpm-4.8.1-use-gpg2.patch
-Patch5: rpm-4.9.90-armhfp.patch
+Patch5: rpm-4.11.3-armhfp.patch
 #conditionally applied patch for arm hardware floating point
 Patch6: rpm-4.9.0-armhfp-logic.patch
 
