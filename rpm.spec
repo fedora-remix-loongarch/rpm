@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.11.2
+%define rpmver 4.11.3
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 
 %define bdbname libdb
@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -464,6 +464,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Fri Sep 05 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.3-1
+- update to 4.11.3 (http://rpm.org/wiki/Releases/4.11.3)
+
 * Tue Feb 18 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.2-2
 - reduce the double separator spec parse error into a warning (#1065563)
 
