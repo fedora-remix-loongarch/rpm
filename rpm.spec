@@ -11,7 +11,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.11.2
+%define rpmver 4.11.3
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 
 %define bdbname libdb
@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -65,8 +65,6 @@ Patch305: rpm-4.10.0-dwz-debuginfo.patch
 Patch306: rpm-4.10.0-minidebuginfo.patch
 # Fix CRC32 after dwz (#971119)
 Patch307: rpm-4.11.1-sepdebugcrcfix.patch
-# To be upstreamed in slightly different form
-Patch308: rpm-4.11.0.1-setuppy-fixes.patch
 # Temporary Patch to provide support for updates
 Patch400: rpm-4.10.90-rpmlib-filesystem-check.patch
 
@@ -264,7 +262,6 @@ packages on a system.
 %patch305 -p1 -b .dwz-debuginfo
 %patch306 -p1 -b .minidebuginfo
 %patch307 -p1 -b .sepdebugcrcfix
-%patch308 -p1 -b .setuppy-fixes
 
 %patch400 -p1 -b .rpmlib-filesystem-check
 
@@ -515,6 +512,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Fri Sep 05 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.3-1
+- update to 4.11.3 (http://rpm.org/wiki/Releases/4.11.3)
+
 * Tue Feb 18 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.2-2
 - reduce the double separator spec parse error into a warning (#1065563)
 
