@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -65,6 +65,11 @@ Patch305: rpm-4.10.0-dwz-debuginfo.patch
 Patch306: rpm-4.10.0-minidebuginfo.patch
 # Fix CRC32 after dwz (#971119)
 Patch307: rpm-4.11.1-sepdebugcrcfix.patch
+# Fix race condidition where unchecked data is exposed in the file system
+Patch308: rpm-4.11.x-CVE-2013-6435.patch
+# Add check against malicious CPIO file name size
+Patch309: rpm-4.11.x-CVE-2014-8118.patch
+
 # Temporary Patch to provide support for updates
 Patch400: rpm-4.10.90-rpmlib-filesystem-check.patch
 
@@ -262,6 +267,8 @@ packages on a system.
 %patch305 -p1 -b .dwz-debuginfo
 %patch306 -p1 -b .minidebuginfo
 %patch307 -p1 -b .sepdebugcrcfix
+%patch308 -p1 -b .chmod
+%patch309 -p1 -b .namesize
 
 %patch400 -p1 -b .rpmlib-filesystem-check
 
@@ -512,6 +519,13 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Fri Dec 12 2014 Lubos Kardos <lkardos@redhat.com> - 4.11.3-2
+- Add check against malicious CPIO file name size (#1168715)
+- Fixes CVE-2014-8118
+- Fix race condidition where unchecked data is exposed in the file system
+  (#1039811)
+- Fixes CVE-2013-6435
+
 * Fri Sep 05 2014 Panu Matilainen <pmatilai@redhat.com> - 4.11.3-1
 - update to 4.11.3 (http://rpm.org/wiki/Releases/4.11.3)
 
