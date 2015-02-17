@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}4%{?dist}
+Release: %{?snapver:0.%{snapver}.}5%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -56,6 +56,9 @@ Patch100: rpm-4.12.0-tslock-nowait.patch
 Patch101: rpm-4.12.0-payload-ghost.patch
 # Unbreak size tag generation on big-endian systems
 Patch102: rpm-4.12.0-archive-endian.patch
+# find-debuginfo.sh fails on ELF with more than 256 notes
+# http://www.rpm.org/ticket/887
+Patch103: 0001-Fix-find-debuginfo.sh-for-ELF-with-file-warnings.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -538,6 +541,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Mar 03 2015 Florian Festi <ffesti@redhat.com> - 4.12.0.1-5
+- Include upstream patch to fix find-debuginfo (http://www.rpm.org/ticket/887).
+
 * Fri Dec 12 2014 Lubos Kardos <lkardos@redhat.com> - 4.12.0.1-4
 - Add check against malicious CPIO file name size (#1168715)
 - Fixes CVE-2014-8118
