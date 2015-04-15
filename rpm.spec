@@ -21,7 +21,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.11.x/%{name}-%{srcver}.tar.bz2
@@ -53,6 +53,8 @@ Patch10: rpm-4.11.2-double-separator-warning.patch
 # Filter soname dependencies by name (these are upstream but not in 4.11.x)
 Patch100: rpm-4.11.x-filter-soname-deps.patch
 Patch102: rpm-4.11.x-do-not-filter-ld64.patch
+# Fix golang debuginfo packages
+Patch103: rpm-4.12.0-golang-debuginfo.patch
 
 # These are not yet upstream
 Patch301: rpm-4.6.0-niagara.patch
@@ -519,6 +521,9 @@ exit 0
 %doc COPYING doc/librpm/html/*
 
 %changelog
+* Wed Apr 15 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-3
+- Fix references to sources in golang debuginfo packages (#1184221)
+
 * Fri Dec 12 2014 Lubos Kardos <lkardos@redhat.com> - 4.11.3-2
 - Add check against malicious CPIO file name size (#1168715)
 - Fixes CVE-2014-8118
