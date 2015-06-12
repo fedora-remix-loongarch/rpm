@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}9%{?dist}
+Release: %{?snapver:0.%{snapver}.}10%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -61,6 +61,7 @@ Patch102: rpm-4.12.0-archive-endian.patch
 Patch103: 0001-Fix-find-debuginfo.sh-for-ELF-with-file-warnings.patch
 # Fix golang debuginfo packages
 Patch104: rpm-4.12.0-golang-debuginfo.patch
+Patch105: rpm-4.12.0-whatrecommends.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -545,6 +546,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 12 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-10
+- Add --whatrecommends and friends (#1231247)
+
 * Wed Apr 15 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-9
 - Fix references to sources in golang debuginfo packages (#1184221)
 
