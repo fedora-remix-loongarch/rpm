@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}8%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -302,6 +302,13 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 ln -s db-%{bdbver} db
 %endif
 
+# Do autoreconf in prep for bootstraping
+CPPFLAGS="$CPPFLAGS `pkg-config --cflags nss`"
+CFLAGS="$RPM_OPT_FLAGS %{?sanitizer_flags}"
+export CPPFLAGS CFLAGS LDFLAGS
+
+autoreconf -i -f
+
 %build
 %if %{without int_bdb}
 #CPPFLAGS=-I%{_includedir}/db%{bdbver} 
@@ -310,8 +317,6 @@ ln -s db-%{bdbver} db
 CPPFLAGS="$CPPFLAGS `pkg-config --cflags nss`"
 CFLAGS="$RPM_OPT_FLAGS %{?sanitizer_flags}"
 export CPPFLAGS CFLAGS LDFLAGS
-
-autoreconf -i -f
 
 # Using configure macro has some unwanted side-effects on rpm platform
 # setup, use the old-fashioned way for now only defining minimal paths.
@@ -544,6 +549,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jul 15 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-8
+- move autoreconf into prep section
+
 * Fri Jun 12 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-7
 - Add --whatrecommends and friends (#1231247)
 
