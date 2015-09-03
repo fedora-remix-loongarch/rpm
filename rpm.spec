@@ -10,13 +10,15 @@
 %bcond_with sanitizer
 # build with libarchive? (needed for rpm2archive)
 %bcond_without libarchive
+# build with libimaevm.so
+%bcond_without libimaevm
 
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.12.0.1
-#define snapver rc1
+%define rpmver 4.13.0
+%define snapver rc1
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 %define eggver %{rpmver}%{?snapver:_%{snapver}}
 
@@ -27,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}18%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -50,25 +52,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-# Dont wait for transaction lock inside scriptlets (#1135596)
-Patch100: rpm-4.12.0-tslock-nowait.patch
-# Skip ghosts in payload (#1156497)
-Patch101: rpm-4.12.0-payload-ghost.patch
-# Unbreak size tag generation on big-endian systems
-Patch102: rpm-4.12.0-archive-endian.patch
-# find-debuginfo.sh fails on ELF with more than 256 notes
-# http://www.rpm.org/ticket/887
-Patch103: 0001-Fix-find-debuginfo.sh-for-ELF-with-file-warnings.patch
-# Fix --excludedocs option (#1192625)
-Patch104: rpm-4.12.0-exclude-doc.patch
-# Pass _find_debuginfo_opts -g to eu-strip for executables (#1186563)
-Patch105: rpm-4.12.0-eu-strip-g-option.patch
-# Fix golang debuginfo packages
-Patch106: rpm-4.12.0-golang-debuginfo.patch
-Patch107: rpm-4.12.0-whatrecommends.patch
-Patch108: rpm-4.12.0-gpg-passphrase1.patch
-Patch109: rpm-4.12.0-gpg-passphrase2.patch
-Patch110: rpm-4.12.0-Fix-Python3-import.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -84,8 +67,6 @@ Patch307: rpm-4.11.1-sepdebugcrcfix.patch
 Patch308: rpm-4.12.0.x-CVE-2013-6435.patch
 # Add check against malicious CPIO file name size
 Patch309: rpm-4.12.0.x-CVE-2014-8118.patch
-# Add support for MIPS platform
-Patch310: rpm-4.12.0-add-mips.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -149,6 +130,10 @@ BuildRequires: libubsan
 #BuildRequires: liblsan
 #BuildRequires: libtsan
 %global sanitizer_flags -fsanitize=address -fsanitize=undefined
+%endif
+
+%if %{with libimaevm}
+BuildRequires: ima-evm-utils
 %endif
 
 %description
@@ -302,6 +287,15 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-systemd-inhibit
 %{summary}
+
+%package plugin-ima
+Summary: Rpm plugin ima file signatures
+Group: System Environment/Base
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-ima
+%{summary}
+
 %endif
 
 %prep
@@ -487,6 +481,9 @@ exit 0
 
 %files plugin-systemd-inhibit
 %{_libdir}/rpm-plugins/systemd_inhibit.so
+
+%files plugin-ima
+%{_libdir}/rpm-plugins/ima.so
 %endif
 
 %files build-libs
@@ -555,6 +552,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Sep 03 2015 Florian Festi <ffesti@rpm.org> - 4.13.0-0.rc1.1
+- Update to upstream rc1 release
+
 * Tue Jul 14 2015 Michal Toman <mtoman@fedoraproject.org> - 4.12.0.1-18
 - Add support for MIPS platform
 
