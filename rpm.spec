@@ -164,6 +164,9 @@ Summary: Compat package with RPM libraries
 Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: rpm = %{version}-%{release}
+# Explicitly conflict with older rpm-libs that ship libraries
+# with the same soname as this compat package
+Conflicts: rpm-libs < 4.12.90
 
 %description -n compat-librpm3
 Compatibility package with RPM libraries ABI version 3.
