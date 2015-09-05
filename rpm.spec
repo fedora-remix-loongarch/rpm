@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -158,6 +158,15 @@ Requires: rpm-plugin-selinux%{_isa} = %{version}-%{release}
 
 %description libs
 This package contains the RPM shared libraries.
+
+%package -n compat-librpm3
+Summary: Compat package with RPM libraries
+Group: Development/Libraries
+License: GPLv2+ and LGPLv2+ with exceptions
+Requires: rpm = %{version}-%{release}
+
+%description -n compat-librpm3
+Compatibility package with RPM libraries ABI version 3.
 
 %package build-libs
 Summary:  Libraries for building and signing RPM packages
@@ -387,6 +396,11 @@ do
 done
 %endif
 
+# Install compatibility libraries
+mkdir -p $RPM_BUILD_ROOT%{_libdir}
+cp -a %{_libdir}/librpmio.so.3* $RPM_BUILD_ROOT%{_libdir}
+cp -a %{_libdir}/librpm.so.3* $RPM_BUILD_ROOT%{_libdir}
+
 %find_lang %{name}
 
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
@@ -468,10 +482,14 @@ exit 0
 
 %files libs
 %defattr(-,root,root)
-%{_libdir}/librpmio.so.*
-%{_libdir}/librpm.so.*
+%{_libdir}/librpmio.so.7*
+%{_libdir}/librpm.so.7*
 %if %{with plugins}
 %dir %{_libdir}/rpm-plugins
+
+%files -n compat-librpm3
+%{_libdir}/librpmio.so.3*
+%{_libdir}/librpm.so.3*
 
 %files plugin-syslog
 %{_libdir}/rpm-plugins/syslog.so
@@ -552,6 +570,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Sat Sep 05 2015 Kalev Lember <klember@redhat.com> - 4.13.0-0.rc1.2
+- Add a temporary compat-librpm3 subpackage
+
 * Thu Sep 03 2015 Florian Festi <ffesti@rpm.org> - 4.13.0-0.rc1.1
 - Update to upstream rc1 release
 
