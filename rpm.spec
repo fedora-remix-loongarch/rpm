@@ -52,6 +52,7 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
+Patch100: rpm-4.13.0-rc1-Fix-new-richdep-syntax.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -557,6 +558,7 @@ exit 0
 
 * Mon Sep 07 2015 Florian Festi <ffesti@rpm.org> - 4.4.13.0-0.rc1.3
 - Remove compat-librpm3 hack
+- Fix new rich dependency syntax
 
 * Sat Sep 05 2015 Kalev Lember <klember@redhat.com> - 4.13.0-0.rc1.2
 - Add a temporary compat-librpm3 subpackage
