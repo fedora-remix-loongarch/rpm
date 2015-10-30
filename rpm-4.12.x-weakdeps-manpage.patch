@@ -1,0 +1,63 @@
+From c336b1474402a566d5351ff41c45559d02a3389a Mon Sep 17 00:00:00 2001
+From: Florian Festi <ffesti@redhat.com>
+Date: Wed, 24 Jun 2015 15:48:23 +0200
+Subject: [PATCH] Add --enhances, --recommends, --suggests and --supplements to
+ the man page
+
+---
+ doc/rpm.8 | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/doc/rpm.8 b/doc/rpm.8
+index c91ce3b..136a595 100644
+--- a/doc/rpm.8
++++ b/doc/rpm.8
+@@ -66,10 +66,12 @@ rpm \- RPM Package Manager
+ 
+ 
+  [\fB--changelog\fR] [\fB-c,--configfiles\fR] [\fB--conflicts\fR]
+- [\fB-d,--docfiles\fR] [\fB--dump\fR] [\fB--filesbypkg\fR] [\fB-i,--info\fR]
+- [\fB--last\fR] [\fB-l,--list\fR] [\fB--obsoletes\fR] [\fB--provides\fR]
+- [\fB--qf,--queryformat \fIQUERYFMT\fB\fR] [\fB-R,--requires\fR]
+- [\fB--scripts\fR] [\fB-s,--state\fR] [\fB--triggers,--triggerscripts\fR]
++ [\fB-d,--docfiles\fR] [\fB--dump\fR] [\fB--enhances\fR] [\fB--filesbypkg\fR]
++ [\fB-i,--info\fR] [\fB--last\fR] [\fB-l,--list\fR] [\fB--obsoletes\fR]
++ [\fB--provides\fR] [\fB--qf,--queryformat \fIQUERYFMT\fB\fR]
++ [\fB--recommends\fR] [\fB-R,--requires\fR] [\fB--suggests\fR]
++ [\fB--supplements\fR] [\fB--scripts\fR] [\fB-s,--state\fR]
++ [\fB--triggers,--triggerscripts\fR]
+ 
+ .SS "verify-options"
+ .PP
+@@ -628,6 +630,9 @@ path size mtime digest mode owner group isconfig isdoc rdev symlink
+ .fi
+ .RE
+ .TP
++\fB--enhances\fR
++List capabilities enhanced by package(s)
++.TP
+ \fB--filesbypkg\fR
+ List all the files in each selected package.
+ .TP
+@@ -651,9 +656,18 @@ List packages this package obsoletes.
+ \fB--provides\fR
+ List capabilities this package provides.
+ .TP
++\fB--recommends\fR
++List capabilities recommended by package(s)
++.TP
+ \fB-R, --requires\fR
+ List capabilities on which this package depends.
+ .TP
++\fB--suggests\fR
++List capabilities suggested by package(s)
++.TP
++\fB--supplements\fR
++List capabilities supplemented by package(s)
++.TP
+ \fB--scripts\fR
+ List the package specific scriptlet(s) that are used as part
+ of the installation and uninstallation processes.
+-- 
+2.1.0
+

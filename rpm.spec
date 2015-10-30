@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}12%{?dist}
+Release: %{?snapver:0.%{snapver}.}13%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -65,6 +65,7 @@ Patch105: rpm-4.12.0-whatrecommends.patch
 Patch108: rpm-4.12.0-gpg-passphrase1.patch
 Patch109: rpm-4.12.0-gpg-passphrase2.patch
 Patch110: rpm-4.12.0-Fix-Python3-import.patch
+Patch111: rpm-4.12.x-weakdeps-manpage.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -549,6 +550,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Oct 30 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-13
+- Add query options for weak dependencies to the man page (#1235230)
+
 * Mon Jun 29 2015 Florian Festi <ffesti@rpm.org> - 4.12.0.1-12
 - Fix Python import directive for more strict Python3 search rules (#1236493)
 
