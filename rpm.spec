@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}10%{?dist}
+Release: %{?snapver:0.%{snapver}.}11%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -321,13 +321,30 @@ ln -s db-%{bdbver} db
 %endif
 CPPFLAGS="$CPPFLAGS `pkg-config --cflags nss` -DLUA_COMPAT_APIINTCASTS"
 CFLAGS="$RPM_OPT_FLAGS %{?sanitizer_flags} -DLUA_COMPAT_APIINTCASTS"
+LDFLAGS="$LDFLAGS %{?__global_ldflags}"
 export CPPFLAGS CFLAGS LDFLAGS
 
 autoreconf -i -f
 
+%ifarch %{arm}
+%global _gnu -gnueabi
+%endif
+
+# Hardening hack taken from macro %%configure defined in redhat-rpm-config
+for i in $(find . -name ltmain.sh) ; do
+    %{__sed} -i.backup -e 's~compiler_flags=$~compiler_flags="%{_hardened_ldflags}"~' $i
+done
+
 # Using configure macro has some unwanted side-effects on rpm platform
 # setup, use the old-fashioned way for now only defining minimal paths.
-%configure \
+./configure \
+    --prefix=%{_usr} \
+    --sysconfdir=%{_sysconfdir} \
+    --localstatedir=%{_var} \
+    --sharedstatedir=%{_var}/lib \
+    --libdir=%{_libdir} \
+    --build=%{_target_platform} \
+    --host=%{_target_platform} \
     --with-vendor=redhat \
     %{!?with_int_bdb: --with-external-db} \
     %{!?with_plugins: --disable-plugins} \
@@ -554,6 +571,11 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Feb 02 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.11
+- Revert using %%configure, it causes problems
+- Temporary set %%_gnu macro explictly, just for one build (#1303265)
+- Harden rpm package again, previous attempt had to be reverted (#1289734)
+
 * Fri Jan 29 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.10
 - Use %%configure macro, harden rpm package (#1289734)
 
