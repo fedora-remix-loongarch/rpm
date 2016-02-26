@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}11%{?dist}
+Release: %{?snapver:0.%{snapver}.}12%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -59,6 +59,7 @@ Patch103: rpm-4.13.0-ignore-sigpipe.patch
 Patch104: rpm-4.13.0-fix-crash-on-corrupted.patch
 Patch105: rpm-4.13.0-chroot-file-triggers.patch
 Patch106: rpm-4.13.0-recursing-rpmdeps.patch
+Patch107: rpm-4.13.0-unlimited-macro-expand.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -571,6 +572,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Feb 26 2016 Lubos Kardos <lkardos@redhat.com> -4.13.0-0.rc1.12
+- Remove size limit when expanding macros (#1303034)
+
 * Tue Feb 02 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.11
 - Revert using %%configure, it causes problems
 - Temporary set %%_gnu macro explictly, just for one build (#1303265)
