@@ -1,6 +1,6 @@
 diff -up rpm-4.12.0.1/build/files.c.umacros rpm-4.12.0.1/build/files.c
---- rpm-4.12.0.1/build/files.c.umacros	2016-02-29 09:42:04.850077315 +0100
-+++ rpm-4.12.0.1/build/files.c	2016-02-29 09:45:10.589560945 +0100
+--- rpm-4.12.0.1/build/files.c.umacros	2014-06-30 10:47:13.928503700 +0200
++++ rpm-4.12.0.1/build/files.c	2016-02-29 14:28:40.949514813 +0100
 @@ -1590,6 +1590,7 @@ static rpmRC readFilesManifest(rpmSpec s
      FILE *fd = NULL;
      rpmRC rc = RPMRC_FAIL;
@@ -25,8 +25,8 @@ diff -up rpm-4.12.0.1/build/files.c.umacros rpm-4.12.0.1/build/files.c
      }
  
 diff -up rpm-4.12.0.1/build/pack.c.umacros rpm-4.12.0.1/build/pack.c
---- rpm-4.12.0.1/build/pack.c.umacros	2016-02-29 09:46:19.502627699 +0100
-+++ rpm-4.12.0.1/build/pack.c	2016-02-29 09:49:16.040236952 +0100
+--- rpm-4.12.0.1/build/pack.c.umacros	2016-02-29 14:28:30.001660705 +0100
++++ rpm-4.12.0.1/build/pack.c	2016-02-29 14:28:40.950514800 +0100
 @@ -132,11 +132,13 @@ static rpmRC addFileToTag(rpmSpec spec,
      }
  
@@ -44,35 +44,30 @@ diff -up rpm-4.12.0.1/build/pack.c.umacros rpm-4.12.0.1/build/pack.c
      headerPutString(h, tag, getStringBuf(sb));
      rc = RPMRC_OK;
 diff -up rpm-4.12.0.1/build/parseSpec.c.umacros rpm-4.12.0.1/build/parseSpec.c
---- rpm-4.12.0.1/build/parseSpec.c.umacros	2016-02-29 09:50:25.366298100 +0100
-+++ rpm-4.12.0.1/build/parseSpec.c	2016-02-29 10:00:07.043817897 +0100
-@@ -159,6 +159,7 @@ static int copyNextLineFromOFI(rpmSpec s
- {
-     /* Expand next line from file into line buffer */
-     if (!(spec->nextline && *spec->nextline)) {
-+	char *expanded;
- 	int pc = 0, bc = 0, nc = 0;
- 	const char *from = ofi->readPtr;
- 	char ch = ' ';
-@@ -208,11 +209,14 @@ static int copyNextLineFromOFI(rpmSpec s
+--- rpm-4.12.0.1/build/parseSpec.c.umacros	2014-09-15 09:17:36.378270111 +0200
++++ rpm-4.12.0.1/build/parseSpec.c	2016-02-29 14:32:05.618787380 +0100
+@@ -207,11 +207,16 @@ static int copyNextLineFromOFI(rpmSpec s
+ 	spec->lbufOff = 0;
  
  	/* Don't expand macros (eg. %define) in false branch of %if clause */
- 	if (spec->readStack->reading &&
+-	if (spec->readStack->reading &&
 -	    expandMacros(spec, spec->macros, spec->lbuf, spec->lbufSize)) {
-+	    (rpmExpandMacros(spec->macros, spec->lbuf, &expanded, 0) < 0)) {
++	if (spec->readStack->reading) {
++	    char *expanded;
++	    if (rpmExpandMacros(spec->macros, spec->lbuf, &expanded, 0) < 0) {
  		rpmlog(RPMLOG_ERR, _("line %d: %s\n"),
  			spec->lineNum, spec->lbuf);
  		return -1;
++	    }
++	    free(spec->lbuf);
++	    spec->lbuf = expanded;
++	    spec->lbufSize = strlen(spec->lbuf) + 1;
  	}
-+	free(spec->lbuf);
-+	spec->lbuf = expanded;
-+	spec->lbufSize = strlen(spec->lbuf) + 1;
  	spec->nextline = spec->lbuf;
      }
-     return 0;
 diff -up rpm-4.12.0.1/rpmio/macro.c.umacros rpm-4.12.0.1/rpmio/macro.c
---- rpm-4.12.0.1/rpmio/macro.c.umacros	2016-02-29 09:31:47.642443073 +0100
-+++ rpm-4.12.0.1/rpmio/macro.c	2016-02-29 10:01:58.550338901 +0100
+--- rpm-4.12.0.1/rpmio/macro.c.umacros	2014-07-01 11:07:07.070211597 +0200
++++ rpm-4.12.0.1/rpmio/macro.c	2016-02-29 14:28:40.951514786 +0100
 @@ -1462,6 +1462,25 @@ int expandMacros(void * spec, rpmMacroCo
      return rc;
  }
@@ -100,8 +95,8 @@ diff -up rpm-4.12.0.1/rpmio/macro.c.umacros rpm-4.12.0.1/rpmio/macro.c
  rpmDumpMacroTable(rpmMacroContext mc, FILE * fp)
  {
 diff -up rpm-4.12.0.1/rpmio/rpmmacro.h.umacros rpm-4.12.0.1/rpmio/rpmmacro.h
---- rpm-4.12.0.1/rpmio/rpmmacro.h.umacros	2016-02-29 09:18:31.244184999 +0100
-+++ rpm-4.12.0.1/rpmio/rpmmacro.h	2016-02-29 10:03:29.370134290 +0100
+--- rpm-4.12.0.1/rpmio/rpmmacro.h.umacros	2014-06-30 10:47:14.105503272 +0200
++++ rpm-4.12.0.1/rpmio/rpmmacro.h	2016-02-29 14:28:40.952514773 +0100
 @@ -66,6 +66,17 @@ int	expandMacros	(void * spec, rpmMacroC
  				size_t slen);
  
