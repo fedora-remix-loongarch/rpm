@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}16%{?dist}
+Release: %{?snapver:0.%{snapver}.}17%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -68,6 +68,8 @@ Patch110: rpm-4.12.0-Fix-Python3-import.patch
 Patch111: rpm-4.12.x-weakdeps-manpage.patch
 Patch112: rpm-4.12.0-fix-crash-on-corrupted.patch
 Patch113: rpm-4.12.0-unlimited-macro-expand.patch
+Patch114: rpm-4.13.0-rpmtd-out-of-bounds.patch
+Patch115: rpm-4.13.0-stringFormat-sigsegv.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -552,6 +554,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Apr 25 2016 Lubos Kardos <lkardos@redhat.com> - 4.12.0.1-17
+- Fix sigsegv in stringFormat() (#1316903)
+- Fix reading rpmtd behind its size in formatValue() (#1316896)
+
 * Mon Feb 29 2016 Lubos Kardos <lkardos@redhat.com> - 4.12.0.1-16
 - Fix problems caused by the changes done in the previous version
 
