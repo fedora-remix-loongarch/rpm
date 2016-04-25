@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}12%{?dist}
+Release: %{?snapver:0.%{snapver}.}13%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -60,6 +60,8 @@ Patch104: rpm-4.13.0-fix-crash-on-corrupted.patch
 Patch105: rpm-4.13.0-chroot-file-triggers.patch
 Patch106: rpm-4.13.0-recursing-rpmdeps.patch
 Patch107: rpm-4.13.0-unlimited-macro-expand.patch
+Patch108: rpm-4.13.0-rpmtd-out-of-bounds.patch
+Patch109: rpm-4.13.0-stringFormat-sigsegv.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -572,6 +574,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Apr 25 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.13
+- Fix sigsegv in stringFormat() (#1316903)
+- Fix reading rpmtd behind its size in formatValue() (#1316896)
+
 * Fri Feb 26 2016 Lubos Kardos <lkardos@redhat.com> -4.13.0-0.rc1.12
 - Remove size limit when expanding macros (#1303034)
 
