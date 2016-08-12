@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}40%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}41%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
@@ -598,6 +598,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Aug 12 2016 Florian Festi <ffesti@rpm.org> - 4.4.13.0-0.rc1.41
+- Enable --majorver-provides in Python dependency generator
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.13.0-0.rc1.40.1
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
