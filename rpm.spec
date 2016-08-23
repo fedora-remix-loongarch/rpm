@@ -27,7 +27,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}43%{?dist}
+Release: %{?snapver:0.%{snapver}.}44%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -275,6 +275,7 @@ programs that will manipulate RPM packages and databases.
 Summary: Python 3 bindings for apps which will manipulate RPM packages
 Group: Development/Libraries
 BuildRequires: python3-devel
+%{?python_provide:%python_provide python3-%{name}}
 %{?system_python_abi}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-python3 = %{version}-%{release}
@@ -594,6 +595,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Aug 23 2016 Igor Gnatenko <ignatenko@redhat.com> - 4.13.0-0.rc1.44
+- Use %%python_provide for python3 subpackage
+
 * Tue Aug 23 2016 Igor Gnatenko <ignatenko@redhat.com> - 4.13.0-0.rc1.43
 - Add %%{?system_python_abi}
 - rpm-python -> python2-rpm && rpm-python3 -> python3-rpm with providing old names
@@ -602,7 +606,7 @@ exit 0
 * Mon Aug 22 2016 Igor Gnatenko <ignatenko@redhat.com> - 4.13.0-0.rc1.42
 - Backport fixes to ignore .egg-link files in Python dependency  generator
 
-* Fri Aug 12 2016 Florian Festi <ffesti@rpm.org> - 4.4.13.0-0.rc1.41
+* Fri Aug 12 2016 Florian Festi <ffesti@rpm.org> - 4.13.0-0.rc1.41
 - Enable --majorver-provides in Python dependency generator
 
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.13.0-0.rc1.40.1
