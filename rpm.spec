@@ -18,7 +18,7 @@
 %define rpmhome /usr/lib/rpm
 
 %define rpmver 4.13.0
-%define snapver rc1
+#define snapver rc1
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 %define eggver %{rpmver}%{?snapver:_%{snapver}}
 
@@ -29,10 +29,10 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}27%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
-Source0: http://rpm.org/releases/rpm-4.12.x/%{name}-%{srcver}.tar.bz2
+Source0: http://rpm.org/releases/rpm-4.13.x/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %else
@@ -52,43 +52,11 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.0-rc1-Fix-new-richdep-syntax.patch
-Patch101: rpm-4.13.0-selinux--permissive-scriptlets.patch
-Patch102: rpm-4.13.0-non-numeric-epoch.patch
-Patch103: rpm-4.13.0-wrong-version-macro.patch
-Patch104: rpm-4.13.0-memory-error.patch
-Patch105: rpm-4.13.0-rpmdeps-weakdep-support.patch
-Patch106: rpm-4.13.0-autopatch-fix.patch
-Patch107: rpm-4.13.0-ignore-sigpipe.patch
-Patch108: rpm-4.13.0-unsupported-keys.patch
-Patch109: rpm-4.13.0-fix-crash-on-corrupted.patch
-Patch110: rpm-4.13.0-disabling-filetriggers.patch
-Patch111: rpm-4.13.0-chroot-file-triggers.patch
-Patch112: rpm-4.13.0-missingok.patch
-Patch113: rpm-4.13.0-recursing-rpmdeps.patch
-Patch114: rpm-4.13.0-autosetup-errors.patch
-Patch115: rpm-4.13.0-unlimited-macro-expand.patch
-Patch116: rpm-4.13.0-idle-and-sleep-in-systemd-inhibit.patch
-Patch117: rpm-4.13.0-add-mipsr6-support.patch
-Patch118: rpm-4.13.0-Use-pkg-dpaths-during-dependency-generation.patch
-Patch119: rpm-4.13.0-redirect2null.patch
-Patch120: rpm-4.13.0-rpmtd-out-of-bounds.patch
-Patch121: rpm-4.13.0-stringFormat-sigsegv.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch304: rpm-4.9.1.1-ld-flags.patch
-# Compressed debuginfo support (#833311)
-Patch305: rpm-4.10.0-dwz-debuginfo.patch
-# Minidebuginfo support (#834073)
-Patch306: rpm-4.10.0-minidebuginfo.patch
-# Fix CRC32 after dwz (#971119)
-Patch307: rpm-4.11.1-sepdebugcrcfix.patch
-# Fix race condidition where unchecked data is exposed in the file system
-Patch308: rpm-4.12.0.x-CVE-2013-6435.patch
-# Add check against malicious CPIO file name size
-Patch309: rpm-4.12.0.x-CVE-2014-8118.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -584,6 +552,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Nov 03 2016 Panu Matilainen <pmatilai@redhat.com> - 4.13.0-1
+- Rebase to 4.13.0 (http://rpm.org/wiki/Releases/4.13.0)
+
 * Mon Apr 25 2016 Lubos Kardos <lkardos@redhat.com> 4.13.0.0.rc1.27
 - Fix sigsegv in stringFormat() (#1316903)
 - Fix reading rpmtd behind its size in formatValue() (#1316896)
@@ -599,7 +570,7 @@ exit 0
 - Add support for MIPS release 6
 - Add mips32 mips64 mipsel and mipseb macros (#1285116)
 
-* Thu Feb 02 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.23
+* Tue Feb 02 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.23
 - Remove size limit when expanding macros (#1301677)
 
 * Mon Feb 01 2016 Lubos Kardos <lkardos@redhat.com> - 4.13.0-0.rc1.22
