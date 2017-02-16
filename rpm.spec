@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}6%{?dist}
+Release: %{?snapver:0.%{snapver}.}7%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -61,6 +61,9 @@ Patch136: rpm-4.13.x-pythondistdeps.py-skip-distribution-metadata-if-ther.patch
 Patch137: rpm-4.13.x-pythondistdeps.py-show-warning-if-version-is-not-fou.patch
 Patch138: rpm-4.13.x-pythondistdeps.py-skip-.egg-link-files.patch
 Patch139: rpm-4.13.x-pythondistdeps.py-add-forgotten-import.patch
+# Upstream PR: https://github.com/rpm-software-management/rpm/pull/154
+# rhbz#1421776
+Patch141: rpm-4.13.x-pythondistdeps.py-fix-processing-wheels.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -558,6 +561,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Feb 16 2017 Tomas Orsava <torsava@redhat.com> - 4.13.0-7
+- Fix handling of Python wheels by pythondistdeps.py --provides (#1421776)
+
 * Sat Dec 03 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 4.13.0-6
 - Fix arch-dependent requires in subpackages (RHBZ #1398591)
 
