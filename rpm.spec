@@ -17,7 +17,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.0
+%global rpmver 4.13.0.1
 #global snapver rc2
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(v=%{version}; echo ${v%.*}.x)}
@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -52,7 +52,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.x-transfiletriggerpostun-invalid-read.patch
 
 Patch133: rpm-4.13.x-pythondistdeps.patch
 Patch134: rpm-4.13.x-pythondistdeps-Makefile.patch
@@ -561,6 +560,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Feb 24 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-1
+- Rebase to rpm 4.13.0.1 (http://rpm.org/wiki/Releases/4.13.0.1)
+- Fixes #1410907, #1405570, #1399798, #1410907 etc
+
 * Thu Feb 16 2017 Tomas Orsava <torsava@redhat.com> - 4.13.0-7
 - Fix handling of Python wheels by pythondistdeps.py --provides (#1421776)
 
