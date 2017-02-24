@@ -17,7 +17,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%define rpmver 4.13.0
+%define rpmver 4.13.0.1
 #define snapver rc1
 %define srcver %{rpmver}%{?snapver:-%{snapver}}
 %define eggver %{rpmver}%{?snapver:_%{snapver}}
@@ -552,6 +552,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Feb 24 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-1
+- Rebase to rpm 4.13.0.1 (http://rpm.org/wiki/Releases/4.13.0.1)
+- Fixes #1410907, #1405570, #1399798, #1410907 etc
+
 * Thu Nov 03 2016 Panu Matilainen <pmatilai@redhat.com> - 4.13.0-1
 - Rebase to 4.13.0 (http://rpm.org/wiki/Releases/4.13.0)
 
