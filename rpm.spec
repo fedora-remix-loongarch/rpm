@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}
+Release: %{?snapver:0.%{snapver}.}4%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -69,6 +69,8 @@ Patch142: rpm-4.13.x-fix-refcount-for-spec_type.patch
 # Fedora-specific (python3) patch (RHBZ #1405483)
 Patch200: rpm-4.13.x-pythondistdeps-python3.patch
 
+# World writable empty (tmp) dirs in debuginfo packages (#641022)
+Patch280: rpm-4.13.x-writable-tmp-dir.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -570,7 +572,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
-* Fri Feb 24 2017 Pavlina Moravcova Varekova <pmoravco@redhat.com> - 4.13.0.2-3
+* Tue Apr 25 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-4
+- Fix rpmbuild world writable empty (tmp) dirs in debuginfo (#641022)
+
+* Fri Feb 24 2017 Pavlina Moravcova Varekova <pmoravco@redhat.com> - 4.13.0.1-3
 - Fix number of references on spec_Type (#1426578)
 
 * Thu Feb 16 2017 Tomas Orsava <torsava@redhat.com> - 4.13.0.1-2
