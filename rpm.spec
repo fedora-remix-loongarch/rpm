@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}4%{?dist}
+Release: %{?snapver:0.%{snapver}.}5%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -52,6 +52,7 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
+Patch100: rpm-4.13.0-python-rpmsign.patch
 
 Patch133: rpm-4.13.x-pythondistdeps.patch
 Patch134: rpm-4.13.x-pythondistdeps-Makefile.patch
@@ -572,6 +573,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 23 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-5
+- Fix rpmsign python module import failing (#1462671)
+
 * Tue Apr 25 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-4
 - Fix rpmbuild world writable empty (tmp) dirs in debuginfo (#641022)
 
