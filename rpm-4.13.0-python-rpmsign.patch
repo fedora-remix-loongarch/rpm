@@ -1,0 +1,22 @@
+From eb632e5158fa4ef993b0e5df2a354f0be7a7a71d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Nikola=20Forr=C3=B3?= <nforro@redhat.com>
+Date: Wed, 20 Apr 2016 15:39:36 +0200
+Subject: [PATCH] Use correct source file for rpmsign module
+
+---
+ python/setup.py.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/setup.py.in b/python/setup.py.in
+index b2c394136..f94873fe5 100644
+--- a/python/setup.py.in
++++ b/python/setup.py.in
+@@ -48,7 +48,7 @@ rpmbuild_mod = Extension('rpm._rpmb',
+                   )
+ 
+ rpmsign_mod = Extension('rpm._rpms',
+-                   sources = ['rpmbmodule.c'],
++                   sources = ['rpmsmodule.c'],
+                    include_dirs = pkgconfig('--cflags'),
+                    libraries = pkgconfig('--libs') + ['rpmsign'],
+                    extra_compile_args = cflags,
