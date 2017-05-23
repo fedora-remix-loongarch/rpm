@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}21%{?dist}
+Release: %{?snapver:0.%{snapver}.}22%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -58,21 +58,8 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # Patches already upstream:
 Patch100: rpm-4.13.0-python-rpmsign.patch
 
-Patch133: rpm-4.13.x-pythondistdeps.patch
-Patch134: rpm-4.13.x-pythondistdeps-Makefile.patch
-Patch135: rpm-4.13.x-pythondistdeps-fileattr.patch
-Patch136: rpm-4.13.x-pythondistdeps.py-skip-distribution-metadata-if-ther.patch
-Patch137: rpm-4.13.x-pythondistdeps.py-show-warning-if-version-is-not-fou.patch
-Patch138: rpm-4.13.x-pythondistdeps.py-skip-.egg-link-files.patch
-Patch139: rpm-4.13.x-pythondistdeps.py-add-forgotten-import.patch
 Patch140: rpm-4.13.x-brp-python-bytecompile-Python3-only.patch
-# Upstream PR: https://github.com/rpm-software-management/rpm/pull/154
-# rhbz#1421776
-Patch141: rpm-4.13.x-pythondistdeps.py-fix-processing-wheels.patch
 Patch142: rpm-4.13.x-fix-refcount-for-spec_type.patch
-
-# Fedora-specific (python3) patch (RHBZ #1405483)
-Patch200: rpm-4.13.x-pythondistdeps-python3.patch
 
 # debuginfo backports (#1427970)
 Patch250: 0001-Add-build-id-links-to-rpm-for-all-ELF-files.patch
@@ -248,10 +235,6 @@ Requires: /usr/bin/gdb-add-index
 # "just work" while allowing for alternatives, depend on a virtual
 # provide, typically coming from redhat-rpm-config.
 Requires: system-rpm-config
-# Techincally rpmbuild doesn't require python3 (and setuptools), but
-# pythondistdeps generator expects it.
-# See: https://bugzilla.redhat.com/show_bug.cgi?id=1410631
-Requires: python3-setuptools
 
 %description build
 The rpm-build package contains the scripts and executable programs
@@ -457,9 +440,9 @@ done
 
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 
-# These live in perl-generators now
-rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*}
-rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/perl*
+# These live in perl-generators and python-rpm-generators now
+rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,python*}
+rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 # Axe unused cruft
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
 
@@ -610,6 +593,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 23 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-22
+- Python dependency generators live in python-rpm-generators now (#1444925)
+
 * Tue May 23 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-21
 - Fix rpmsign python module import failing (#1393659)
 
