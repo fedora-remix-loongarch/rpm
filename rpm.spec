@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}22%{?dist}
+Release: %{?snapver:0.%{snapver}.}23%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -88,6 +88,7 @@ Patch270: 0021-debugedit-Fix-off-by-one-adding-DW_FORM_string-repla.patch
 Patch271: 0022-unbreak-short-circuit.patch
 Patch272: 0023-minisymtab-exe-sh.patch
 Patch273: 0024-no-recompute-build-id.patch
+Patch274: 0025-buildid-reset-attrs.patch
 
 # World writable empty (tmp) dirs in debuginfo packages (#641022)
 Patch280: rpm-4.13.x-writable-tmp-dir.patch
@@ -593,6 +594,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 30 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-23
+- Fix resetting attr flags in buildid creation (#1449732)
+
 * Tue May 23 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-22
 - Python dependency generators live in python-rpm-generators now (#1444925)
 
