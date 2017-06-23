@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}23%{?dist}
+Release: %{?snapver:0.%{snapver}.}24%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -92,6 +92,10 @@ Patch274: 0025-buildid-reset-attrs.patch
 
 # World writable empty (tmp) dirs in debuginfo packages (#641022)
 Patch280: rpm-4.13.x-writable-tmp-dir.patch
+
+# Parallel debuginfo processing
+Patch281: find-debuginfo-split-traversal-and-extraction.patch
+Patch282: find-debuginfo-process-files-in-parallel.patch
 
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
@@ -594,6 +598,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 23 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-24
+- Backport parallel debuginfo processing.
+
 * Tue May 30 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-23
 - Fix resetting attr flags in buildid creation (#1449732)
 
