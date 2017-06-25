@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}24%{?dist}
+Release: %{?snapver:0.%{snapver}.}25%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -96,6 +96,10 @@ Patch280: rpm-4.13.x-writable-tmp-dir.patch
 # Parallel debuginfo processing
 Patch281: find-debuginfo-split-traversal-and-extraction.patch
 Patch282: find-debuginfo-process-files-in-parallel.patch
+
+# Support debugsource and debuginfo subpackages
+Patch285: find-debuginfo-untangle-unique-build-options.patch
+Patch286: debugsrc-and-sub-debuginfo-packages.patch
 
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
@@ -598,6 +602,11 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Sun Jun 25 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-25
+- Add support for debugsource and debuginfo subpackages
+  - find-debuginfo-untangle-unique-build-options.patch
+  - debugsrc-and-sub-debuginfo-packages.patch
+
 * Fri Jun 23 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-24
 - Backport parallel debuginfo processing.
 
