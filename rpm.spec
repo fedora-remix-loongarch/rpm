@@ -108,6 +108,9 @@ Patch290: debugedit-prefix.patch
 # find-debuginfo.sh: Filter out all <built-in> like fake file names.
 Patch291: find-debuginfo-filter-built-ins.patch
 
+# Don't create dwz multi file if there is only one .debug.
+Patch292: find-debuginfo-dwz-multi.patch
+
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
 
@@ -620,6 +623,7 @@ exit 0
 * Thu Jun 29 2017 Mark Wielaard <mjw@fedoraproject.org>
 - Add debugedit-prefix.patch.
 - Add find-debuginfo-filter-built-ins.patch.
+- Add find-debuginfo-dwz-multi.patch.
 
 * Wed Jun 28 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-27
 - Add find-debuginfo-split-traversal-and-extraction-fix.patch (#1465170)
