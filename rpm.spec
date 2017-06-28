@@ -105,6 +105,9 @@ Patch286: debugsrc-and-sub-debuginfo-packages.patch
 # debugedit check prefix match ends with slash.
 Patch290: debugedit-prefix.patch
 
+# find-debuginfo.sh: Filter out all <built-in> like fake file names.
+Patch291: find-debuginfo-filter-built-ins.patch
+
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
 
@@ -616,6 +619,7 @@ exit 0
 %changelog
 * Thu Jun 29 2017 Mark Wielaard <mjw@fedoraproject.org>
 - Add debugedit-prefix.patch.
+- Add find-debuginfo-filter-built-ins.patch.
 
 * Wed Jun 28 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-27
 - Add find-debuginfo-split-traversal-and-extraction-fix.patch (#1465170)
