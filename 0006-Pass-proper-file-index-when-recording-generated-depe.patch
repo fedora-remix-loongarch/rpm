@@ -1,4 +1,4 @@
-From 25e4f138ec11e5b0f757a8ab610e43fe08f18cf0 Mon Sep 17 00:00:00 2001
+From 34979267904cec0c53cad1e1361db733f56dcbf8 Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Wed, 31 May 2017 10:42:03 +0200
 Subject: [PATCH 6/6] Pass proper file index when recording generated

@@ -1,4 +1,4 @@
-From 170ba73806c6f2cea258373bd98bf7d754fec995 Mon Sep 17 00:00:00 2001
+From 6739797e1c4a1c24f691568956597adcaece788e Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Tue, 28 Feb 2017 10:57:56 +0100
 Subject: [PATCH 1/6] Use RPMTAG_*NAME instead of RPMTAG_*FLAGS in
@@ -17,10 +17,10 @@ that is also based on NAME tags.
  3 files changed, 30 insertions(+), 45 deletions(-)
 
 diff --git a/build/parsePreamble.c b/build/parsePreamble.c
-index 933f7340f..a9db6f37c 100644
+index 3bb833cff..bc639e86c 100644
 --- a/build/parsePreamble.c
 +++ b/build/parsePreamble.c
-@@ -843,8 +843,8 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
+@@ -850,8 +850,8 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
  	if (parseNoSource(spec, field, tag))
  	    goto exit;
  	break;
@@ -31,7 +31,7 @@ index 933f7340f..a9db6f37c 100644
  	if (parseBits(lang, installScriptBits, &tagflags)) {
  	    rpmlog(RPMLOG_ERR, _("line %d: Bad %s: qualifiers: %s\n"),
  		     spec->lineNum, rpmTagGetName(tag), spec->line);
-@@ -852,13 +852,13 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
+@@ -859,13 +859,13 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
  	}
  	/* fallthrough */
      case RPMTAG_PREREQ:
@@ -52,7 +52,7 @@ index 933f7340f..a9db6f37c 100644
  	if (parseRCPOT(spec, pkg, field, tag, 0, tagflags))
  	    goto exit;
  	break;
-@@ -954,15 +954,15 @@ static struct PreambleRec_s const preambleList[] = {
+@@ -970,15 +970,15 @@ static struct PreambleRec_s const preambleList[] = {
      {RPMTAG_EXCLUDEOS,		0, 0, LEN_AND_STR("excludeos")},
      {RPMTAG_EXCLUSIVEOS,	0, 0, LEN_AND_STR("exclusiveos")},
      {RPMTAG_ICON,		0, 0, LEN_AND_STR("icon")},
@@ -76,7 +76,7 @@ index 933f7340f..a9db6f37c 100644
      {RPMTAG_PREFIXES,		0, 0, LEN_AND_STR("prefixes")},
      {RPMTAG_PREFIXES,		0, 0, LEN_AND_STR("prefix")},
      {RPMTAG_BUILDROOT,		0, 0, LEN_AND_STR("buildroot")},
-@@ -977,7 +977,7 @@ static struct PreambleRec_s const preambleList[] = {
+@@ -993,7 +993,7 @@ static struct PreambleRec_s const preambleList[] = {
      {RPMTAG_DOCDIR,		0, 0, LEN_AND_STR("docdir")},
      {RPMTAG_DISTTAG,		0, 0, LEN_AND_STR("disttag")},
      {RPMTAG_BUGURL,		0, 0, LEN_AND_STR("bugurl")},

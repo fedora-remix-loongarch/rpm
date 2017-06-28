@@ -1,4 +1,4 @@
-From aa4f0da27f1a18f35784f0f148a41f58ba581c78 Mon Sep 17 00:00:00 2001
+From 9ff717b63e94eb6a330050036506f8b78bf1401f Mon Sep 17 00:00:00 2001
 From: Igor Gnatenko <ignatenko@redhat.com>
 Date: Sat, 25 Feb 2017 12:28:16 +0100
 Subject: [PATCH 5/6] add support for rich dependencies from dependency
@@ -19,10 +19,10 @@ Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
  6 files changed, 54 insertions(+), 71 deletions(-)
 
 diff --git a/build/parsePreamble.c b/build/parsePreamble.c
-index a9db6f37c..a9d2f8e23 100644
+index bc639e86c..6b3705598 100644
 --- a/build/parsePreamble.c
 +++ b/build/parsePreamble.c
-@@ -859,13 +859,13 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
+@@ -866,13 +866,13 @@ static rpmRC handlePreambleTag(rpmSpec spec, Package pkg, rpmTagVal tag,
      case RPMTAG_CONFLICTNAME:
      case RPMTAG_OBSOLETENAME:
      case RPMTAG_PROVIDENAME:
@@ -112,7 +112,7 @@ index 7422db65f..5fa0a1c6b 100644
  {
      char *reqname = NULL;
 diff --git a/build/rpmbuild_internal.h b/build/rpmbuild_internal.h
-index 7dd577f26..d0442f625 100644
+index 7ec05b9c9..1c3332faf 100644
 --- a/build/rpmbuild_internal.h
 +++ b/build/rpmbuild_internal.h
 @@ -283,6 +283,10 @@ int parseScript(rpmSpec spec, int parsePart);
@@ -151,7 +151,7 @@ index 7dd577f26..d0442f625 100644
 +		    int index);
  
  /** \ingroup rpmbuild
-  * Add rpmlib feature dependency.
+  * Add self-provides to package.
 diff --git a/build/rpmfc.c b/build/rpmfc.c
 index 921814ad1..7fa8227d0 100644
 --- a/build/rpmfc.c

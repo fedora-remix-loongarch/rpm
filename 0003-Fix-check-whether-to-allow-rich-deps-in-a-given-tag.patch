@@ -1,4 +1,4 @@
-From ccb3a59bbbccbcf4003117e182d4ae7446e53d07 Mon Sep 17 00:00:00 2001
+From 950eafdaac08cb618a4b5a8c923f1535985bcdc3 Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Thu, 9 Mar 2017 12:12:32 +0100
 Subject: [PATCH 3/6] Fix check whether to allow rich deps in a given tag
