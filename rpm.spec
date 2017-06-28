@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}25%{?dist}
+Release: %{?snapver:0.%{snapver}.}26%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -104,10 +104,18 @@ Patch286: debugsrc-and-sub-debuginfo-packages.patch
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
 
+# Rich dependencies coming from dependency generatos
+Patch310: 0001-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
+Patch311: 0002-Fix-check-for-weak-deps-in-external-dependency-gener.patch
+Patch312: 0003-Fix-check-whether-to-allow-rich-deps-in-a-given-tag.patch
+Patch313: 0004-Re-enable-rich-dependecies-for-build-requires-and-co.patch
+Patch314: 0005-add-support-for-rich-dependencies-from-dependency-ge.patch
+Patch315: 0006-Pass-proper-file-index-when-recording-generated-depe.patch
+
 # These are not yet upstream
-Patch302: rpm-4.7.1-geode-i686.patch
+Patch902: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
-Patch304: rpm-4.13.90-ldflags.patch
+Patch904: rpm-4.13.90-ldflags.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -602,6 +610,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 28 2017 Igor Gnatenko <ignatenko@redhat.com> - 4.13.0.1-26
+- Backport patches for rich dependencies from dependency generators
+
 * Sun Jun 25 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-25
 - Add support for debugsource and debuginfo subpackages
   - find-debuginfo-untangle-unique-build-options.patch
