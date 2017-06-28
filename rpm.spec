@@ -111,6 +111,9 @@ Patch291: find-debuginfo-filter-built-ins.patch
 # Don't create dwz multi file if there is only one .debug.
 Patch292: find-debuginfo-dwz-multi.patch
 
+# Update find-debuginfo.sh options and macros documentation.
+Patch293: find-debuginfo-and-macro-docs.patch
+
 # OpenSSL backend
 Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
 
@@ -624,6 +627,7 @@ exit 0
 - Add debugedit-prefix.patch.
 - Add find-debuginfo-filter-built-ins.patch.
 - Add find-debuginfo-dwz-multi.patch.
+- Add find-debuginfo-and-macro-docs.patch.
 
 * Wed Jun 28 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-27
 - Add find-debuginfo-split-traversal-and-extraction-fix.patch (#1465170)
