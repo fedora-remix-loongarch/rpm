@@ -95,7 +95,8 @@ Patch280: rpm-4.13.x-writable-tmp-dir.patch
 
 # Parallel debuginfo processing
 Patch281: find-debuginfo-split-traversal-and-extraction.patch
-Patch282: find-debuginfo-process-files-in-parallel.patch
+Patch282: find-debuginfo-split-traversal-and-extraction-fix.patch
+Patch283: find-debuginfo-process-files-in-parallel.patch
 
 # Support debugsource and debuginfo subpackages
 Patch285: find-debuginfo-untangle-unique-build-options.patch
@@ -610,6 +611,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 28 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-27
+- Add find-debuginfo-split-traversal-and-extraction-fix.patch (#1465170)
+
 * Wed Jun 28 2017 Igor Gnatenko <ignatenko@redhat.com> - 4.13.0.1-26
 - Backport patches for rich dependencies from dependency generators
 
