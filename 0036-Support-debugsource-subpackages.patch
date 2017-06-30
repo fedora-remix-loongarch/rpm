@@ -1,0 +1,125 @@
+From 01145b9b68b89d0d4d6d5a77d9af70dba7dbc9a3 Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Tue, 28 Mar 2017 14:21:40 +0200
+Subject: [PATCH 36/49] Support debugsource subpackages
+
+This can be enabled by setting the _debugsource_packages macro.
+
+(cherry picked from commit 538cecf0f1fe127dc416afce7a7ee6f94fdb1ad7)
+---
+ macros.in                 | 28 +++++++++++++++++++++++++---
+ scripts/find-debuginfo.sh | 17 ++++++++++++++++-
+ 2 files changed, 41 insertions(+), 4 deletions(-)
+
+diff --git a/macros.in b/macros.in
+index b5bf26ac9..d104ad5a7 100644
+--- a/macros.in
++++ b/macros.in
+@@ -191,13 +191,12 @@
+     %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} \\\
+     %{?_find_debuginfo_dwz_opts} \\\
+     %{?_find_debuginfo_opts} \\\
++    %{?_debugsource_packages:-S debugsourcefiles.list} \\\
+     "%{_builddir}/%{?buildsubdir}"\
+ %{nil}
+ 
+ #	Template for debug information sub-package.
+-%debug_package \
+-%ifnarch noarch\
+-%global __debug_package 1\
++%_debuginfo_template \
+ %package debuginfo\
+ Summary: Debug information for package %{name}\
+ Group: Development/Debug\
+@@ -208,6 +207,26 @@ Debug information is useful when developing applications that use this\
+ package or when debugging this package.\
+ %files debuginfo -f debugfiles.list\
+ %defattr(-,root,root)\
++%{nil}
++
++%_debugsource_template \
++%package debugsource\
++Summary: Debug sources for package %{name}\
++Group: Development/Debug\
++AutoReqProv: 0\
++%description debugsource\
++This package provides debug sources for package %{name}.\
++Debug sources are useful when developing applications that use this\
++package or when debugging this package.\
++%files debugsource -f debugsourcefiles.list\
++%defattr(-,root,root)\
++%{nil}
++
++%debug_package \
++%ifnarch noarch\
++%global __debug_package 1\
++%_debuginfo_template\
++%{?_debugsource_packages:%_debugsource_template}\
+ %endif\
+ %{nil}
+ 
+@@ -517,6 +536,9 @@ package or when debugging this package.\
+ # directory under /usr/debug/src as <name>-<ver>-<rel>.<arch>
+ %_unique_debug_srcs	1
+ 
++# Whether rpm should put debug source files into its own subpackage
++#%_debugsource_packages	1
++
+ #
+ # Use internal dependency generator rather than external helpers?
+ %_use_internal_dependency_generator	1
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+index cd2931c0d..bede833d7 100644
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -4,6 +4,7 @@
+ #
+ # Usage: find-debuginfo.sh [--strict-build-id] [-g] [-r] [-m] [-i] [-n]
+ #	 		   [-o debugfiles.list]
++#	 		   [-S debugsourcefiles.list]
+ #			   [--run-dwz] [--dwz-low-mem-die-limit N]
+ #			   [--dwz-max-die-limit N]
+ #			   [--build-id-seed VERSION-RELEASE]
+@@ -79,6 +80,7 @@ n_jobs=1
+ 
+ BUILDDIR=.
+ out=debugfiles.list
++srcout=
+ nout=0
+ while [ $# -gt 0 ]; do
+   case "$1" in
+@@ -147,6 +149,10 @@ while [ $# -gt 0 ]; do
+   -j*)
+     n_jobs=${1#-j}
+     ;;
++  -S)
++    srcout=$2
++    shift
++    ;;
+   *)
+     BUILDDIR=$1
+     shift
+@@ -512,10 +518,19 @@ if [ -d "${RPM_BUILD_ROOT}/usr/lib" -o -d "${RPM_BUILD_ROOT}/usr/src" ]; then
+ 
+   (cd "${RPM_BUILD_ROOT}/usr"
+    test ! -d lib/debug || find lib/debug ! -type d
+-   test ! -d src/debug || find src/debug -mindepth 1 -maxdepth 1
++   test ! -d src/debug -o -n "$srcout" || find src/debug -mindepth 1 -maxdepth 1
+   ) | sed 's,^,/usr/,' >> "$LISTFILE"
+ fi
+ 
++if [ -n "$srcout" ]; then
++  > "$srcout"
++  if [ -d "${RPM_BUILD_ROOT}/usr/src/debug" ]; then
++    (cd "${RPM_BUILD_ROOT}/usr"
++     find src/debug -mindepth 1 -maxdepth 1
++    ) | sed 's,^,/usr/,' >> "$srcout"
++  fi
++fi
++
+ # Append to $1 only the lines from stdin not already in the file.
+ append_uniq()
+ {
+-- 
+2.13.2
+

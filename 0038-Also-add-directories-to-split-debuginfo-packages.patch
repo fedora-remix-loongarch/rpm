@@ -1,0 +1,70 @@
+From 9f826d903dabbc2ce199560e296224c320bb840f Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Wed, 29 Mar 2017 14:55:10 +0200
+Subject: [PATCH 38/49] Also add directories to split debuginfo packages
+
+This gets rid of the last difference between debuginfo subpackages
+and normal debuginfo packages.
+
+(cherry picked from commit a517554e36666f58724620347a4b8224471d2225)
+---
+ build/files.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/build/files.c b/build/files.c
+index 779a2a102..f27dcc7c1 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -2707,8 +2707,9 @@ static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
+ {
+     rpmfi fi;
+     ARGV_t files = NULL;
+-    Package dbg = NULL;
+-    char *path = NULL;
++    ARGV_t dirs = NULL;
++    int lastdiridx = -1, dirsadded;
++    char *path = NULL, *p, *pmin;
+     size_t buildrootlen = strlen(buildroot);
+ 
+     /* ignore noarch subpackages */
+@@ -2741,12 +2742,37 @@ static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
+ 		argvAdd(&files, "%defattr(-,root,root)");
+ 		argvAddDir(&files, DEBUG_LIB_DIR);
+ 	    }
++
+ 	    /* Add the files main debug-info file */
+ 	    argvAdd(&files, path + buildrootlen);
++
++	    /* Add the dir(s) */
++	    dirsadded = 0;
++	    pmin = path + buildrootlen + strlen(DEBUG_LIB_DIR);
++	    while ((p = strrchr(path + buildrootlen, '/')) != NULL && p > pmin) {
++		*p = 0;
++		if (lastdiridx >= 0 && !strcmp(dirs[lastdiridx], path + buildrootlen))
++		    break;		/* already added this one */
++		argvAdd(&dirs, path + buildrootlen);
++		dirsadded++;
++	    }
++	    if (dirsadded)
++		lastdiridx = argvCount(dirs) - dirsadded;	/* remember longest dir */
+ 	}
+ 	path = _free(path);
+     }
+ 
++    /* add collected directories to file list */
++    if (dirs) {
++	int i;
++	argvSort(dirs, NULL);
++	for (i = 0; dirs[i]; i++) {
++	    if (!i || strcmp(dirs[i], dirs[i - 1]) != 0)
++		argvAddDir(&files, dirs[i]);
++	}
++	dirs = argvFree(dirs);
++    }
++
+     if (files) {
+ 	/* we have collected some files. Now put them in a debuginfo
+          * package. If this is not the main package, clone the main
+-- 
+2.13.2
+

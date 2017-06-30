@@ -1,0 +1,37 @@
+From 4fb394a677c17a33c7e3f3455a1a6c109200b87e Mon Sep 17 00:00:00 2001
+From: Florian Festi <ffesti@redhat.com>
+Date: Tue, 28 Feb 2017 17:42:21 +0100
+Subject: [PATCH 45/49] Fix check for weak deps in external dependency
+ generator
+
+(cherry picked from commit 43d230884365d90d42184a0000f44bb33e5f1ab8)
+---
+ build/rpmfc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/build/rpmfc.c b/build/rpmfc.c
+index ce192fa9c..921814ad1 100644
+--- a/build/rpmfc.c
++++ b/build/rpmfc.c
+@@ -1267,12 +1267,12 @@ static rpmRC rpmfcApplyExternal(rpmfc fc)
+ 	    tagflags = RPMSENSE_FIND_PROVIDES;
+ 	    break;
+ 	case RPMTAG_REQUIREFLAGS:
+-	case RPMTAG_RECOMMENDNAME:
+-	case RPMTAG_SUGGESTNAME:
+-	case RPMTAG_SUPPLEMENTNAME:
+-	case RPMTAG_ENHANCENAME:
+-	case RPMTAG_CONFLICTNAME:
+-	case RPMTAG_OBSOLETENAME:
++	case RPMTAG_RECOMMENDFLAGS:
++	case RPMTAG_SUGGESTFLAGS:
++	case RPMTAG_SUPPLEMENTFLAGS:
++	case RPMTAG_ENHANCEFLAGS:
++	case RPMTAG_CONFLICTFLAGS:
++	case RPMTAG_OBSOLETEFLAGS:
+ 	    if (fc->skipReq)
+ 		continue;
+ 	    tagflags = RPMSENSE_FIND_REQUIRES;
+-- 
+2.13.2
+

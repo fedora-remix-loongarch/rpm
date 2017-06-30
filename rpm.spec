@@ -56,74 +56,79 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.0-python-rpmsign.patch
+# All patches are tracked on https://pagure.io/rpm-fedora
+Patch100: 0001-Use-correct-source-file-for-rpmsign-module.patch
 
-Patch140: rpm-4.13.x-brp-python-bytecompile-Python3-only.patch
-Patch142: rpm-4.13.x-fix-refcount-for-spec_type.patch
+Patch140: 0002-brp-python-bytecompile-Process-python-lib-dirs-even-.patch
+Patch142: 0003-Fix-number-of-references-on-spec_Type-114.patch
 
 # debuginfo backports (#1427970)
-Patch250: 0001-Add-build-id-links-to-rpm-for-all-ELF-files.patch
-Patch251: 0002-Make-it-possible-to-have-unique-build-ids-across-bui.patch
-Patch252: 0003-Make-adding-GDB-index-sections-configurable.patch
-Patch253: 0004-Add-option-to-have-unique-debug-file-names-across-ve.patch
-Patch254: 0005-Fix-behavior-when-_build_id_links-is-undefined.patch
-Patch255: 0006-Fix-debuginfo-etc-when-subpackages-have-different-ve.patch
-Patch256: 0007-Only-process-regular-files-when-generating-build-ids.patch
-Patch257: 0008-configure.ac-use-LIBDW-always-conditionally.patch
-Patch258: 0009-Fix-libdw-configure-check.patch
-Patch259: 0010-debugedit-Support-String-Line-table-rewriting-for-la.patch
-Patch260: 0011-Add-option-to-have-unique-debug-source-dirs-across-v.patch
+Patch250: 0004-Add-build-id-links-to-rpm-for-all-ELF-files.patch
+Patch251: 0005-Make-it-possible-to-have-unique-build-ids-across-bui.patch
+Patch252: 0006-Make-adding-GDB-index-sections-configurable.patch
+Patch253: 0007-Add-option-to-have-unique-debug-file-names-across-ve.patch
+Patch254: 0008-Fix-behavior-when-_build_id_links-is-undefined.patch
+Patch255: 0009-Fix-debuginfo-etc-when-subpackages-have-different-ve.patch
+Patch256: 0010-Only-process-regular-files-when-generating-build-ids.patch
+Patch257: 0011-configure.ac-use-LIBDW-always-conditionally.patch
+Patch258: 0012-Fix-libdw-configure-check.patch
+Patch259: 0013-debugedit-Support-String-Line-table-rewriting-for-la.patch
+Patch260: 0014-Add-option-to-have-unique-debug-source-dirs-across-v.patch
 
 # debuginfo build-id warn/error fix (#1430587)
-Patch261: 0012-generateBuildIDs-Don-t-warn-or-error-for-object-file.patch
-Patch262: 0013-missing_build_ids_terminate_build.patch
-Patch263: 0014-generateBuildIDs-Fix-error-handling.patch
-Patch264: 0015-reset-buildid-file-attrs.patch
-Patch265: 0016-debugedit-replace-files.patch
-Patch266: 0017-do-not-process-buildi-ds-for-noarch.patch
-Patch267: 0018-update-build-id-endian.patch
-Patch268: 0019-fix-sed-build-id-match-test.patch
-Patch269: 0020-build-files-exec-build-id.patch
-Patch270: 0021-debugedit-Fix-off-by-one-adding-DW_FORM_string-repla.patch
-Patch271: 0022-unbreak-short-circuit.patch
-Patch272: 0023-minisymtab-exe-sh.patch
-Patch273: 0024-no-recompute-build-id.patch
-Patch274: 0025-buildid-reset-attrs.patch
+Patch261: 0015-generateBuildIDs-Don-t-warn-or-error-for-object-file.patch
+Patch262: 0016-build-files.c-Unset-__debug_package-implies-missing-.patch
+Patch263: 0017-generateBuildIDs-Fix-error-handling.patch
+Patch264: 0018-Make-sure-to-reset-file-attributes-for-generated-bui.patch
+Patch265: 0019-rpmbuild-Reset-attrFlags-in-generateBuildIDs.patch
+Patch266: 0020-debugedit-Fix-edit_dwarf2_line-replace_dirs-replace_.patch
+Patch267: 0021-build-files.c-processPackageFiles-Don-t-call-generat.patch
+Patch268: 0022-debugedit-Fix-cross-endian-build-id-reading-and-upda.patch
+Patch269: 0023-tests-tpmbuild.at-Make-file-sed-regexp-more-strict-t.patch
+Patch270: 0024-tests-rpmbuildid.at-Make-file-sed-regexp-more-strict.patch
+Patch271: 0025-build-files.c-Only-check-build-ids-for-executable-fi.patch
+Patch272: 0026-debugedit-Fix-off-by-one-adding-DW_FORM_string-repla.patch
+Patch273: 0027-Unbreak-short-circuited-binary-builds.patch
+Patch274: 0028-find-debuginfo.sh-Only-add-minisymtab-for-executable.patch
+Patch275: 0029-debugedit-Add-n-no-recompute-build-id.patch
+Patch276: 0030-Fix-non-standard-inherented-modes-of-directories-in-.patch
 
 # World writable empty (tmp) dirs in debuginfo packages (#641022)
-Patch280: rpm-4.13.x-writable-tmp-dir.patch
+Patch280: 0031-debugedit-Only-output-comp_dir-under-build-dir-once.patch
 
 # Parallel debuginfo processing
-Patch281: find-debuginfo-split-traversal-and-extraction.patch
-Patch282: find-debuginfo-split-traversal-and-extraction-fix.patch
-Patch283: find-debuginfo-process-files-in-parallel.patch
+Patch281: 0032-find-debuginfo.sh-Split-directory-traversal-and-debu.patch
+Patch282: 0033-find-debuginfo.sh-Use-return-not-continue-to-break-o.patch
+Patch283: 0034-find-debuginfo.sh-Process-files-in-parallel.patch
 
 # Support debugsource and debuginfo subpackages
-Patch285: find-debuginfo-untangle-unique-build-options.patch
-Patch286: debugsrc-and-sub-debuginfo-packages.patch
+Patch284: 0035-Untangle-unique-build-options-in-find-debuginfo.sh.patch
+Patch285: 0036-Support-debugsource-subpackages.patch
+Patch286: 0037-Support-debuginfo-subpackages.patch
+Patch287: 0038-Also-add-directories-to-split-debuginfo-packages.patch
 
 # debugedit check prefix match ends with slash.
-Patch290: debugedit-prefix.patch
+Patch290: 0039-debugedit-skip_dir_prefix-should-check-for-dir-separ.patch
 
 # find-debuginfo.sh: Filter out all <built-in> like fake file names.
-Patch291: find-debuginfo-filter-built-ins.patch
+Patch291: 0040-find-debuginfo.sh-Filter-out-all-built-in-like-fake-.patch
 
 # Don't create dwz multi file if there is only one .debug.
-Patch292: find-debuginfo-dwz-multi.patch
+Patch292: 0041-find-debuginfo.sh-Don-t-create-dwz-multi-file-if-the.patch
 
 # Update find-debuginfo.sh options and macros documentation.
-Patch293: find-debuginfo-and-macro-docs.patch
+Patch293: 0042-Update-find-debuginfo.sh-options-and-macros-document.patch
 
 # OpenSSL backend
-Patch300: 0001-Add-OpenSSL-support-for-digest-and-signatures.patch
+Patch300: 0043-Add-OpenSSL-support-for-digest-and-signatures.patch
 
 # Rich dependencies coming from dependency generatos
-Patch310: 0001-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
-Patch311: 0002-Fix-check-for-weak-deps-in-external-dependency-gener.patch
-Patch312: 0003-Fix-check-whether-to-allow-rich-deps-in-a-given-tag.patch
-Patch313: 0004-Re-enable-rich-dependecies-for-build-requires-and-co.patch
-Patch314: 0005-add-support-for-rich-dependencies-from-dependency-ge.patch
-Patch315: 0006-Pass-proper-file-index-when-recording-generated-depe.patch
+Patch310: 0044-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
+Patch311: 0045-Fix-check-for-weak-deps-in-external-dependency-gener.patch
+Patch312: 0046-Fix-check-whether-to-allow-rich-deps-in-a-given-tag.patch
+Patch313: 0047-Re-enable-rich-dependecies-for-build-requires-and-co.patch
+Patch314: 0048-add-support-for-rich-dependencies-from-dependency-ge.patch
+Patch315: 0049-Pass-proper-file-index-when-recording-generated-depe.patch
 
 # These are not yet upstream
 Patch902: rpm-4.7.1-geode-i686.patch

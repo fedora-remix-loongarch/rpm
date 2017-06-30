@@ -1,0 +1,30 @@
+From 27c263a877dd4bfac12ae716038dfbb0a305625b Mon Sep 17 00:00:00 2001
+From: Florian Festi <ffesti@redhat.com>
+Date: Thu, 9 Mar 2017 14:02:10 +0100
+Subject: [PATCH 47/49] Re-enable rich dependecies for build requires and
+ conflicts
+
+(cherry picked from commit cb3dc0b43bd9a119196a527504d03d57d0785092)
+---
+ build/parseReqs.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/build/parseReqs.c b/build/parseReqs.c
+index 6c2aead4e..4d500c1df 100644
+--- a/build/parseReqs.c
++++ b/build/parseReqs.c
+@@ -174,9 +174,11 @@ rpmRC parseRCPOT(rpmSpec spec, Package pkg, const char *field, rpmTagVal tagN,
+     case RPMTAG_BUILDREQUIRES:
+ 	nametag = RPMTAG_REQUIRENAME;
+ 	tagflags |= RPMSENSE_ANY;
++	allow_richdeps = 1;
+ 	break;
+     case RPMTAG_BUILDCONFLICTS:
+ 	nametag = RPMTAG_CONFLICTNAME;
++	allow_richdeps = 1;
+ 	break;
+     case RPMTAG_FILETRIGGERIN:
+ 	nametag = RPMTAG_FILETRIGGERNAME;
+-- 
+2.13.2
+

@@ -1,0 +1,57 @@
+From f22cb2890026544499ee4f1a309a44c71e0b8152 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Mon, 26 Jun 2017 17:38:30 +0200
+Subject: [PATCH 41/49] find-debuginfo.sh: Don't create dwz multi file if there
+ is only one .debug.
+
+dwz -m multi only works when there are multiple .debug input files.
+With just one .debug file it doesn't really make sense to extract
+the shared debug info into a separate file and dwz will complain:
+
+  dwz: Too few files for multifile optimization.
+
+So only add -m multi if there is more than one .debug file.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+(cherry picked from commit 0f162dc41f2051eab237bd223356d88e94a07580)
+---
+ scripts/find-debuginfo.sh | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+index eb62a158a..3bfc15a79 100644
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -442,8 +442,8 @@ fi
+ # Invoke the DWARF Compressor utility.
+ if $run_dwz \
+    && [ -d "${RPM_BUILD_ROOT}/usr/lib/debug" ]; then
+-  dwz_files="`cd "${RPM_BUILD_ROOT}/usr/lib/debug"; find -type f -name \*.debug`"
+-  if [ -n "${dwz_files}" ]; then
++  readarray dwz_files < <(cd "${RPM_BUILD_ROOT}/usr/lib/debug"; find -type f -name \*.debug)
++  if [ ${#dwz_files[@]} -gt 0 ]; then
+     dwz_multifile_name="${RPM_PACKAGE_NAME}-${RPM_PACKAGE_VERSION}-${RPM_PACKAGE_RELEASE}.${RPM_ARCH}"
+     dwz_multifile_suffix=
+     dwz_multifile_idx=0
+@@ -452,14 +452,16 @@ if $run_dwz \
+       dwz_multifile_suffix=".${dwz_multifile_idx}"
+     done
+     dwz_multfile_name="${dwz_multifile_name}${dwz_multifile_suffix}"
+-    dwz_opts="-h -q -r -m .dwz/${dwz_multifile_name}"
++    dwz_opts="-h -q -r"
++    [ ${#dwz_files[@]} -gt 1 ] \
++      && dwz_opts="${dwz_opts} -m .dwz/${dwz_multifile_name}"
+     mkdir -p "${RPM_BUILD_ROOT}/usr/lib/debug/.dwz"
+     [ -n "${dwz_low_mem_die_limit}" ] \
+       && dwz_opts="${dwz_opts} -l ${dwz_low_mem_die_limit}"
+     [ -n "${dwz_max_die_limit}" ] \
+       && dwz_opts="${dwz_opts} -L ${dwz_max_die_limit}"
+     if type dwz >/dev/null 2>&1; then
+-      ( cd "${RPM_BUILD_ROOT}/usr/lib/debug" && dwz $dwz_opts $dwz_files )
++      ( cd "${RPM_BUILD_ROOT}/usr/lib/debug" && dwz $dwz_opts ${dwz_files[@]} )
+     else
+       echo >&2 "*** ERROR: DWARF compression requested, but no dwz installed"
+       exit 2
+-- 
+2.13.2
+

@@ -1,0 +1,25 @@
+From bacdd7eeac9abb5046f5163a79ec8296287d83fc Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Fri, 30 Jun 2017 16:52:03 +0200
+Subject: [PATCH 50/50] fixup! Support debuginfo subpackages
+
+---
+ build/files.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/files.c b/build/files.c
+index 933fad35b..f27dcc7c1 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -2930,7 +2930,7 @@ rpmRC processBinaryFiles(rpmSpec spec, rpmBuildPkgFlags pkgFlags,
+ 	rpmlog(RPMLOG_NOTICE, _("Processing files: %s\n"), nvr);
+ 	free(nvr);
+ 
+-	if ((rc = processPackageFiles(spec, pkgFlags, pkg, didInstall, test)) != RPMRC_OK)
++	if ((rc = processPackageFiles(spec, pkgFlags, pkg, installSpecialDoc, test)) != RPMRC_OK)
+ 	    goto exit;
+ 
+ 	if (maindbg)
+-- 
+2.13.2
+

@@ -1,0 +1,39 @@
+From ba8f2239de528f02d272aed71599a4a560ddd238 Mon Sep 17 00:00:00 2001
+From: Robin Lee <cheeselee@fedoraproject.org>
+Date: Sat, 8 Apr 2017 21:21:39 +0800
+Subject: [PATCH 30/49] Fix non-standard inherented modes of directories in
+ debuginfo
+
+In case that binary compiled from source generated in /tmp, a
+/usr/src/debug/tmp directory will be created with the same mode as
+/tmp, a.k.a 777, which should be avoided.
+
+Fixes: rhbz#641022
+(cherry picked from commit c707ab26362e795d3f9dba4eb87dc7ed99a28bcb)
+---
+ scripts/find-debuginfo.sh | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 scripts/find-debuginfo.sh
+
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+old mode 100644
+new mode 100755
+index 1d3dc0623..5087c4050
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -443,9 +443,10 @@ if [ -s "$SOURCEFILE" ]; then
+   mkdir -p "${RPM_BUILD_ROOT}${debug_dest_name}"
+   LC_ALL=C sort -z -u "$SOURCEFILE" | grep -E -v -z '(<internal>|<built-in>)$' |
+   (cd "${debug_base_name}"; cpio -pd0mL "${RPM_BUILD_ROOT}${debug_dest_name}")
+-  # stupid cpio creates new directories in mode 0700, fixup
++  # stupid cpio creates new directories in mode 0700,
++  # and non-standard modes may be inherented from original directories, fixup
+   find "${RPM_BUILD_ROOT}${debug_dest_name}" -type d -print0 |
+-  xargs --no-run-if-empty -0 chmod a+rx
++  xargs --no-run-if-empty -0 chmod 0755
+ fi
+ 
+ if [ -d "${RPM_BUILD_ROOT}/usr/lib" -o -d "${RPM_BUILD_ROOT}/usr/src" ]; then
+-- 
+2.13.2
+

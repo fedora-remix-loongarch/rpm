@@ -1,0 +1,37 @@
+From 8e74618100580a1370b9045296c4d2d37340735f Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Thu, 16 Mar 2017 22:53:54 +0100
+Subject: [PATCH 20/49] debugedit: Fix edit_dwarf2_line replace_dirs ->
+ replace_files typo.
+
+We wouldn't replace the changed file names if replace_dirs was false,
+but replace_files was true. This could overrun the new debug_line data
+buffer if the original file name was larger than the replacement. It
+wasn't found before because often when we need to replace files we
+also would have to replace dirs.
+
+This fixes the kubernetes build in fedora.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+
+(cherry picked from commit dc759bc655ff1c18a08d77dd31dedfe3ae1025b0)
+---
+ tools/debugedit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index 4798c6370..87a423fdb 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -1185,7 +1185,7 @@ edit_dwarf2_line (DSO *dso)
+ 	    {
+ 	      const char *file = (const char *) optr;
+ 	      const char *file_path = NULL;
+-	      if (t->replace_dirs)
++	      if (t->replace_files)
+ 		{
+ 		  file_path = skip_dir_prefix (file, base_dir);
+ 		  if (file_path != NULL)
+-- 
+2.13.2
+

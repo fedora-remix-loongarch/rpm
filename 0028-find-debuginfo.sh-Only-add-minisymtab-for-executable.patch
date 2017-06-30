@@ -1,0 +1,42 @@
+From 349489c3219e31efd552d87e255b06a864d1c034 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Sun, 16 Apr 2017 18:16:02 +0200
+Subject: [PATCH 28/49] find-debuginfo.sh: Only add minisymtab for executables
+ or shared libraries.
+
+It only makes sense to add a minisymtab for executables and shared
+libraries. Other executable ELF files (like kernel modules) don't need it.
+Since those don't have a dynsym section trying to add it will fail and
+produce confusing errors from nm.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+(cherry picked from commit 3790a6872749a9601be6044be7d8fb0951131376)
+---
+ scripts/find-debuginfo.sh | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+index 1420ef6cd..f1ffcd7d8 100644
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -347,7 +347,16 @@ while read nlinks inum f; do
+   fi
+ 
+   # strip -g implies we have full symtab, don't add mini symtab in that case.
+-  $strip_g || ($include_minidebug && add_minidebug "${debugfn}" "$f")
++  # It only makes sense to add a minisymtab for executables and shared
++  # libraries. Other executable ELF files (like kernel modules) don't need it.
++  if [ "$include_minidebug" = "true" -a "$strip_g" = "false" ]; then
++    skip_mini=true
++    case "$(file -bi "$f")" in
++      application/x-sharedlib*) skip_mini=false ;;
++      application/x-executable*) skip_mini=false ;;
++    esac
++    $skip_mini || add_minidebug "${debugfn}" "$f"
++  fi
+ 
+   echo "./${f#$RPM_BUILD_ROOT}" >> "$ELFBINSFILE"
+ 
+-- 
+2.13.2
+
