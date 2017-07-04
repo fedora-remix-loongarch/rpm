@@ -1,0 +1,102 @@
+From c24003b77926967589546681ef893e4e11f6b77f Mon Sep 17 00:00:00 2001
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Fri, 19 May 2017 11:01:12 +0300
+Subject: [PATCH 50/53] Consolidate %defattr/%attr(-,root,root) generation to
+ helper function
+
+(cherry picked from commit b71d63ef598cb5bf504265a18166d782fb017569)
+---
+ build/files.c | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
+
+diff --git a/build/files.c b/build/files.c
+index f27dcc7..e93efeb 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -193,6 +193,16 @@ static void dupAttrRec(const AttrRec oar, AttrRec nar)
+     *nar = *oar; /* struct assignment */
+ }
+ 
++static char *mkattr(const char *fn)
++{
++    char *s = NULL;
++    if (fn)
++	rasprintf(&s, "%s(-,%s,%s) %s", "%attr", "root", "root", fn);
++    else
++	rasprintf(&s, "%s(-,%s,%s)", "%defattr", "root", "root");
++    return s;
++}
++
+ static void copyFileEntry(FileEntry src, FileEntry dest)
+ {
+     /* Copying struct makes just shallow copy */
+@@ -1820,7 +1830,7 @@ static int generateBuildIDs(FileList fl)
+ 	    fl->cur.verifyFlags = RPMVERIFY_ALL;
+ 	    fl->def.specdFlags |= SPECD_VERIFY;
+ 	    fl->cur.specdFlags |= SPECD_VERIFY;
+-	    attrstr = xstrdup ("%defattr(-,root,root)");
++	    attrstr = mkattr(NULL);
+ 	    parseForAttr(fl->pool, attrstr, 1, &fl->def);
+ 	    free (attrstr);
+ 
+@@ -1833,8 +1843,7 @@ static int generateBuildIDs(FileList fl)
+ 		if ((rc = rpmioMkpath(mainiddir, 0755, -1, -1)) != 0) {
+ 		    rpmlog(RPMLOG_ERR, "%s %s: %m\n", errdir, mainiddir);
+ 		} else {
+-		    rasprintf (&attrstr, "%s %s", "%attr(-,root,root) ",
+-			       mainiddir);
++		    attrstr = mkattr(mainiddir);
+ 		    parseForAttr(fl->pool, attrstr, 0, &fl->cur);
+ 		    fl->cur.isDir = 1;
+ 		    rc = addFile(fl, mainiddir, NULL);
+@@ -1846,8 +1855,7 @@ static int generateBuildIDs(FileList fl)
+ 		if ((rc = rpmioMkpath(debugiddir, 0755, -1, -1)) != 0) {
+ 		    rpmlog(RPMLOG_ERR, "%s %s: %m\n", errdir, debugiddir);
+ 		} else {
+-		    rasprintf (&attrstr, "%s %s", "%attr(-,root,root) ",
+-			       debugiddir);
++		    attrstr = mkattr(debugiddir);
+ 		    parseForAttr(fl->pool, attrstr, 0, &fl->cur);
+ 		    fl->cur.isDir = 1;
+ 		    rc = addFile(fl, debugiddir, NULL);
+@@ -2739,8 +2747,10 @@ static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
+ 	if (access(path, F_OK) == 0) {
+ 	    /* Append the file list preamble */
+ 	    if (!files) {
+-		argvAdd(&files, "%defattr(-,root,root)");
++		char *attr = mkattr(NULL);
++		argvAdd(&files, attr);
+ 		argvAddDir(&files, DEBUG_LIB_DIR);
++		free(attr);
+ 	    }
+ 
+ 	    /* Add the files main debug-info file */
+@@ -2797,8 +2807,10 @@ static int addDebugDwz(Package pkg, char *buildroot)
+     rasprintf(&path, "%s%s", buildroot, DEBUG_DWZ_DIR);
+     if (lstat(path, &sbuf) == 0 && S_ISDIR(sbuf.st_mode)) {
+ 	if (!pkg->fileList) {
+-	    argvAdd(&pkg->fileList, "%defattr(-,root,root)");
++	    char *attr = mkattr(NULL);
++	    argvAdd(&pkg->fileList, attr);
+ 	    argvAddDir(&pkg->fileList, DEBUG_LIB_DIR);
++	    free(attr);
+ 	}
+ 	argvAdd(&pkg->fileList, DEBUG_DWZ_DIR);
+ 	ret = 1;
+@@ -2828,8 +2840,11 @@ static int addDebugSrc(Package pkg, char *buildroot)
+ 	    if (!strcmp(de->d_name, ".") || !strcmp(de->d_name, ".."))
+ 		continue;
+ 	    rasprintf(&path, "%s/%s", DEBUG_SRC_DIR, de->d_name);
+-	    if (!pkg->fileList)
+-		argvAdd(&pkg->fileList, "%defattr(-,root,root)");
++	    if (!pkg->fileList) {
++		char *attr = mkattr(NULL);
++		argvAdd(&pkg->fileList, attr);
++		free(attr);
++	    }
+ 	    argvAdd(&pkg->fileList, path);
+ 	    path = _free(path);
+ 	    ret = 1;
+-- 
+2.9.4
+

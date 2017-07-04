@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}28%{?dist}
+Release: %{?snapver:0.%{snapver}.}29%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -129,6 +129,14 @@ Patch312: 0046-Fix-check-whether-to-allow-rich-deps-in-a-given-tag.patch
 Patch313: 0047-Re-enable-rich-dependecies-for-build-requires-and-co.patch
 Patch314: 0048-add-support-for-rich-dependencies-from-dependency-ge.patch
 Patch315: 0049-Pass-proper-file-index-when-recording-generated-depe.patch
+
+# Use file list to explicitly set mode for build-id dirs/files.
+# https://bugzilla.redhat.com/show_bug.cgi?id=1452893
+# https://bugzilla.redhat.com/show_bug.cgi?id=1458839
+Patch320: 0050-Consolidate-defattr-attr-root-root-generation-to-hel.patch
+Patch321: 0051-Extract-package-file-list-processing-in-separate-fun.patch
+Patch322: 0052-Use-a-file-list-to-add-build-id-files-to-pkgList.patch
+Patch323: 0053-Change-mkattr-to-always-create-a-defattr-with-explic.patch
 
 # These are not yet upstream
 Patch902: rpm-4.7.1-geode-i686.patch
@@ -628,6 +636,11 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jul 04 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-29
+- Track patches using https://pagure.io/rpm-fedora
+- Use file list to explicitly set mode for build-id dirs/files
+  (#1452893, #1458839)
+
 * Thu Jun 29 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-28
 - Add debugedit-prefix.patch.
 - Add find-debuginfo-filter-built-ins.patch.
