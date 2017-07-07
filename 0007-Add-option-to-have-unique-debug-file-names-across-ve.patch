@@ -1,7 +1,7 @@
 From 5b29c09c31982a712844cb2bbcd0bfff09c457d1 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mjw@redhat.com>
 Date: Thu, 16 Jun 2016 14:24:22 +0200
-Subject: [PATCH 07/49] Add option to have unique debug file names across
+Subject: [PATCH 07/54] Add option to have unique debug file names across
  version/release/arch.
 
 Introduce a new macro _unique_debug_names that when set will pass

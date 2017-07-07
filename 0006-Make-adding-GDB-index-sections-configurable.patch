@@ -1,7 +1,7 @@
 From 68a0323ab1738aee40f9f5a60a7fb3163162bf39 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mjw@redhat.com>
 Date: Tue, 14 Jun 2016 17:07:14 +0200
-Subject: [PATCH 06/49] Make adding GDB index sections configurable.
+Subject: [PATCH 06/54] Make adding GDB index sections configurable.
 
 Introduces _include_gdb_index macro and -i flag to find-debuginfo.sh to
 enable or disable adding a .gdb_index section to debug files. Adds tests

@@ -1,7 +1,7 @@
 From 534fae47e4d05fd27c277c9e04ad238e608289f5 Mon Sep 17 00:00:00 2001
 From: Michal Marek <mmarek@suse.com>
 Date: Sat, 10 Sep 2016 23:13:24 +0200
-Subject: [PATCH 32/49] find-debuginfo.sh: Split directory traversal and
+Subject: [PATCH 32/54] find-debuginfo.sh: Split directory traversal and
  debuginfo extraction
 
 This siplifies the handling of hardlinks a bit and allows a later patch

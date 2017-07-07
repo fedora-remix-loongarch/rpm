@@ -1,7 +1,7 @@
 From 5598e24ef8aef14727ff72eea71ec460200bc2e3 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 17 Mar 2017 21:03:35 +0100
-Subject: [PATCH 22/49] debugedit: Fix cross-endian build-id reading and
+Subject: [PATCH 22/54] debugedit: Fix cross-endian build-id reading and
  updating section data.
 
 debugedit doesn't read raw mmap data any longer. Which made the complex

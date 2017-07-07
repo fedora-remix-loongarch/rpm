@@ -1,7 +1,7 @@
 From 201b856c02aeb3c4fc6b3a8b96ce8817278f4fbf Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 26 Jun 2017 13:35:48 +0200
-Subject: [PATCH 42/49] Update find-debuginfo.sh options and macros
+Subject: [PATCH 42/54] Update find-debuginfo.sh options and macros
  documentation.
 
 This adds some missing documentation for rpm macros and find-debuginfo.sh

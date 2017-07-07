@@ -1,7 +1,7 @@
 From 651264c51dfb13bf78bb969a429719f301497631 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Wed, 15 Mar 2017 20:07:29 +0100
-Subject: [PATCH 18/49] Make sure to reset file attributes for generated
+Subject: [PATCH 18/54] Make sure to reset file attributes for generated
  build-id directories.
 
 [Note this patch is currently being tested in Fedora. See bug below.]

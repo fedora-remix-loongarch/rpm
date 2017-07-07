@@ -1,7 +1,7 @@
 From 387acd5cb74c968b4751a1c2c731964fc1ab6c3f Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 21 Apr 2017 17:33:26 +0200
-Subject: [PATCH 31/49] debugedit: Only output comp_dir under build dir (once).
+Subject: [PATCH 31/54] debugedit: Only output comp_dir under build dir (once).
 
 The fix for rhbz#444310 (commit c1a5eb - Include empty CU current dirs)
 was a little greedy. It would also include comp_dirs outside the build

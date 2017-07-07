@@ -1,7 +1,7 @@
 From 58f2b095c0d1507ad09990669f1ae03f6f1d931f Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 20 Mar 2017 09:55:44 +0100
-Subject: [PATCH 24/49] tests/rpmbuildid.at: Make file sed regexp more strict
+Subject: [PATCH 24/54] tests/rpmbuildid.at: Make file sed regexp more strict
  to extract BuildID.
 
 Like commit f0a5819 for rpmbuild.at. In the case of rpmbuildid.at the

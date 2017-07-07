@@ -1,7 +1,7 @@
 From ba8f2239de528f02d272aed71599a4a560ddd238 Mon Sep 17 00:00:00 2001
 From: Robin Lee <cheeselee@fedoraproject.org>
 Date: Sat, 8 Apr 2017 21:21:39 +0800
-Subject: [PATCH 30/49] Fix non-standard inherented modes of directories in
+Subject: [PATCH 30/54] Fix non-standard inherented modes of directories in
  debuginfo
 
 In case that binary compiled from source generated in /tmp, a

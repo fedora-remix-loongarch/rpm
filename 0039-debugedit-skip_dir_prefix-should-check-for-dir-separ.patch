@@ -1,7 +1,7 @@
 From faaf3bbfc261f49eda996801b50996fb1066092f Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Wed, 28 Jun 2017 20:25:39 +0200
-Subject: [PATCH 39/49] debugedit: skip_dir_prefix should check for dir
+Subject: [PATCH 39/54] debugedit: skip_dir_prefix should check for dir
  separator.
 
 To count as a real directory prefix the string matched should either

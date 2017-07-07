@@ -1,7 +1,7 @@
 From d6a1e94f18d2f73e7b03025d891aa7e407cb169a Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Wed, 31 May 2017 10:42:03 +0200
-Subject: [PATCH 49/49] Pass proper file index when recording generated
+Subject: [PATCH 49/54] Pass proper file index when recording generated
  dependencies
 
 Resolves regression introduced with 8f509d6

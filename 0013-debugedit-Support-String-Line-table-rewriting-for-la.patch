@@ -1,7 +1,7 @@
 From ddb7c4abddd746d7ec354fb89be16a2411a92cba Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 27 Feb 2017 16:28:18 +0100
-Subject: [PATCH 13/49] debugedit: Support String/Line table rewriting for
+Subject: [PATCH 13/54] debugedit: Support String/Line table rewriting for
  larger/smaller paths.
 
 debugedit --base to --dest rewriting of debug source file paths only

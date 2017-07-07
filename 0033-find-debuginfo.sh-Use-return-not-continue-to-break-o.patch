@@ -1,7 +1,7 @@
 From 3e0419ebc11494d9848decfdfb4909cbce9448b7 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Wed, 28 Jun 2017 14:21:32 +0200
-Subject: [PATCH 33/49] find-debuginfo.sh: Use 'return', not 'continue', to
+Subject: [PATCH 33/54] find-debuginfo.sh: Use 'return', not 'continue', to
  break out do_file().
 
 commit 038bfe "Split directory traversal and debuginfo extraction"

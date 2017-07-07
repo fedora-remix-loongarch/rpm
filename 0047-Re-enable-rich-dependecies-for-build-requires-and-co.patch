@@ -1,7 +1,7 @@
 From 27c263a877dd4bfac12ae716038dfbb0a305625b Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Thu, 9 Mar 2017 14:02:10 +0100
-Subject: [PATCH 47/49] Re-enable rich dependecies for build requires and
+Subject: [PATCH 47/54] Re-enable rich dependecies for build requires and
  conflicts
 
 (cherry picked from commit cb3dc0b43bd9a119196a527504d03d57d0785092)

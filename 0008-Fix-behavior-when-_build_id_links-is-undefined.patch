@@ -1,7 +1,7 @@
 From a040e812b39d1fcc6aa69ca6aa5ff2fe4316a018 Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Mon, 3 Oct 2016 12:36:46 +0300
-Subject: [PATCH 08/49] Fix behavior when %_build_id_links is undefined
+Subject: [PATCH 08/54] Fix behavior when %_build_id_links is undefined
 
 Commit bbfe1f86b2e4b5c0bd499d9f3dd9de9c9c20fff2 tries to behave sanely
 and use compat setting when %_build_id_links is undefined, but

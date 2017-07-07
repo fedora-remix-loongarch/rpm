@@ -1,7 +1,7 @@
 From 419ae36f2c0dad195737982b446fcace507d0814 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Tue, 21 Mar 2017 16:57:44 +0100
-Subject: [PATCH 26/49] debugedit: Fix off-by-one adding DW_FORM_string
+Subject: [PATCH 26/54] debugedit: Fix off-by-one adding DW_FORM_string
  replacement slashes.
 
 We would put one too many slashes in between the new dest_dir and file name

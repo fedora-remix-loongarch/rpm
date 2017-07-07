@@ -1,7 +1,7 @@
 From 01145b9b68b89d0d4d6d5a77d9af70dba7dbc9a3 Mon Sep 17 00:00:00 2001
 From: Michael Schroeder <mls@suse.de>
 Date: Tue, 28 Mar 2017 14:21:40 +0200
-Subject: [PATCH 36/49] Support debugsource subpackages
+Subject: [PATCH 36/54] Support debugsource subpackages
 
 This can be enabled by setting the _debugsource_packages macro.
 

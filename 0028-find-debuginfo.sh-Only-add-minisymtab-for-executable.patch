@@ -1,7 +1,7 @@
 From 349489c3219e31efd552d87e255b06a864d1c034 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Sun, 16 Apr 2017 18:16:02 +0200
-Subject: [PATCH 28/49] find-debuginfo.sh: Only add minisymtab for executables
+Subject: [PATCH 28/54] find-debuginfo.sh: Only add minisymtab for executables
  or shared libraries.
 
 It only makes sense to add a minisymtab for executables and shared

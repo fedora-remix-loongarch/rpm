@@ -1,7 +1,7 @@
 From 8cd45c82a968404929e00dce65644f81e906591b Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 3 Mar 2017 23:51:13 +0100
-Subject: [PATCH 23/49] tests/tpmbuild.at: Make file sed regexp more strict to
+Subject: [PATCH 23/54] tests/tpmbuild.at: Make file sed regexp more strict to
  extract BuildID.
 
 In some testcases we extract the BuildID with the file command.

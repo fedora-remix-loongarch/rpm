@@ -1,7 +1,7 @@
 From 590081d625b22b5845015949ecb184989377c928 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 9 Mar 2017 09:34:01 +0100
-Subject: [PATCH 15/49] generateBuildIDs: Don't warn or error for object files
+Subject: [PATCH 15/54] generateBuildIDs: Don't warn or error for object files
  without build-id.
 
 Only loadable ELF images (executables, shared libraries, kernel modules)

@@ -1,7 +1,7 @@
 From 6e748a4eb167b2ca201d9e90b927cc4523eabeda Mon Sep 17 00:00:00 2001
 From: Pavlina Moravcova Varekova <pmoravco@redhat.com>
 Date: Tue, 21 Feb 2017 11:48:27 +0100
-Subject: [PATCH 03/49] Fix number of references on spec_Type (#114)
+Subject: [PATCH 03/54] Fix number of references on spec_Type (#114)
 
 After creating a specPkg from a spec file we must increase spec file
 reference counter. Otherwise spec file may be accidentally deallocated

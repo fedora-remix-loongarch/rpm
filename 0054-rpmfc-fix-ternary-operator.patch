@@ -1,0 +1,30 @@
+From e7462b81f69933f531ee6905681a24ac61e11bf6 Mon Sep 17 00:00:00 2001
+From: Florian Festi <ffesti@redhat.com>
+Date: Fri, 7 Jul 2017 11:30:42 +0200
+Subject: [PATCH 54/54] rpmfc: fix ternary operator
+
+Fixes: 9d5bbd9774d00f50749bb045217eaf91c87b6de0
+References: https://bugzilla.redhat.com/show_bug.cgi?id=1468476
+Tested-by: Igor Gnatenko <ignatenkobrain@fedoraproject.org>
+Signed-off-by: Florian Festi <ffesti@redhat.com>
+(cherry picked from commit cbb062963b535186a461dfc9e03558a72ec8004d)
+---
+ build/rpmfc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/rpmfc.c b/build/rpmfc.c
+index 72f29ddf5..271bfbea8 100644
+--- a/build/rpmfc.c
++++ b/build/rpmfc.c
+@@ -1259,7 +1259,7 @@ static rpmRC rpmfcApplyExternal(rpmfc fc)
+ 	}
+ 
+ 	/* Parse dependencies into header */
+-	rc = parseRCPOT(NULL, fc->pkg, getStringBuf(sb_stdout), dm->ntag ? dm->ntag != -1 : RPMTAG_REQUIRENAME, 0, tagflags, addReqProvPkg, NULL);
++	rc = parseRCPOT(NULL, fc->pkg, getStringBuf(sb_stdout), dm->ntag != -1 ? dm->ntag : RPMTAG_REQUIRENAME, 0, tagflags, addReqProvPkg, NULL);
+ 	freeStringBuf(sb_stdout);
+ 
+ 	if (rc) {
+-- 
+2.13.2
+

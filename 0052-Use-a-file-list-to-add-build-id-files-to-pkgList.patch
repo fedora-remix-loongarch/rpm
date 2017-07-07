@@ -1,7 +1,7 @@
 From 97ad525723d0c9af382acadc823b6a744d5426cf Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 29 Jun 2017 13:26:25 +0200
-Subject: [PATCH 52/53] Use a file list to add build-id files to pkgList.
+Subject: [PATCH 52/54] Use a file list to add build-id files to pkgList.
 
 Change the generation of build-id files to a file list using ARGV_t.
 First go through the current package list and generate a files list.
@@ -15,7 +15,7 @@ Signed-off-by: Mark Wielaard <mark@klomp.org>
  1 file changed, 33 insertions(+), 41 deletions(-)
 
 diff --git a/build/files.c b/build/files.c
-index 8baf85e..e88a5d2 100644
+index 8baf85e9d..e88a5d24d 100644
 --- a/build/files.c
 +++ b/build/files.c
 @@ -1576,6 +1576,15 @@ exit:
@@ -189,5 +189,5 @@ index 8baf85e..e88a5d2 100644
   * a (possibly new) debuginfo subpackage */
  static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
 -- 
-2.9.4
+2.13.2
 

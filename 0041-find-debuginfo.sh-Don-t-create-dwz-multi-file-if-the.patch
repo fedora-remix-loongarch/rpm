@@ -1,7 +1,7 @@
 From f22cb2890026544499ee4f1a309a44c71e0b8152 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 26 Jun 2017 17:38:30 +0200
-Subject: [PATCH 41/49] find-debuginfo.sh: Don't create dwz multi file if there
+Subject: [PATCH 41/54] find-debuginfo.sh: Don't create dwz multi file if there
  is only one .debug.
 
 dwz -m multi only works when there are multiple .debug input files.

@@ -1,7 +1,7 @@
 From 932c2170e961d393569992b2f9c3ab8ee415f01b Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Wed, 9 Nov 2016 09:16:48 +0200
-Subject: [PATCH 09/49] Fix debuginfo etc when subpackages have different
+Subject: [PATCH 09/54] Fix debuginfo etc when subpackages have different
  versions (RhBug:1051407)
 
 Rpm has always been a bit dazed and confused when it comes to specs

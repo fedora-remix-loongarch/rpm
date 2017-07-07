@@ -1,7 +1,7 @@
 From 46b763e54de34d0dd28d82e3a87b59c6a94a4c07 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mjw@redhat.com>
 Date: Tue, 14 Jun 2016 17:07:12 +0200
-Subject: [PATCH 04/49] Add build-id links to rpm for all ELF files.
+Subject: [PATCH 04/54] Add build-id links to rpm for all ELF files.
 
 This patch moves the main ELF file build-id symlinks from the
 debuginfo package into the main package. And uses different

@@ -1,7 +1,7 @@
 From 3936d5a227dfcfd502588c6fd8f52ccb826f11c4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Nikola=20Forr=C3=B3?= <nforro@redhat.com>
 Date: Wed, 20 Apr 2016 15:39:36 +0200
-Subject: [PATCH 01/49] Use correct source file for rpmsign module
+Subject: [PATCH 01/54] Use correct source file for rpmsign module
 
 (cherry picked from commit eb632e5158fa4ef993b0e5df2a354f0be7a7a71d)
 ---

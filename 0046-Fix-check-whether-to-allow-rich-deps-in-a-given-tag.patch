@@ -1,7 +1,7 @@
 From 9a316cbeb61549b3004692c9dd8437b9fa805e74 Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Thu, 9 Mar 2017 12:12:32 +0100
-Subject: [PATCH 46/49] Fix check whether to allow rich deps in a given tag
+Subject: [PATCH 46/54] Fix check whether to allow rich deps in a given tag
 
 Broken with 9d5bbd9774d00f50749bb045217eaf91c87b6de0
 

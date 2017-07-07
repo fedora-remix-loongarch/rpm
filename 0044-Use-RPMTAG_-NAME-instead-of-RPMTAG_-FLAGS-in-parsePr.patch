@@ -1,7 +1,7 @@
 From 287cda21a5594ad41ffbd29eb01022f314637bdf Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Tue, 28 Feb 2017 10:57:56 +0100
-Subject: [PATCH 44/49] Use RPMTAG_*NAME instead of RPMTAG_*FLAGS in
+Subject: [PATCH 44/54] Use RPMTAG_*NAME instead of RPMTAG_*FLAGS in
  parsePreamble.c and parseRCPOT()
 
 Using the FLGS tags is awkward and inconsistent with other part of the code

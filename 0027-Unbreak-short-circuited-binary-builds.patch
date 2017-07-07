@@ -1,7 +1,7 @@
 From 6328e1e0da3ba26885f095ccbd83d223d5830527 Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Thu, 5 Jan 2017 13:47:28 +0200
-Subject: [PATCH 27/49] Unbreak short-circuited binary builds
+Subject: [PATCH 27/54] Unbreak short-circuited binary builds
 
 Commit bbfe1f86b2e4b5c0bd499d9f3dd9de9c9c20fff2 broke short-circuited
 binary builds (which can be handy for testing when working on large

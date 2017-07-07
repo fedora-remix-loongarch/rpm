@@ -1,7 +1,7 @@
 From 0febf191cc874a822f045c24587d412e4d0ec33c Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Tue, 28 Feb 2017 21:34:34 +0100
-Subject: [PATCH 14/49] Add option to have unique debug source dirs across
+Subject: [PATCH 14/54] Add option to have unique debug source dirs across
  version/release/arch.
 
 Introduce a new macro _unique_debug_srcs that when set will pass

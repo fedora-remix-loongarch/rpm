@@ -1,7 +1,7 @@
 From aa74f749e8eba102069aaafd0b2e18af8f5f0fa0 Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Tue, 14 Feb 2017 14:04:35 +0100
-Subject: [PATCH 02/49] brp-python-bytecompile: Process python lib dirs even
+Subject: [PATCH 02/54] brp-python-bytecompile: Process python lib dirs even
  without standard Python
 
 There is no need for /usr/bin/python when byte compiling files in

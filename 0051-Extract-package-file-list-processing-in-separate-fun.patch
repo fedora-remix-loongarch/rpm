@@ -1,7 +1,7 @@
 From bc5990647ad94fcb4acdb68612e16fe514ee59b7 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 29 Jun 2017 13:26:24 +0200
-Subject: [PATCH 51/53] Extract package file list processing in separate
+Subject: [PATCH 51/54] Extract package file list processing in separate
  functions.
 
 Extract two functions resetPackageFilesDefaults() and addPackageFileList()
@@ -15,7 +15,7 @@ Signed-off-by: Mark Wielaard <mark@klomp.org>
  1 file changed, 107 insertions(+), 63 deletions(-)
 
 diff --git a/build/files.c b/build/files.c
-index e93efeb..8baf85e 100644
+index e93efebd7..8baf85e9d 100644
 --- a/build/files.c
 +++ b/build/files.c
 @@ -2307,45 +2307,35 @@ static void processSpecialDir(rpmSpec spec, Package pkg, FileList fl,
@@ -255,5 +255,5 @@ index e93efeb..8baf85e 100644
      specialDirFree(specialDoc);
      specialDirFree(specialLic);
 -- 
-2.9.4
+2.13.2
 
