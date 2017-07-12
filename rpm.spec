@@ -33,7 +33,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}30%{?dist}
+Release: %{?snapver:0.%{snapver}.}31%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -141,6 +141,9 @@ Patch323: 0053-Change-mkattr-to-always-create-a-defattr-with-explic.patch
 # Fix regression from 0044-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1468476
 Patch330: 0054-rpmfc-fix-ternary-operator.patch
+
+# debuginfo packages should automatically provide debuginfo(build-id) = ...
+Patch331: 0055-let-debuginfo-packages-provide-the-build-id.patch
 
 # These are not yet upstream
 Patch902: rpm-4.7.1-geode-i686.patch
@@ -640,6 +643,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jul 12 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-31
+- Add automatic provides debuginfo(build-id) = ... into debuginfo subpackages
+
 * Fri Jul 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-30
 - Fix brokeness when using %%filter_setup (RHBZ #1468476)
 
