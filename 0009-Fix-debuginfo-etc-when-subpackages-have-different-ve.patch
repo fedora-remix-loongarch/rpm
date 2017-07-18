@@ -1,8 +1,8 @@
 From 932c2170e961d393569992b2f9c3ab8ee415f01b Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Wed, 9 Nov 2016 09:16:48 +0200
-Subject: [PATCH 09/54] Fix debuginfo etc when subpackages have different
- versions (RhBug:1051407)
+Subject: [PATCH] Fix debuginfo etc when subpackages have different versions
+ (RhBug:1051407)
 
 Rpm has always been a bit dazed and confused when it comes to specs
 with sub-packages having different version etc from the main package.
@@ -137,6 +137,3 @@ index 68bf39194..4d9028254 100644
  
  # bzr doesn't seem to have its own command to apply patches?
  %__scm_apply_bzr(qp:m:)\
--- 
-2.13.2
-

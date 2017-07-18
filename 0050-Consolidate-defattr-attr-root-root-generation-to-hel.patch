@@ -1,8 +1,8 @@
 From c24003b77926967589546681ef893e4e11f6b77f Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Fri, 19 May 2017 11:01:12 +0300
-Subject: [PATCH 50/54] Consolidate %defattr/%attr(-,root,root) generation to
- helper function
+Subject: [PATCH] Consolidate %defattr/%attr(-,root,root) generation to helper
+ function
 
 (cherry picked from commit b71d63ef598cb5bf504265a18166d782fb017569)
 ---
@@ -97,6 +97,3 @@ index f27dcc7c1..e93efebd7 100644
  	    argvAdd(&pkg->fileList, path);
  	    path = _free(path);
  	    ret = 1;
--- 
-2.13.2
-

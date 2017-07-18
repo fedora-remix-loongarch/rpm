@@ -1,7 +1,7 @@
 From 709e675cdf0c8f9b07507aad12400398f354cc90 Mon Sep 17 00:00:00 2001
 From: Stephen Gallagher <sgallagh@redhat.com>
 Date: Mon, 16 Jan 2017 09:19:43 -0500
-Subject: [PATCH 43/54] Add OpenSSL support for digest and signatures
+Subject: [PATCH] Add OpenSSL support for digest and signatures
 
 Autotools: add --with-crypto=openssl
 This enables RPM to locate the appropriate flags for compiling
@@ -1168,6 +1168,3 @@ index 000000000..aea460e39
 +    }
 +    return sa;
 +}
--- 
-2.13.2
-

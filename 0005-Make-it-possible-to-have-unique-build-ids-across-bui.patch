@@ -1,7 +1,7 @@
 From 3edae790572203f07a28448fedfda82d0629f4fb Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mjw@redhat.com>
 Date: Tue, 14 Jun 2016 17:07:13 +0200
-Subject: [PATCH 05/54] Make it possible to have unique build-ids across build
+Subject: [PATCH] Make it possible to have unique build-ids across build
  versions/releases.
 
 Introduce a new macro _unique_build_ids that when set will pass the
@@ -344,6 +344,3 @@ index cf89312fa..c0147f086 100644
    /* Ensure clean paths, users can muck with these */
    if (base_dir)
      canonicalize_path(base_dir, base_dir);
--- 
-2.13.2
-

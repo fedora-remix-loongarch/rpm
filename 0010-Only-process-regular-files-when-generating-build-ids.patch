@@ -1,7 +1,7 @@
 From 29f756e3fba09f6a66515970978367829862f35c Mon Sep 17 00:00:00 2001
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Thu, 5 Jan 2017 12:13:54 +0200
-Subject: [PATCH 10/54] Only process regular files when generating build-ids
+Subject: [PATCH] Only process regular files when generating build-ids
 
 Versioned shared libraries typically have several symlinks pointing
 to them directly and indirectly. When %_build_id_links is set to compat or
@@ -47,6 +47,3 @@ index 2ede463a1..ca041764f 100644
  	}
      }
  
--- 
-2.13.2
-

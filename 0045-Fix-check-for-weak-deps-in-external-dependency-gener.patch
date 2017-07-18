@@ -1,8 +1,7 @@
 From 4fb394a677c17a33c7e3f3455a1a6c109200b87e Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Tue, 28 Feb 2017 17:42:21 +0100
-Subject: [PATCH 45/54] Fix check for weak deps in external dependency
- generator
+Subject: [PATCH] Fix check for weak deps in external dependency generator
 
 (cherry picked from commit 43d230884365d90d42184a0000f44bb33e5f1ab8)
 ---
@@ -32,6 +31,3 @@ index ce192fa9c..921814ad1 100644
  	    if (fc->skipReq)
  		continue;
  	    tagflags = RPMSENSE_FIND_REQUIRES;
--- 
-2.13.2
-

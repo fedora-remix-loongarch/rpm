@@ -1,7 +1,7 @@
 From ac275c650fee13ec0fd204bf2b05fbff01a053cd Mon Sep 17 00:00:00 2001
 From: Michael Schroeder <mls@suse.de>
 Date: Tue, 28 Mar 2017 14:20:50 +0200
-Subject: [PATCH 35/54] Untangle unique build options in find-debuginfo.sh
+Subject: [PATCH] Untangle unique build options in find-debuginfo.sh
 
 Rename --ver-rel option to --build-id-seed, so that it reflects what
 it does, not how it is used.
@@ -170,6 +170,3 @@ index d8b718bdf..cd2931c0d 100644
    fi
  
    mkdir -p "${RPM_BUILD_ROOT}${debug_dest_name}"
--- 
-2.13.2
-

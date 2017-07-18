@@ -1,7 +1,7 @@
 From aede94115e077e87504b03bf668ef375290200ad Mon Sep 17 00:00:00 2001
 From: Michal Marek <mmarek@suse.com>
 Date: Sat, 10 Sep 2016 23:13:25 +0200
-Subject: [PATCH 34/54] find-debuginfo.sh: Process files in parallel
+Subject: [PATCH] find-debuginfo.sh: Process files in parallel
 
 Add a -j <n> option, which, when used, will spawn <n> processes to do the
 debuginfo extraction in parallel. A pipe is used to dispatch the files among
@@ -120,6 +120,3 @@ index c435a02e4..d8b718bdf 100644
  
  # Invoke the DWARF Compressor utility.
  if $run_dwz \
--- 
-2.13.2
-

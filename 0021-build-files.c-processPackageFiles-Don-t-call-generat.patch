@@ -1,7 +1,7 @@
 From 430f012c5794873a84db81b93c5858ca96ea4559 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 17 Mar 2017 11:14:00 +0100
-Subject: [PATCH 21/54] build/files.c (processPackageFiles): Don't call
+Subject: [PATCH] build/files.c (processPackageFiles): Don't call
  generateBuildIDs for noarch.
 
 We don't want to do build-id processing for noarch packages. It might be
@@ -40,6 +40,3 @@ index 6c0ca39ef..9e58ae547 100644
      }
  #endif
  
--- 
-2.13.2
-

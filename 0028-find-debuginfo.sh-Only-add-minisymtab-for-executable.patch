@@ -1,8 +1,8 @@
 From 349489c3219e31efd552d87e255b06a864d1c034 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Sun, 16 Apr 2017 18:16:02 +0200
-Subject: [PATCH 28/54] find-debuginfo.sh: Only add minisymtab for executables
- or shared libraries.
+Subject: [PATCH] find-debuginfo.sh: Only add minisymtab for executables or
+ shared libraries.
 
 It only makes sense to add a minisymtab for executables and shared
 libraries. Other executable ELF files (like kernel modules) don't need it.
@@ -37,6 +37,3 @@ index 1420ef6cd..f1ffcd7d8 100644
  
    echo "./${f#$RPM_BUILD_ROOT}" >> "$ELFBINSFILE"
  
--- 
-2.13.2
-

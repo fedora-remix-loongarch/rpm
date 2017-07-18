@@ -1,8 +1,8 @@
 From aa74f749e8eba102069aaafd0b2e18af8f5f0fa0 Mon Sep 17 00:00:00 2001
 From: Florian Festi <ffesti@redhat.com>
 Date: Tue, 14 Feb 2017 14:04:35 +0100
-Subject: [PATCH 02/54] brp-python-bytecompile: Process python lib dirs even
- without standard Python
+Subject: [PATCH] brp-python-bytecompile: Process python lib dirs even without
+ standard Python
 
 There is no need for /usr/bin/python when byte compiling files in
 /usr/lib/pythonX.Y (only /usr/bin/pythonX.Y). Moved check so we do not exit
@@ -45,6 +45,3 @@ index 838f23d9d..894fa3459 100644
  
  # Generate normal (.pyc) byte-compiled files.
  python_bytecompile "" $default_python "/bin/|/sbin/|/usr/lib(64)?/python[0-9]\.[0-9]|/usr/share/doc" "$RPM_BUILD_ROOT" "$depth" "/"
--- 
-2.13.2
-

@@ -1,0 +1,81 @@
+From 85395ae424cf79bc05abe94472bdc11ea9239753 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Mon, 17 Jul 2017 12:58:26 +0200
+Subject: [PATCH] find-debuginfo.sh: Add --keep-section and --remove-section
+ for eu-strip.
+
+Use --keep-section SECTION or --remove-section SECTION to explicitly
+keep a (non-allocated) section in the main executable or explicitly
+remove it into the .debug file. SECTION is an extended wildcard pattern.
+Both options can be given more than once.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1465997
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+(cherry picked from commit b388bfe936dd6d68d2f4efd1b4393bf8f8c13fe8)
+---
+ scripts/find-debuginfo.sh | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+index 185d25f96..5ec52d3bc 100644
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -3,6 +3,7 @@
+ #for inclusion in an rpm spec file.
+ #
+ # Usage: find-debuginfo.sh [--strict-build-id] [-g] [-r] [-m] [-i] [-n]
++#			   [--keep-section SECTION] [--remove-section SECTION]
+ #	 		   [-j N]
+ #	 		   [-o debugfiles.list]
+ #	 		   [-S debugsourcefiles.list]
+@@ -15,9 +16,14 @@
+ #			   [builddir]
+ #
+ # The -g flag says to use strip -g instead of full strip on DSOs or EXEs.
++# The -r flag says to use eu-strip --reloc-debug-sections.
++# Use --keep-section SECTION or --remove-section SECTION to explicitly
++# keep a (non-allocated) section in the main executable or explicitly
++# remove it into the .debug file. SECTION is an extended wildcard pattern.
++# Both options can be given more than once.
++#
+ # The --strict-build-id flag says to exit with failure status if
+ # any ELF binary processed fails to contain a build-id note.
+-# The -r flag says to use eu-strip --reloc-debug-sections.
+ # The -m flag says to include a .gnu_debugdata section in the main binary.
+ # The -i flag says to include a .gdb_index section in the .debug file.
+ # The -n flag says to not recompute the build-id.
+@@ -65,6 +71,9 @@ strip_g=false
+ # with -r arg, pass --reloc-debug-sections to eu-strip.
+ strip_r=false
+ 
++# keep or remove arguments to eu-strip.
++keep_remove_args=
++
+ # with -m arg, add minimal debuginfo to binary.
+ include_minidebug=false
+ 
+@@ -158,6 +167,14 @@ while [ $# -gt 0 ]; do
+   -r)
+     strip_r=true
+     ;;
++  --keep-section)
++    keep_remove_args="${keep_remove_args} --keep-section $2"
++    shift
++    ;;
++  --remove-section)
++    keep_remove_args="${keep_remove_args} --remove-section $2"
++    shift
++    ;;
+   -j)
+     n_jobs=$2
+     shift
+@@ -215,7 +232,7 @@ strip_to_debug()
+   application/x-sharedlib*) g=-g ;;
+   application/x-executable*) g=-g ;;
+   esac
+-  eu-strip --remove-comment $r $g -f "$1" "$2" || exit
++  eu-strip --remove-comment $r $g ${keep_remove_args} -f "$1" "$2" || exit
+   chmod 444 "$1" || exit
+ }
+ 

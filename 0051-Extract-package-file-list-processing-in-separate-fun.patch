@@ -1,8 +1,7 @@
 From bc5990647ad94fcb4acdb68612e16fe514ee59b7 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 29 Jun 2017 13:26:24 +0200
-Subject: [PATCH 51/54] Extract package file list processing in separate
- functions.
+Subject: [PATCH] Extract package file list processing in separate functions.
 
 Extract two functions resetPackageFilesDefaults() and addPackageFileList()
 from processPackageFiles(). This will make it possible to add multiple
@@ -254,6 +253,3 @@ index e93efebd7..8baf85e9d 100644
      FileListFree(&fl);
      specialDirFree(specialDoc);
      specialDirFree(specialLic);
--- 
-2.13.2
-

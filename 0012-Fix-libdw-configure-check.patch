@@ -1,7 +1,7 @@
 From f41a0a8c6839e3962e10a7bd3aad39127a764748 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mjw@redhat.com>
 Date: Wed, 24 Aug 2016 17:06:34 +0200
-Subject: [PATCH 12/54] Fix libdw configure check.
+Subject: [PATCH] Fix libdw configure check.
 
 commit a82119 "configure.ac: use LIBDW always conditionally" contained
 a typo that caused WITH_LIBDW_LIB never to be set when you were using
@@ -26,6 +26,3 @@ index 33c8f344f..9596a97b3 100644
    AC_CHECK_HEADERS([elfutils/libdwelf.h],[
      AC_CHECK_LIB(dw, dwelf_elf_gnu_build_id, [
        AC_DEFINE(HAVE_LIBDW, 1,
--- 
-2.13.2
-

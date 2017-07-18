@@ -1,7 +1,7 @@
 From 9f826d903dabbc2ce199560e296224c320bb840f Mon Sep 17 00:00:00 2001
 From: Michael Schroeder <mls@suse.de>
 Date: Wed, 29 Mar 2017 14:55:10 +0200
-Subject: [PATCH 38/54] Also add directories to split debuginfo packages
+Subject: [PATCH] Also add directories to split debuginfo packages
 
 This gets rid of the last difference between debuginfo subpackages
 and normal debuginfo packages.
@@ -65,6 +65,3 @@ index 779a2a102..f27dcc7c1 100644
      if (files) {
  	/* we have collected some files. Now put them in a debuginfo
           * package. If this is not the main package, clone the main
--- 
-2.13.2
-

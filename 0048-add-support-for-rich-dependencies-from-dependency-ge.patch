@@ -1,8 +1,7 @@
 From c1ed362facbab3d08b5576950d4c6a68cfae9e75 Mon Sep 17 00:00:00 2001
 From: Igor Gnatenko <ignatenko@redhat.com>
 Date: Sat, 25 Feb 2017 12:28:16 +0100
-Subject: [PATCH 48/54] add support for rich dependencies from dependency
- generators
+Subject: [PATCH] add support for rich dependencies from dependency generators
 
 Mostly achieved by replacing custom parser with the parseRCPOT().
 
@@ -274,6 +273,3 @@ index 921814ad1..7fa8227d0 100644
  	freeStringBuf(sb_stdout);
  
  	if (rc) {
--- 
-2.13.2
-

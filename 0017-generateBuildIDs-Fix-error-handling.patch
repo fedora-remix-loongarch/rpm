@@ -1,7 +1,7 @@
 From fa61c840ba6be18c6579b247605634c1e2a320f8 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 9 Mar 2017 22:13:01 +0100
-Subject: [PATCH 17/54] generateBuildIDs: Fix error handling.
+Subject: [PATCH] generateBuildIDs: Fix error handling.
 
 commit e6bdf7 made it so that we don't give a warning or error message
 for non-kernel ET_REL object files with missing or bad build-ids. But
@@ -65,6 +65,3 @@ index b19abf299..fef0c6960 100644
  #endif
  
      /* Verify that file attributes scope over hardlinks correctly. */
--- 
-2.13.2
-

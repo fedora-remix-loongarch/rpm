@@ -1,7 +1,7 @@
 From 5bc9efa303efe933b02cc8679ef3134668839831 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 9 Mar 2017 15:52:12 +0100
-Subject: [PATCH 16/54] build/files.c: Unset __debug_package implies missing
+Subject: [PATCH] build/files.c: Unset __debug_package implies missing
  build-ids aren't fatal.
 
 Historically we have only checked build_ids when __debug_package was
@@ -31,6 +31,3 @@ index 274b38c62..b19abf299 100644
  
      /* Collect and check all build-ids for ELF files in this package.  */
      int needMain = 0;
--- 
-2.13.2
-

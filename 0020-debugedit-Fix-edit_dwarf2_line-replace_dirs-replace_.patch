@@ -1,8 +1,8 @@
 From 8e74618100580a1370b9045296c4d2d37340735f Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 16 Mar 2017 22:53:54 +0100
-Subject: [PATCH 20/54] debugedit: Fix edit_dwarf2_line replace_dirs ->
- replace_files typo.
+Subject: [PATCH] debugedit: Fix edit_dwarf2_line replace_dirs -> replace_files
+ typo.
 
 We wouldn't replace the changed file names if replace_dirs was false,
 but replace_files was true. This could overrun the new debug_line data
@@ -32,6 +32,3 @@ index 4798c6370..87a423fdb 100644
  		{
  		  file_path = skip_dir_prefix (file, base_dir);
  		  if (file_path != NULL)
--- 
-2.13.2
-

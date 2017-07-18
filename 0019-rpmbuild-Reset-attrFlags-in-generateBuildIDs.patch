@@ -1,7 +1,7 @@
 From 20636f4358db0cb85f2251333190626dc2e4ee02 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 19 May 2017 23:11:39 +0200
-Subject: [PATCH 19/54] rpmbuild: Reset attrFlags in generateBuildIDs.
+Subject: [PATCH] rpmbuild: Reset attrFlags in generateBuildIDs.
 
 Debuginfo directories and files could be marked as configuration files
 if the file list ended with a config file.
@@ -124,6 +124,3 @@ index 1cae26dbf..a0e39782c 100644
 +],
 +[ignore])
 +AT_CLEANUP
--- 
-2.13.2
-

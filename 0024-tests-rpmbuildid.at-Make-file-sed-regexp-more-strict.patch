@@ -1,8 +1,8 @@
 From 58f2b095c0d1507ad09990669f1ae03f6f1d931f Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 20 Mar 2017 09:55:44 +0100
-Subject: [PATCH 24/54] tests/rpmbuildid.at: Make file sed regexp more strict
- to extract BuildID.
+Subject: [PATCH] tests/rpmbuildid.at: Make file sed regexp more strict to
+ extract BuildID.
 
 Like commit f0a5819 for rpmbuild.at. In the case of rpmbuildid.at the
 sed expression looked to work, but only matched by accident. Make the sed
@@ -217,6 +217,3 @@ index a0e39782c..158ce122d 100644
  
  if test "$id1" == "$id2"; then echo "equal"; else echo "unequal $id1 $id2"; fi
  ],
--- 
-2.13.2
-

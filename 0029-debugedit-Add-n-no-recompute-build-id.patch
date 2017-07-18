@@ -1,7 +1,7 @@
 From 525282b9a8b78c2890c752e45c4dc7dcf25f42cb Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Sun, 16 Apr 2017 18:16:46 +0200
-Subject: [PATCH 29/54] debugedit: Add -n, --no-recompute-build-id.
+Subject: [PATCH] debugedit: Add -n, --no-recompute-build-id.
 
 Some packages depend on the build-ids as generated during the build
 and cannot handle rpmbuild recomputing them before generating the
@@ -280,6 +280,3 @@ index b618dceb5..8444e030e 100644
      goto print;
  
    /* Clear the old bits so they do not affect the new hash.  */
--- 
-2.13.2
-

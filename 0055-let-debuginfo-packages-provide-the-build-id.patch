@@ -1,7 +1,7 @@
 From 7bac47a54fef8fc01fa29865a9622677dbdfa28d Mon Sep 17 00:00:00 2001
 From: Igor Gnatenko <ignatenko@redhat.com>
 Date: Wed, 3 Aug 2016 11:14:05 +0200
-Subject: [PATCH 55/55] let debuginfo packages provide the build-id
+Subject: [PATCH] let debuginfo packages provide the build-id
 
 This patch lets debuginfo packages provide build-id like follows:
 
@@ -98,6 +98,3 @@ index 000000000..a8636c976
 +      ;;
 +  esac
 +done
--- 
-2.13.2
-

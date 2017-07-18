@@ -1,8 +1,8 @@
 From c21bf3aefdcfb22bc3f41888ef090c6d5a45baec Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Mon, 20 Mar 2017 11:52:00 +0100
-Subject: [PATCH 25/54] build/files.c: Only check build-ids for executable
- files in the main package.
+Subject: [PATCH] build/files.c: Only check build-ids for executable files in
+ the main package.
 
 generateBuildIDs should mimic what find-debuginfo.sh does. Only check
 build-ids for executable files in non-debuginfo packages. This moves the
@@ -57,6 +57,3 @@ index 9e58ae547..9f7def78c 100644
  			    needDbg = 1;
  			    addid = 1;
  			}
--- 
-2.13.2
-

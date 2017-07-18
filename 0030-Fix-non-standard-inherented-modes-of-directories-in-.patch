@@ -1,8 +1,7 @@
 From ba8f2239de528f02d272aed71599a4a560ddd238 Mon Sep 17 00:00:00 2001
 From: Robin Lee <cheeselee@fedoraproject.org>
 Date: Sat, 8 Apr 2017 21:21:39 +0800
-Subject: [PATCH 30/54] Fix non-standard inherented modes of directories in
- debuginfo
+Subject: [PATCH] Fix non-standard inherented modes of directories in debuginfo
 
 In case that binary compiled from source generated in /tmp, a
 /usr/src/debug/tmp directory will be created with the same mode as
@@ -34,6 +33,3 @@ index 1d3dc0623..5087c4050
  fi
  
  if [ -d "${RPM_BUILD_ROOT}/usr/lib" -o -d "${RPM_BUILD_ROOT}/usr/src" ]; then
--- 
-2.13.2
-

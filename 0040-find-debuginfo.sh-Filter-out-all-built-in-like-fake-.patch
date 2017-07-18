@@ -1,8 +1,8 @@
 From b4d166652011f0d0e8573feb616283698f6cf848 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Wed, 28 Jun 2017 13:34:55 +0200
-Subject: [PATCH 40/54] find-debuginfo.sh: Filter out all <built-in> like fake
- file names.
+Subject: [PATCH] find-debuginfo.sh: Filter out all <built-in> like fake file
+ names.
 
 There is no official way to mark an instruction range as being not
 part of some actual source code, but as part of a compiler built-in
@@ -38,6 +38,3 @@ index bede833d7..eb62a158a 100644
    (cd "${debug_base_name}"; cpio -pd0mL "${RPM_BUILD_ROOT}${debug_dest_name}")
    # stupid cpio creates new directories in mode 0700,
    # and non-standard modes may be inherented from original directories, fixup
--- 
-2.13.2
-
