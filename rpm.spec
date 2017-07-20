@@ -15,10 +15,6 @@
 # build with new db format
 %bcond_with ndb
 
-%define pyver_cmd "import sys; sys.stdout.write('= %s' % sys.version.split(' ')[0])"
-%define py2_fullver %(%{__python2} -c %{pyver_cmd})
-%define py3_fullver %(%{__python3} -c %{pyver_cmd})
-
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.13.0.1
@@ -33,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}32%{?dist}
+Release: %{?snapver:0.%{snapver}.}33%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -312,7 +308,6 @@ BuildRequires: python2-devel
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Provides: %{name}-python = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
-Requires: python2-libs%{?_isa} %{py2_fullver}
 
 %description -n python2-%{name}
 The python2-rpm package contains a module that permits applications
@@ -331,7 +326,6 @@ BuildRequires: python3-devel
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Provides: %{name}-python3 = %{version}-%{release}
 Obsoletes: %{name}-python3 < %{version}-%{release}
-Requires: system-python-libs%{?_isa} %{py3_fullver}
 
 %description -n python3-%{name}
 The python3-rpm package contains a module that permits applications
@@ -649,6 +643,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jul 20 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-33
+- Remove strict requirement on python libs
+
 * Tue Jul 18 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-32
 - Add find-debuginfo.sh: Add --keep-section and --remove-section (#1465997)
 
