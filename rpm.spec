@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}33%{?dist}
+Release: %{?snapver:0.%{snapver}.}34%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -146,6 +146,7 @@ Patch331: 0055-let-debuginfo-packages-provide-the-build-id.patch
 # find-debuginfo.sh: Add --keep-section and --remove-section for eu-strip.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1465997
 Patch332: 0056-find-debuginfo.sh-Add-keep-section-and-remove-sectio.patch
+Patch333: 0057-find-debuginfo.sh-Remove-non-allocated-NOBITS-sectio.patch
 
 # These are not yet upstream
 Patch902: rpm-4.7.1-geode-i686.patch
@@ -643,6 +644,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jul 21 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-34
+- find-debuginfo.sh: Remove non-allocated NOBITS sections from minisymtab.
+
 * Thu Jul 20 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-33
 - Remove strict requirement on python libs
 
