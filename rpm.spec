@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}34%{?dist}
+Release: %{?snapver:0.%{snapver}.}35%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -147,6 +147,10 @@ Patch331: 0055-let-debuginfo-packages-provide-the-build-id.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1465997
 Patch332: 0056-find-debuginfo.sh-Add-keep-section-and-remove-sectio.patch
 Patch333: 0057-find-debuginfo.sh-Remove-non-allocated-NOBITS-sectio.patch
+
+# Fix rpmfd_write on big endian arches.
+patch334: 0058-Define-PY_SSIZE_T_CLEAN.patch
+patch335: 0059-Fix-error-handling-in-rpmio-Python-binding-test-case.patch
 
 # These are not yet upstream
 Patch902: rpm-4.7.1-geode-i686.patch
@@ -644,6 +648,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Sun Jul 23 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-35
+- Fix rpmfd_write on big endian arches.
+
 * Fri Jul 21 2017 Mark Wielaard <mjw@fedoraproject.org> - 4.13.0.1-34
 - find-debuginfo.sh: Remove non-allocated NOBITS sections from minisymtab.
 
