@@ -18,7 +18,7 @@ in both python2 and python3.
  1 file changed, 1 insertion(+)
 
 diff --git a/python/rpmsystem-py.h b/python/rpmsystem-py.h
-index 50e8770..c8423e3 100644
+index 50e8770e8..c8423e3dc 100644
 --- a/python/rpmsystem-py.h
 +++ b/python/rpmsystem-py.h
 @@ -5,6 +5,7 @@

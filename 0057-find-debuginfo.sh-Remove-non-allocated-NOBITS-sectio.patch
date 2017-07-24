@@ -22,7 +22,7 @@ Signed-off-by: Mark Wielaard <mark@klomp.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
-index 5ec52d3..b83e4c6 100644
+index 5ec52d3bc..b83e4c6db 100644
 --- a/scripts/find-debuginfo.sh
 +++ b/scripts/find-debuginfo.sh
 @@ -247,12 +247,16 @@ add_minidebug()

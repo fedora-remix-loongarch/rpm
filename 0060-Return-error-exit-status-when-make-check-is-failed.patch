@@ -1,0 +1,23 @@
+From ee2eec7c7922f8927b4850b385da26384ad05755 Mon Sep 17 00:00:00 2001
+From: Jun Aruga <jaruga@redhat.com>
+Date: Mon, 3 Jul 2017 17:07:56 +0200
+Subject: [PATCH] Return error exit status when make check is failed.
+
+(cherry picked from commit 45d9f54e9669ed44cc632247483f49a42725849b)
+---
+ tests/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 83586ec67..4ccc1a092 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -125,7 +125,7 @@ check_DATA += testing$(bindir)/rpmbuild
+ 
+ if HAVE_FAKECHROOT
+ check-local: $(check_DATA)
+-	$(SHELL) '$(TESTSUITE)' $(TESTSUITEFLAGS) ||:
++	$(SHELL) '$(TESTSUITE)' $(TESTSUITEFLAGS)
+ else
+ check-local:
+ 	echo "you need to have fakechroot installed"

@@ -9,7 +9,7 @@ Subject: [PATCH] Fix error handling in rpmio Python binding test case
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/rpmpython.at b/tests/rpmpython.at
-index 949673b..eac31b2 100644
+index 949673bd8..eac31b20b 100644
 --- a/tests/rpmpython.at
 +++ b/tests/rpmpython.at
 @@ -53,7 +53,7 @@ for iot in [ 'fpio', 'fdio', 'ufdio', 'gzdio' ]:
