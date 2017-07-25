@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}36%{?dist}
+Release: %{?snapver:0.%{snapver}.}37%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -156,6 +156,8 @@ Patch335: 0059-Fix-error-handling-in-rpmio-Python-binding-test-case.patch
 Patch340: 0060-Return-error-exit-status-when-make-check-is-failed.patch
 
 # These are not yet upstream
+# Enable debugsource and debuginfo subpackages by default
+Patch900: 0001-macros-enable-debugsource-and-debuginfo-subpkgs-by-d.patch
 Patch902: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch904: rpm-4.13.90-ldflags.patch
@@ -651,6 +653,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jul 25 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-37
+- Enable debugsource and debuginfo subpackages by default
+
 * Mon Jul 24 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-36
 - Make sure that test results are not ignored
 
