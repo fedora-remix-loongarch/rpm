@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}37%{?dist}
+Release: %{?snapver:0.%{snapver}.}38%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -158,6 +158,8 @@ Patch340: 0060-Return-error-exit-status-when-make-check-is-failed.patch
 # These are not yet upstream
 # Enable debugsource and debuginfo subpackages by default
 Patch900: 0001-macros-enable-debugsource-and-debuginfo-subpkgs-by-d.patch
+# Fixes for debugsource/debuginfo-ubspackages
+Patch901: 0001-Make-sure-that-debugsourcefiles.list-is-generated-in.patch
 Patch902: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch904: rpm-4.13.90-ldflags.patch
@@ -655,6 +657,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jul 26 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-38
+- Backport trivial fix for debugsourcefiles.list ending up in random dir
+
 * Tue Jul 25 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-37
 - Enable debugsource and debuginfo subpackages by default
 
