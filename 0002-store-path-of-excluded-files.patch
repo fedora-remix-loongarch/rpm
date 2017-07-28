@@ -1,0 +1,64 @@
+From 90007b550cf585c9cb9427e1fd0b2d8f56c9c2b5 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Fri, 28 Jul 2017 14:33:29 +0200
+Subject: [PATCH] store path of excluded files
+
+We will need this in next commit so we know which files
+were excluded and we will exclude respective debug files.
+
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ build/files.c             | 6 +++++-
+ build/rpmbuild_internal.h | 1 +
+ build/spec.c              | 2 ++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/build/files.c b/build/files.c
+index 2238c2453..988b3b315 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -1060,7 +1060,11 @@ static void genCpioListAndHeader(FileList fl, Package pkg, int isSrc)
+ 	}
+ 
+ 	/* Skip files that were marked with %exclude. */
+-	if (flp->flags & RPMFILE_EXCLUDE) continue;
++	if (flp->flags & RPMFILE_EXCLUDE)
++	{
++	    argvAdd(&pkg->fileExcludeList, flp->diskPath);
++	    continue;
++	}
+ 
+ 	/* Collect on-disk paths for archive creation */
+ 	pkg->dpaths[npaths++] = xstrdup(flp->diskPath);
+diff --git a/build/rpmbuild_internal.h b/build/rpmbuild_internal.h
+index 1c3332faf..5978a6d32 100644
+--- a/build/rpmbuild_internal.h
++++ b/build/rpmbuild_internal.h
+@@ -118,6 +118,7 @@ struct Package_s {
+ 
+     ARGV_t fileFile;
+     ARGV_t fileList;		/* If NULL, package will not be written */
++    ARGV_t fileExcludeList;
+     ARGV_t removePostfixes;
+     ARGV_t policyList;
+ 
+diff --git a/build/spec.c b/build/spec.c
+index 7cb264abd..c33cde7eb 100644
+--- a/build/spec.c
++++ b/build/spec.c
+@@ -101,6 +101,7 @@ Package newPackage(const char *name, rpmstrPool pool, Package *pkglist)
+     p->autoProv = 1;
+     p->autoReq = 1;
+     p->fileList = NULL;
++    p->fileExcludeList = NULL;
+     p->fileFile = NULL;
+     p->policyList = NULL;
+     p->pool = rpmstrPoolLink(pool);
+@@ -143,6 +144,7 @@ static Package freePackage(Package pkg)
+     }
+ 
+     pkg->fileList = argvFree(pkg->fileList);
++    pkg->fileExcludeList = argvFree(pkg->fileExcludeList);
+     pkg->fileFile = argvFree(pkg->fileFile);
+     pkg->policyList = argvFree(pkg->policyList);
+     pkg->removePostfixes = argvFree(pkg->removePostfixes);

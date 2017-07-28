@@ -1,0 +1,46 @@
+From 651d9355f6db9f4d1305c25af5a953289dc8ef47 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Fri, 28 Jul 2017 15:21:00 +0200
+Subject: [PATCH] exclude respective debug files for files which are excluded
+
+Closes: https://github.com/rpm-software-management/rpm/issues/284
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ build/files.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/build/files.c b/build/files.c
+index 988b3b315..a29730998 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -1062,7 +1062,7 @@ static void genCpioListAndHeader(FileList fl, Package pkg, int isSrc)
+ 	/* Skip files that were marked with %exclude. */
+ 	if (flp->flags & RPMFILE_EXCLUDE)
+ 	{
+-	    argvAdd(&pkg->fileExcludeList, flp->diskPath);
++	    argvAdd(&pkg->fileExcludeList, flp->cpioPath);
+ 	    continue;
+ 	}
+ 
+@@ -2802,6 +2802,21 @@ static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
+ 	}
+ 	path = _free(path);
+     }
++    /* Exclude debug files for files which were excluded in respective non-debug package */
++    for (ARGV_const_t excl = pkg->fileExcludeList; excl && *excl; excl++) {
++        const char *name = *excl;
++
++	/* generate path */
++	rasprintf(&path, "%s%s%s%s.debug", buildroot, DEBUG_LIB_DIR, name, uniquearch);
++	/* Exclude only debuginfo files which actually exist */
++	if (access(path, F_OK) == 0) {
++	    char *line = NULL;
++	    rasprintf(&line, "%%exclude %s", path + buildrootlen);
++	    argvAdd(&files, line);
++	    _free(line);
++	}
++	path = _free(path);
++    }
+ 
+     /* add collected directories to file list */
+     if (dirs) {

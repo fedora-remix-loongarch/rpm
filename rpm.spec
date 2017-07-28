@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}38%{?dist}
+Release: %{?snapver:0.%{snapver}.}39%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -155,14 +155,24 @@ Patch335: 0059-Fix-error-handling-in-rpmio-Python-binding-test-case.patch
 # Finally make sure that test results are not ignored ;)
 Patch340: 0060-Return-error-exit-status-when-make-check-is-failed.patch
 
+# Fix for generation of debugsourcefiles.list in subdirectory
+Patch341: 0061-find-debuginfo.sh-make-sure-that-debugsourcefiles.li.patch
+
+# Trivial improvement for RemovePathPostfixes
+Patch342: 0062-Avoid-redundant-processing-for-RemovePathPostfixes.patch
+
 # These are not yet upstream
 # Enable debugsource and debuginfo subpackages by default
 Patch900: 0001-macros-enable-debugsource-and-debuginfo-subpkgs-by-d.patch
-# Fixes for debugsource/debuginfo-ubspackages
-Patch901: 0001-Make-sure-that-debugsourcefiles.list-is-generated-in.patch
-Patch902: rpm-4.7.1-geode-i686.patch
+# debuginfo_subpackages fixes
+Patch901: 0001-remove-duplicated-call-to-strlen.patch
+Patch902: 0002-store-path-of-excluded-files.patch
+Patch903: 0003-exclude-respective-debug-files-for-files-which-are-e.patch
+Patch904: 0004-store-mapping-for-renamed-files.patch
+Patch905: 0005-reference-proper-debug-files-whenever-RemovePathPost.patch
+Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
-Patch904: rpm-4.13.90-ldflags.patch
+Patch907: rpm-4.13.90-ldflags.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -657,6 +667,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jul 28 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-39
+- Backport fixes for debuginfo subpackages
+
 * Wed Jul 26 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-38
 - Backport trivial fix for debugsourcefiles.list ending up in random dir
 

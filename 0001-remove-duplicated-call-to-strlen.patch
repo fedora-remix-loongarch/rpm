@@ -1,0 +1,24 @@
+From 726e2bb66c16e3a70664185b246de910dc5b9010 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Fri, 28 Jul 2017 14:32:20 +0200
+Subject: [PATCH] remove duplicated call to strlen()
+
+It is already done few lines above.
+
+Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+---
+ build/files.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/build/files.c b/build/files.c
+index 9b1d2cd98..2238c2453 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -2764,7 +2764,6 @@ static void filterDebuginfoPackage(rpmSpec spec, Package pkg,
+ 	int namel = strlen(name);
+ 
+ 	/* strip trailing .debug like in find-debuginfo.sh */
+-	namel = strlen(name);
+ 	if (namel > 6 && !strcmp(name + namel - 6, ".debug"))
+ 	    namel -= 6;
+ 	
