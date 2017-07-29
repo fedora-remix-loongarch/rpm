@@ -1,4 +1,4 @@
-From f1e03904fc7173c772cb5795f6df30591f790b01 Mon Sep 17 00:00:00 2001
+From bcc54f828865ea5ba8b99acb2b6882f6e32190b0 Mon Sep 17 00:00:00 2001
 From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
 Date: Fri, 28 Jul 2017 18:30:37 +0200
 Subject: [PATCH] store mapping for renamed files
@@ -6,15 +6,17 @@ Subject: [PATCH] store mapping for renamed files
 We will need this in next commit so we know which original name
 files had, so we can reference appropriate debug file.
 
+Reviewed-by: Mark Wielaard <mark@klomp.org>
 Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+(cherry picked from commit cc8a682c386bf28540dc3fa5dbbb66c57bca5ec5)
 ---
- build/files.c             | 40 +++++++++++++++++++++++++++++-----------
+ build/files.c             | 42 +++++++++++++++++++++++++++++++-----------
  build/rpmbuild_internal.h | 12 ++++++++++++
  build/spec.c              |  2 ++
- 3 files changed, 43 insertions(+), 11 deletions(-)
+ 3 files changed, 45 insertions(+), 11 deletions(-)
 
 diff --git a/build/files.c b/build/files.c
-index a29730998..2387a2e5b 100644
+index 36e1ed5ea..42709a549 100644
 --- a/build/files.c
 +++ b/build/files.c
 @@ -50,6 +50,17 @@
@@ -26,7 +28,7 @@ index a29730998..2387a2e5b 100644
 +#undef HTDATATYPE
 +#define HASHTYPE fileRenameHash
 +#define HTKEYTYPE const char *
-+#define HTDATATYPE char *
++#define HTDATATYPE const char *
 +#include "lib/rpmhash.C"
 +#undef HASHTYPE
 +#undef HTKEYTYPE
@@ -35,7 +37,7 @@ index a29730998..2387a2e5b 100644
  /**
   */
  enum specfFlags_e {
-@@ -982,19 +993,26 @@ static void genCpioListAndHeader(FileList fl, Package pkg, int isSrc)
+@@ -982,19 +993,28 @@ static void genCpioListAndHeader(FileList fl, Package pkg, int isSrc)
      }
  
      /* Adjust paths if needed */
@@ -70,11 +72,13 @@ index a29730998..2387a2e5b 100644
  	    }
 +	    if (strcmp(cpiopath_orig, cpiopath))
 +		fileRenameHashAddEntry(pkg->fileRenameMap, xstrdup(cpiopath), cpiopath_orig);
++	    else
++		_free(cpiopath_orig);
  	}
      }
  
 diff --git a/build/rpmbuild_internal.h b/build/rpmbuild_internal.h
-index 5978a6d32..b4247ae61 100644
+index 5978a6d32..5dd0a5b83 100644
 --- a/build/rpmbuild_internal.h
 +++ b/build/rpmbuild_internal.h
 @@ -6,6 +6,17 @@
@@ -86,7 +90,7 @@ index 5978a6d32..b4247ae61 100644
 +#undef HTDATATYPE
 +#define HASHTYPE fileRenameHash
 +#define HTKEYTYPE const char *
-+#define HTDATATYPE char *
++#define HTDATATYPE const char *
 +#include "lib/rpmhash.H"
 +#undef HASHTYPE
 +#undef HTKEYTYPE

@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}39%{?dist}
+Release: %{?snapver:0.%{snapver}.}40%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -161,15 +161,15 @@ Patch341: 0061-find-debuginfo.sh-make-sure-that-debugsourcefiles.li.patch
 # Trivial improvement for RemovePathPostfixes
 Patch342: 0062-Avoid-redundant-processing-for-RemovePathPostfixes.patch
 
+# debuginfo_subpackages fixes
+Patch343: 0063-store-path-of-excluded-files.patch
+Patch344: 0064-exclude-respective-debug-files-for-files-which-are-e.patch
+Patch345: 0065-store-mapping-for-renamed-files.patch
+Patch346: 0066-reference-proper-debug-files-whenever-RemovePathPost.patch
+
 # These are not yet upstream
 # Enable debugsource and debuginfo subpackages by default
 Patch900: 0001-macros-enable-debugsource-and-debuginfo-subpkgs-by-d.patch
-# debuginfo_subpackages fixes
-Patch901: 0001-remove-duplicated-call-to-strlen.patch
-Patch902: 0002-store-path-of-excluded-files.patch
-Patch903: 0003-exclude-respective-debug-files-for-files-which-are-e.patch
-Patch904: 0004-store-mapping-for-renamed-files.patch
-Patch905: 0005-reference-proper-debug-files-whenever-RemovePathPost.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.13.90-ldflags.patch
@@ -667,6 +667,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Sat Jul 29 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-40
+- Update latest patches from merged versions
+
 * Fri Jul 28 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-39
 - Backport fixes for debuginfo subpackages
 

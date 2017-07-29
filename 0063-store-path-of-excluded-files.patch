@@ -1,4 +1,4 @@
-From 90007b550cf585c9cb9427e1fd0b2d8f56c9c2b5 Mon Sep 17 00:00:00 2001
+From e7ce266784e2b122df03c8023c16ec18ec8209e7 Mon Sep 17 00:00:00 2001
 From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
 Date: Fri, 28 Jul 2017 14:33:29 +0200
 Subject: [PATCH] store path of excluded files
@@ -6,7 +6,9 @@ Subject: [PATCH] store path of excluded files
 We will need this in next commit so we know which files
 were excluded and we will exclude respective debug files.
 
+Reviewed-by: Mark Wielaard <mark@klomp.org>
 Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+(cherry picked from commit b5c2deffd4cb1b19782e11d1537a4a0ba8a52b60)
 ---
  build/files.c             | 6 +++++-
  build/rpmbuild_internal.h | 1 +
@@ -14,7 +16,7 @@ Signed-off-by: Igor Gnatenko <i.gnatenko.brain@gmail.com>
  3 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/build/files.c b/build/files.c
-index 2238c2453..988b3b315 100644
+index 9b1d2cd98..b9716b4d8 100644
 --- a/build/files.c
 +++ b/build/files.c
 @@ -1060,7 +1060,11 @@ static void genCpioListAndHeader(FileList fl, Package pkg, int isSrc)
@@ -24,7 +26,7 @@ index 2238c2453..988b3b315 100644
 -	if (flp->flags & RPMFILE_EXCLUDE) continue;
 +	if (flp->flags & RPMFILE_EXCLUDE)
 +	{
-+	    argvAdd(&pkg->fileExcludeList, flp->diskPath);
++	    argvAdd(&pkg->fileExcludeList, flp->cpioPath);
 +	    continue;
 +	}
  
