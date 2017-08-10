@@ -17,8 +17,8 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.0.1
-#global snapver rc2
+%global rpmver 4.13.90
+%global snapver git14002
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}41%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -52,120 +52,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-# All patches are tracked on https://pagure.io/rpm-fedora
-# Regenerate them using -N and --no-signature to minimize differences:
-#   git format-patch -N --no-signature rpm-4.13.0.1-release..
-Patch100: 0001-Use-correct-source-file-for-rpmsign-module.patch
-
-Patch140: 0002-brp-python-bytecompile-Process-python-lib-dirs-even-.patch
-Patch142: 0003-Fix-number-of-references-on-spec_Type-114.patch
-
-# debuginfo backports (#1427970)
-Patch250: 0004-Add-build-id-links-to-rpm-for-all-ELF-files.patch
-Patch251: 0005-Make-it-possible-to-have-unique-build-ids-across-bui.patch
-Patch252: 0006-Make-adding-GDB-index-sections-configurable.patch
-Patch253: 0007-Add-option-to-have-unique-debug-file-names-across-ve.patch
-Patch254: 0008-Fix-behavior-when-_build_id_links-is-undefined.patch
-Patch255: 0009-Fix-debuginfo-etc-when-subpackages-have-different-ve.patch
-Patch256: 0010-Only-process-regular-files-when-generating-build-ids.patch
-Patch257: 0011-configure.ac-use-LIBDW-always-conditionally.patch
-Patch258: 0012-Fix-libdw-configure-check.patch
-Patch259: 0013-debugedit-Support-String-Line-table-rewriting-for-la.patch
-Patch260: 0014-Add-option-to-have-unique-debug-source-dirs-across-v.patch
-
-# debuginfo build-id warn/error fix (#1430587)
-Patch261: 0015-generateBuildIDs-Don-t-warn-or-error-for-object-file.patch
-Patch262: 0016-build-files.c-Unset-__debug_package-implies-missing-.patch
-Patch263: 0017-generateBuildIDs-Fix-error-handling.patch
-Patch264: 0018-Make-sure-to-reset-file-attributes-for-generated-bui.patch
-Patch265: 0019-rpmbuild-Reset-attrFlags-in-generateBuildIDs.patch
-Patch266: 0020-debugedit-Fix-edit_dwarf2_line-replace_dirs-replace_.patch
-Patch267: 0021-build-files.c-processPackageFiles-Don-t-call-generat.patch
-Patch268: 0022-debugedit-Fix-cross-endian-build-id-reading-and-upda.patch
-Patch269: 0023-tests-tpmbuild.at-Make-file-sed-regexp-more-strict-t.patch
-Patch270: 0024-tests-rpmbuildid.at-Make-file-sed-regexp-more-strict.patch
-Patch271: 0025-build-files.c-Only-check-build-ids-for-executable-fi.patch
-Patch272: 0026-debugedit-Fix-off-by-one-adding-DW_FORM_string-repla.patch
-Patch273: 0027-Unbreak-short-circuited-binary-builds.patch
-Patch274: 0028-find-debuginfo.sh-Only-add-minisymtab-for-executable.patch
-Patch275: 0029-debugedit-Add-n-no-recompute-build-id.patch
-Patch276: 0030-Fix-non-standard-inherented-modes-of-directories-in-.patch
-
-# World writable empty (tmp) dirs in debuginfo packages (#641022)
-Patch280: 0031-debugedit-Only-output-comp_dir-under-build-dir-once.patch
-
-# Parallel debuginfo processing
-Patch281: 0032-find-debuginfo.sh-Split-directory-traversal-and-debu.patch
-Patch282: 0033-find-debuginfo.sh-Use-return-not-continue-to-break-o.patch
-Patch283: 0034-find-debuginfo.sh-Process-files-in-parallel.patch
-
-# Support debugsource and debuginfo subpackages
-Patch284: 0035-Untangle-unique-build-options-in-find-debuginfo.sh.patch
-Patch285: 0036-Support-debugsource-subpackages.patch
-Patch286: 0037-Support-debuginfo-subpackages.patch
-Patch287: 0038-Also-add-directories-to-split-debuginfo-packages.patch
-
-# debugedit check prefix match ends with slash.
-Patch290: 0039-debugedit-skip_dir_prefix-should-check-for-dir-separ.patch
-
-# find-debuginfo.sh: Filter out all <built-in> like fake file names.
-Patch291: 0040-find-debuginfo.sh-Filter-out-all-built-in-like-fake-.patch
-
-# Don't create dwz multi file if there is only one .debug.
-Patch292: 0041-find-debuginfo.sh-Don-t-create-dwz-multi-file-if-the.patch
-
-# Update find-debuginfo.sh options and macros documentation.
-Patch293: 0042-Update-find-debuginfo.sh-options-and-macros-document.patch
-
-# OpenSSL backend
-Patch300: 0043-Add-OpenSSL-support-for-digest-and-signatures.patch
-
-# Rich dependencies coming from dependency generatos
-Patch310: 0044-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
-Patch311: 0045-Fix-check-for-weak-deps-in-external-dependency-gener.patch
-Patch312: 0046-Fix-check-whether-to-allow-rich-deps-in-a-given-tag.patch
-Patch313: 0047-Re-enable-rich-dependecies-for-build-requires-and-co.patch
-Patch314: 0048-add-support-for-rich-dependencies-from-dependency-ge.patch
-Patch315: 0049-Pass-proper-file-index-when-recording-generated-depe.patch
-
-# Use file list to explicitly set mode for build-id dirs/files.
-# https://bugzilla.redhat.com/show_bug.cgi?id=1452893
-# https://bugzilla.redhat.com/show_bug.cgi?id=1458839
-Patch320: 0050-Consolidate-defattr-attr-root-root-generation-to-hel.patch
-Patch321: 0051-Extract-package-file-list-processing-in-separate-fun.patch
-Patch322: 0052-Use-a-file-list-to-add-build-id-files-to-pkgList.patch
-Patch323: 0053-Change-mkattr-to-always-create-a-defattr-with-explic.patch
-
-# Fix regression from 0044-Use-RPMTAG_-NAME-instead-of-RPMTAG_-FLAGS-in-parsePr.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1468476
-Patch330: 0054-rpmfc-fix-ternary-operator.patch
-
-# debuginfo packages should automatically provide debuginfo(build-id) = ...
-Patch331: 0055-let-debuginfo-packages-provide-the-build-id.patch
-
-# find-debuginfo.sh: Add --keep-section and --remove-section for eu-strip.
-# https://bugzilla.redhat.com/show_bug.cgi?id=1465997
-Patch332: 0056-find-debuginfo.sh-Add-keep-section-and-remove-sectio.patch
-Patch333: 0057-find-debuginfo.sh-Remove-non-allocated-NOBITS-sectio.patch
-
-# Fix rpmfd_write on big endian arches.
-Patch334: 0058-Define-PY_SSIZE_T_CLEAN.patch
-Patch335: 0059-Fix-error-handling-in-rpmio-Python-binding-test-case.patch
-
-# Finally make sure that test results are not ignored ;)
-Patch340: 0060-Return-error-exit-status-when-make-check-is-failed.patch
-
-# Fix for generation of debugsourcefiles.list in subdirectory
-Patch341: 0061-find-debuginfo.sh-make-sure-that-debugsourcefiles.li.patch
-
-# Trivial improvement for RemovePathPostfixes
-Patch342: 0062-Avoid-redundant-processing-for-RemovePathPostfixes.patch
-
-# debuginfo_subpackages fixes
-Patch343: 0063-store-path-of-excluded-files.patch
-Patch344: 0064-exclude-respective-debug-files-for-files-which-are-e.patch
-Patch345: 0065-store-mapping-for-renamed-files.patch
-Patch346: 0066-reference-proper-debug-files-whenever-RemovePathPost.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -408,7 +294,18 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %description plugin-ima
 %{summary}
 
-%endif
+%package plugin-prioreset
+Summary: Rpm plugin for resetting scriptlet priorities for SysV init
+Group: System Environment/Base
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-prioreset
+%{summary}
+
+Useful on legacy SysV init systems if you run rpm transactions with
+nice/ionice priorities. Should not be used on systemd systems.
+
+%endif # with plugins
 
 %prep
 %autosetup -n %{name}-%{srcver} %{?with_int_bdb:-a 1} -p1
@@ -519,7 +416,7 @@ rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
 %if %{with check}
 %check
 make check
-#[ "$(ls -A tests/rpmtests.dir)" ] && cat tests/rpmtests.log
+[ "$(ls -A tests/rpmtests.dir)" ] && cat tests/rpmtests.log
 %endif
 
 %post libs -p /sbin/ldconfig
@@ -540,7 +437,7 @@ exit 0
 
 %files -f %{name}.lang
 %license COPYING
-%doc GROUPS CREDITS doc/manual/[a-z]*
+%doc CREDITS doc/manual/[a-z]*
 
 /usr/lib/tmpfiles.d/rpm.conf
 %dir %{_sysconfdir}/rpm
@@ -548,7 +445,7 @@ exit 0
 %attr(0755, root, root) %dir /var/lib/rpm
 %attr(0644, root, root) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
 
-/bin/rpm
+%{_bindir}/rpm
 %{_bindir}/rpm2archive
 %{_bindir}/rpm2cpio
 %{_bindir}/rpmdb
@@ -560,6 +457,7 @@ exit 0
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
 %{_mandir}/man8/rpm2cpio.8*
+%{_mandir}/man8/rpm-misc.8*
 
 # XXX this places translated manuals to wrong package wrt eg rpmbuild
 %lang(fr) %{_mandir}/fr/man[18]/*.[18]*
@@ -600,10 +498,14 @@ exit 0
 
 %files plugin-systemd-inhibit
 %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
 
 %files plugin-ima
 %{_libdir}/rpm-plugins/ima.so
-%endif
+
+%files plugin-prioreset
+%{_libdir}/rpm-plugins/prioreset.so
+%endif # with plugins
 
 %files build-libs
 %{_libdir}/librpmbuild.so.*
@@ -641,11 +543,11 @@ exit 0
 
 %files -n python2-%{name}
 %{python_sitearch}/%{name}/
-%{python_sitearch}/%{name}_python-*.egg-info
+%{python_sitearch}/%{name}-%{version}*.egg-info
 
 %files -n python3-%{name}
 %{python3_sitearch}/%{name}/
-%{python3_sitearch}/%{name}_python-*.egg-info
+%{python3_sitearch}/%{name}-%{version}*.egg-info
 
 %files devel
 %{_mandir}/man8/rpmgraph.8*
@@ -663,6 +565,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Aug 10 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.1
+- Rebase to rpm 4.13.90 aka 4.14.0-alpha (#1474836)
+
 * Mon Jul 31 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-41
 - Move _debuginfo_subpackages and _debugsource_packages to redhat-rpm-config
 
