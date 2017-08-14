@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -53,6 +53,9 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # rpm 4.13 rpmkeys -K is buggy and chokes on the new sha256 header digest,
 # disable its generation until fixed in other fedora versions (#1480407)
 Patch6: rpm-4.14-disable-sha256hdr.patch
+# Macro argument quoting breaks too much stuff, disable until a better
+# solution is found upstream (#1481025)
+Patch7: rpm-4.13.90-macro-noquote.patch
 
 # Patches already upstream:
 
@@ -568,6 +571,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Aug 14 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.3
+- Disable macro argument quoting as a band-aid to #1481025
+
 * Fri Aug 11 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.2
 - Disable SHA256 header-only digest generation temporarily (#1480407)
 
