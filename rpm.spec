@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}5%{?dist}
+Release: %{?snapver:0.%{snapver}.}6%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -53,6 +53,8 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
 Patch100: rpm-4.13.0-python-rpmsign.patch
+Patch101: rpm-4.13.0-unknown-sigtags.patch
+Patch102: rpm-4.13.0-testsuite-nss.patch
 
 Patch133: rpm-4.13.x-pythondistdeps.patch
 Patch134: rpm-4.13.x-pythondistdeps-Makefile.patch
@@ -573,6 +575,10 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Aug 16 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-6
+- Really ignore unknown tags in the signature header (#1480492)
+- Fix testsuite with recent NSS-versions
+
 * Tue May 23 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-5
 - Fix rpmsign python module import failing (#1462671)
 

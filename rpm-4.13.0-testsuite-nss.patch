@@ -1,0 +1,21 @@
+commit 36db47bf59213befbb0afb37032b82e634c7ba78
+Author: Panu Matilainen <pmatilai@redhat.com>
+Date:   Wed May 10 09:17:20 2017 +0300
+
+    Fix testsuite with newer NSS versions which require /dev/urandom
+    
+    (cherry picked from commit 9e3256d2e8fa1bed042f7c4ded7e40e232342539)
+
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 7a5cc6544..1e71d685f 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -109,7 +109,7 @@ testing$(bindir)/rpmbuild: ../rpmbuild
+ 	          $(MAKE) DESTDIR=`pwd`/${subdir}/testing install)
+ 	cp -r ${srcdir}/data/ testing/
+ 	for d in dev etc magic tmp var; do if [ ! -d testing/$${d} ]; then mkdir testing/$${d}; fi; done
+-	for node in stdin stderr stdout null; do ln -s /dev/$${node} testing/dev/$${node}; done
++	for node in urandom stdin stderr stdout null; do ln -s /dev/$${node} testing/dev/$${node}; done
+ 	for cf in hosts resolv.conf passwd shadow group gshadow mtab fstab; do [ -f /etc/$${cf} ] && ln -s /etc/$${cf} testing/etc/$${cf}; done
+ 	ln -s ../$(bindir) testing/usr/bin
+ 	for prog in gzip cat patch tar sh ln chmod rm mkdir uname grep sed find file ionice mktemp nice cut sort diff touch; do p=`which $${prog}`; ln -s $${p} testing/$${p}; done
