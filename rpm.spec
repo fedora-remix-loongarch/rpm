@@ -21,9 +21,7 @@
 %bcond_without python3
 # Note that the rpm package with Patch908 applied has to be in
 # the buildroot before platform_python enabled build happens.
-# Hence platform_python is disbaled for this build, because this
-# is the first build with Patch908 (to be removed in the second build).
-%bcond_with platform_python
+%bcond_without platform_python
 
 %define rpmhome /usr/lib/rpm
 
@@ -39,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}4%{?dist}
+Release: %{?snapver:0.%{snapver}.}5%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -643,6 +641,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Aug 17 2017 Miro Hrončok <mhroncok@redhat.com> - 4.13.90-0.git14002.5
+- Build with platform_python
+
 * Mon Aug 14 2017 Miro Hrončok <mhroncok@redhat.com> - 4.13.90-0.git14000.4
 - Add platform-python bytecompilation patch: platform-python-bytecompile.patch
 - Add platform python deps generator patch: platform-python-abi.patch
