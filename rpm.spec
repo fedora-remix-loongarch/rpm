@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}5%{?dist}
+Release: %{?snapver:0.%{snapver}.}6%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -66,6 +66,7 @@ Patch6: rpm-4.14-disable-sha256hdr.patch
 Patch7: rpm-4.13.90-macro-noquote.patch
 
 # Patches already upstream:
+Patch100: rpm-4.13.90-silent-lookup.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -641,6 +642,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Aug 18 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.6
+- Silence harmless but bogus error message on noarch packages (#1482144)
+
 * Thu Aug 17 2017 Miro Hrončok <mhroncok@redhat.com> - 4.13.90-0.git14002.5
 - Build with platform_python
 

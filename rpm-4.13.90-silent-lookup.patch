@@ -1,0 +1,94 @@
+From 4afe09cbcfbc43c1385b8626e69bea216600ee59 Mon Sep 17 00:00:00 2001
+Message-Id: <4afe09cbcfbc43c1385b8626e69bea216600ee59.1503051023.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Fri, 18 Aug 2017 12:43:27 +0300
+Subject: [PATCH 1/2] Add a flag to allow quiet test for package existence with
+ lookupPackage()
+
+Turning "flag" into an actual bitfield requires testing for
+PART_NAME/PART_SUBNAME differently, no actual changes here though.
+---
+ build/rpmbuild_internal.h |  1 +
+ build/spec.c              | 16 +++++++++-------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/build/rpmbuild_internal.h b/build/rpmbuild_internal.h
+index c294d5ee2..439b7d3b5 100644
+--- a/build/rpmbuild_internal.h
++++ b/build/rpmbuild_internal.h
+@@ -138,6 +138,7 @@ struct Package_s {
+ 
+ #define PART_SUBNAME  0
+ #define PART_NAME     1
++#define PART_QUIET    2
+ 
+ /** \ingroup rpmbuild
+  * rpmSpec file parser states.
+diff --git a/build/spec.c b/build/spec.c
+index 17a9b7c5a..39599e284 100644
+--- a/build/spec.c
++++ b/build/spec.c
+@@ -73,7 +73,7 @@ rpmRC lookupPackage(rpmSpec spec, const char *name, int flag,Package *pkg)
+     }
+ 
+     /* Construct partial package name */
+-    if (flag == PART_SUBNAME) {
++    if (!(flag & PART_NAME)) {
+ 	rasprintf(&fullName, "%s-%s",
+ 		 headerGetString(spec->packages->header, RPMTAG_NAME), name);
+ 	name = fullName;
+@@ -87,12 +87,14 @@ rpmRC lookupPackage(rpmSpec spec, const char *name, int flag,Package *pkg)
+ 	}
+     }
+ 
+-    if (p == NULL && pkg != NULL) {
+-	rpmlog(RPMLOG_ERR, _("line %d: %s: package %s does not exist\n"),
+-				spec->lineNum, spec->line, name);
+-    } else if (p != NULL && pkg == NULL) {
+-	rpmlog(RPMLOG_ERR, _("line %d: %s: package %s already exists\n"),
+-				spec->lineNum, spec->line, name);
++    if (!(flag & PART_QUIET)) {
++	if (p == NULL && pkg != NULL) {
++	    rpmlog(RPMLOG_ERR, _("line %d: %s: package %s does not exist\n"),
++				    spec->lineNum, spec->line, name);
++	} else if (p != NULL && pkg == NULL) {
++	    rpmlog(RPMLOG_ERR, _("line %d: %s: package %s already exists\n"),
++				    spec->lineNum, spec->line, name);
++	}
+     }
+ 
+     if (fullName == name)
+-- 
+2.13.5
+
+From 054de0f50fc1c8aacb6c45fa4a0fcd8d9ce5b2d1 Mon Sep 17 00:00:00 2001
+Message-Id: <054de0f50fc1c8aacb6c45fa4a0fcd8d9ce5b2d1.1503051023.git.pmatilai@redhat.com>
+In-Reply-To: <4afe09cbcfbc43c1385b8626e69bea216600ee59.1503051023.git.pmatilai@redhat.com>
+References: <4afe09cbcfbc43c1385b8626e69bea216600ee59.1503051023.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Fri, 18 Aug 2017 12:46:59 +0300
+Subject: [PATCH 2/2] Use silent lookup for debuginfo packages (#1482144)
+
+Noarch packages do not have debuginfo, this was causing harmless
+but bogus error messages via lookupPackage(). Depends on commit
+4afe09cbcfbc43c1385b8626e69bea216600ee59.
+---
+ build/files.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/files.c b/build/files.c
+index c7fe2485c..5e84532f1 100644
+--- a/build/files.c
++++ b/build/files.c
+@@ -2981,7 +2981,7 @@ static int addDebugSrc(Package pkg, char *buildroot)
+ static Package findDebuginfoPackage(rpmSpec spec)
+ {
+     Package pkg = NULL;
+-    if (lookupPackage(spec, "debuginfo", PART_SUBNAME, &pkg))
++    if (lookupPackage(spec, "debuginfo", PART_SUBNAME|PART_QUIET, &pkg))
+ 	return NULL;
+     return pkg && pkg->fileList ? pkg : NULL;
+ }
+-- 
+2.13.5
+
