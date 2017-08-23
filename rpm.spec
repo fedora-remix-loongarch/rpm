@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}6%{?dist}
+Release: %{?snapver:0.%{snapver}.}7%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -68,6 +68,8 @@ Patch140: rpm-4.13.x-brp-python-bytecompile-Python3-only.patch
 # rhbz#1421776
 Patch141: rpm-4.13.x-pythondistdeps.py-fix-processing-wheels.patch
 Patch142: rpm-4.13.x-fix-refcount-for-spec_type.patch
+# https://github.com/rpm-software-management/rpm/commit/124ed29259b05fdf574d5e3e145bc1201b24ae4d
+Patch143: rpm-4.13.x-RPMCALLBACK_ELEM_PROGRESS-available-header.patch
 
 # Fedora-specific (python3) patch (RHBZ #1405483)
 Patch200: rpm-4.13.x-pythondistdeps-python3.patch
@@ -575,6 +577,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Aug 23 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-7
+- backport patch to have headers available in RPMCALLBACK_ELEM_PROGRESS
+
 * Wed Aug 16 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-6
 - Really ignore unknown tags in the signature header (#1480492)
 - Fix testsuite with recent NSS-versions
