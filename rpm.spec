@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}6%{?dist}
+Release: %{?snapver:0.%{snapver}.}7%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -491,16 +491,6 @@ make check
 %post build-libs -p /sbin/ldconfig
 %postun build-libs -p /sbin/ldconfig
 
-%posttrans
-# XXX this is klunky and ugly, rpm itself should handle this
-dbstat=/usr/lib/rpm/rpmdb_stat
-if [ -x "$dbstat" ]; then
-    if "$dbstat" -e -h /var/lib/rpm 2>&1 | grep -q "doesn't match library version \| Invalid argument"; then
-        rm -f /var/lib/rpm/__db.* 
-    fi
-fi
-exit 0
-
 %files -f %{name}.lang
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
@@ -642,6 +632,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Aug 24 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.7
+- Remove ugly kludges from posttrans script, BDB handles this now
+
 * Fri Aug 18 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.6
 - Silence harmless but bogus error message on noarch packages (#1482144)
 
