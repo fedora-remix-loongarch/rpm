@@ -76,9 +76,10 @@ Patch907: rpm-4.13.90-ldflags.patch
 # Use platform-python for bytecompilation in /usr/lib*/platform-python
 Patch908: platform-python-bytecompile.patch
 
-# This patch is currently not part of any built RPM, however, to be
+# Those patches are currently not part of any built RPM, however, to be
 # consistent with python-rpm-generators, we are adding it anyway.
 Patch909: platform-python-abi.patch
+Patch910: platform-python-distdeps.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
