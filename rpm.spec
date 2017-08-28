@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}8%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -67,6 +67,7 @@ Patch7: rpm-4.13.90-macro-noquote.patch
 
 # Patches already upstream:
 Patch100: rpm-4.13.90-silent-lookup.patch
+Patch101: rpm-4.13.90-db-version-mismatch.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -633,6 +634,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Aug 28 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.8
+- Band-aid for DB_VERSION_MISMATCH errors on glibc updates (#1465809)
+
 * Thu Aug 24 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.7
 - Remove ugly kludges from posttrans script, BDB handles this now
 
