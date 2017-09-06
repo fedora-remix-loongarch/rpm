@@ -25,8 +25,8 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.90
-%global snapver git14002
+%global rpmver 4.14.0
+%global snapver rc1
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}8%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -58,16 +58,8 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
-# rpm 4.13 rpmkeys -K is buggy and chokes on the new sha256 header digest,
-# disable its generation until fixed in other fedora versions (#1480407)
-Patch6: rpm-4.14-disable-sha256hdr.patch
-# Macro argument quoting breaks too much stuff, disable until a better
-# solution is found upstream (#1481025)
-Patch7: rpm-4.13.90-macro-noquote.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.90-silent-lookup.patch
-Patch101: rpm-4.13.90-db-version-mismatch.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -634,6 +626,10 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Sep 06 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.1
+- Rebase to rpm 4.14.0-rc1 (http://rpm.org/wiki/Releases/4.14.0)
+- Re-enable SHA256 header digest generation (see #1480407)
+
 * Mon Aug 28 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.90-0.git14000.8
 - Band-aid for DB_VERSION_MISMATCH errors on glibc updates (#1465809)
 
