@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -136,7 +136,7 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-BuildRequires: ima-evm-utils
+BuildRequires: ima-evm-utils >= 1.0
 %endif
 
 %description
@@ -381,6 +381,7 @@ done;
     --with-cap \
     --with-acl \
     %{?with_ndb: --with-ndb} \
+    %{?with_libimaevm: --with-imaevm} \
     --enable-python \
     --with-crypto=openssl
 
@@ -626,6 +627,10 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Sep 07 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.2
+- Actually honor with/without libimaevm option
+- ima-evm-utis >= 1.0 is required for rpm >= 4.14.0
+
 * Wed Sep 06 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.1
 - Rebase to rpm 4.14.0-rc1 (http://rpm.org/wiki/Releases/4.14.0)
 - Re-enable SHA256 header digest generation (see #1480407)
