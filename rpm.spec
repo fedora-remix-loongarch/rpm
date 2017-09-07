@@ -136,7 +136,7 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-BuildRequires: ima-evm-utils >= 1.0
+BuildRequires: ima-evm-utils-devel >= 1.0
 %endif
 
 %description
@@ -629,7 +629,7 @@ make check
 %changelog
 * Thu Sep 07 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.2
 - Actually honor with/without libimaevm option
-- ima-evm-utis >= 1.0 is required for rpm >= 4.14.0
+- ima-evm-utils-devel >= 1.0 is required for rpm >= 4.14.0
 
 * Wed Sep 06 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.1
 - Rebase to rpm 4.14.0-rc1 (http://rpm.org/wiki/Releases/4.14.0)
