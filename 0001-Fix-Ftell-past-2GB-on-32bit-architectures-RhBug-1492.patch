@@ -1,0 +1,53 @@
+From 90802a894ad75df3a94edbe66a901fca006e65ee Mon Sep 17 00:00:00 2001
+Message-Id: <90802a894ad75df3a94edbe66a901fca006e65ee.1505741312.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Mon, 18 Sep 2017 16:10:03 +0300
+Subject: [PATCH] Fix Ftell() past 2GB on 32bit architectures (RhBug:1492587)
+
+Back in 2011 "somebody" forgot to apply brain when copying the return
+type of "long" from ftell() to the Ftell() implementations within rpmio
+(commit 61f5838aa849b8a75f7f08a33c868b518e1ccd44).
+
+Fast-forward six years and suddenly TexLive in Fedora no longer builds
+on 32bit architectures due to that thinko, appearing to be a regression
+in commit 7d1a303c456ce459cf550e8154fa4b6f29012b05. However that only
+exposes the inner flaw of Ftell() as the code now relies on values
+past the initial header range, for which the 2G of "long" has been more
+than enough on 32bit architectures too.
+
+Doh, dude...
+
+diff --git a/rpmio/rpmio.c b/rpmio/rpmio.c
+index 57e610185..d8b884085 100644
+--- a/rpmio/rpmio.c
++++ b/rpmio/rpmio.c
+@@ -124,7 +124,7 @@ typedef int (*fdio_close_function_t) (FDSTACK_t fps);
+ typedef FD_t (*fdio_open_function_t) (const char * path, int flags, mode_t mode);
+ typedef FD_t (*fdio_fdopen_function_t) (FD_t fd, int fdno, const char * fmode);
+ typedef int (*fdio_fflush_function_t) (FDSTACK_t fps);
+-typedef long (*fdio_ftell_function_t) (FDSTACK_t fps);
++typedef off_t (*fdio_ftell_function_t) (FDSTACK_t fps);
+ typedef int (*fdio_ferror_function_t) (FDSTACK_t fps);
+ typedef const char * (*fdio_fstrerr_function_t)(FDSTACK_t fps);
+ 
+@@ -410,7 +410,7 @@ static FD_t fdOpen(const char *path, int flags, mode_t mode)
+     return fd;
+ }
+ 
+-static long fdTell(FDSTACK_t fps)
++static off_t fdTell(FDSTACK_t fps)
+ {
+     return lseek(fps->fdno, 0, SEEK_CUR);
+ }
+@@ -619,7 +619,7 @@ static int gzdClose(FDSTACK_t fps)
+     return (rc != 0) ? -1 : 0;
+ }
+ 
+-static long gzdTell(FDSTACK_t fps)
++static off_t gzdTell(FDSTACK_t fps)
+ {
+     off_t pos = -1;
+     gzFile gzfile = fps->fp;
+-- 
+2.13.5
+

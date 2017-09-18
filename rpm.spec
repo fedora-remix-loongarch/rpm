@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -60,6 +60,7 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
+Patch100: 0001-Fix-Ftell-past-2GB-on-32bit-architectures-RhBug-1492.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -627,6 +628,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Sep 18 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.3
+- Fix Ftell() past 2GB on 32bit architectures (#1492587)
+
 * Thu Sep 07 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc1.2
 - Actually honor with/without libimaevm option
 - ima-evm-utils-devel >= 1.0 is required for rpm >= 4.14.0
