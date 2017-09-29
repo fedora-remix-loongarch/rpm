@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}3%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -91,7 +91,7 @@ BuildRequires: %{bdbname}-devel
 %endif
 
 %if %{with check}
-BuildRequires: fakechroot
+BuildRequires: fakechroot gnupg2
 %endif
 
 # XXX generally assumed to be installed but make it explicit as rpm
@@ -632,6 +632,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Sep 29 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.3
+- BuildRequire gnupg2 for the testsuite
+
 * Fri Sep 29 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.2
 - ima-evm-utils only has a -devel package in fedora >= 28
 
