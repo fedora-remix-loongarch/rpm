@@ -37,7 +37,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}1%{?dist}
+Release: %{?snapver:0.%{snapver}.}2%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -136,7 +136,12 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-BuildRequires: ima-evm-utils-devel >= 1.0
+%if 0%{?fedora} >= 28
+%global imadevname ima-evm-utils-devel
+%else
+%global imadevname ima-evm-utils
+%endif
+BuildRequires: %{imadevname} >= 1.0
 %endif
 
 %description
@@ -627,6 +632,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Sep 29 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.2
+- ima-evm-utils only has a -devel package in fedora >= 28
+
 * Thu Sep 28 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.1
 - Rebase to rpm 4.14.0-rc2 (http://rpm.org/wiki/Releases/4.14.0)
 
