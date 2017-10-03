@@ -14,6 +14,10 @@
 %bcond_without libimaevm
 # build with new db format
 %bcond_with ndb
+# build with zstd support?
+%bcond_without zstd
+# build with lmdb support?
+%bcond_with lmdb
 
 # which python subpackages to build (default: all)
 # so it can be built in different modules with different subpackages
@@ -27,7 +31,7 @@
 
 %global rpmver 4.14.0
 %global snapver rc2
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -119,6 +123,12 @@ BuildRequires: xz-devel >= 4.999.8
 %if %{with libarchive}
 BuildRequires: libarchive-devel
 %endif
+%if %{with zstd}
+BuildRequires: libzstd-devel
+%endif
+%if %{with lmdb}
+BuildRequires: lmdb-devel
+%endif
 # Only required by sepdebugcrcfix patch
 BuildRequires: binutils-devel
 # Couple of patches change makefiles so, require for now...
@@ -208,7 +218,7 @@ Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
-Requires: tar unzip gzip bzip2 cpio xz
+Requires: tar unzip gzip bzip2 cpio xz zstd
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
 # Technically rpmbuild doesn't require any external configuration, but
@@ -389,6 +399,8 @@ done;
     --with-acl \
     %{?with_ndb: --with-ndb} \
     %{?with_libimaevm: --with-imaevm} \
+    %{?with_zstd: --enable-zstd} \
+    %{?with_lmdb: --enable-lmdb} \
     --enable-python \
     --with-crypto=openssl
 
@@ -634,6 +646,10 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Oct 03 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.5
+- Add build conditionals for zstd and lmdb support
+- Enable zstd support
+
 * Tue Oct 03 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.4
 - Spec cleanups
 
