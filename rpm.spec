@@ -27,6 +27,8 @@
 
 %global rpmver 4.14.0
 %global snapver rc2
+%global rel 4
+
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
@@ -37,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}3%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -111,10 +113,10 @@ BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: lua-devel >= 5.1
 BuildRequires: libcap-devel
 BuildRequires: libacl-devel
-%if ! %{without xz}
+%if %{with xz}
 BuildRequires: xz-devel >= 4.999.8
 %endif
-%if ! %{without libarchive}
+%if %{with libarchive}
 BuildRequires: libarchive-devel
 %endif
 # Only required by sepdebugcrcfix patch
@@ -632,6 +634,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Oct 03 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.4
+- Spec cleanups
+
 * Fri Sep 29 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.3
 - BuildRequire gnupg2 for the testsuite
 
