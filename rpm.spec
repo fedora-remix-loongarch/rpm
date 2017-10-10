@@ -31,7 +31,7 @@
 
 %global rpmver 4.14.0
 %global snapver rc2
-%global rel 5
+%global rel 6
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -148,7 +148,7 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-%if 0%{?fedora} >= 28
+%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
 %global imadevname ima-evm-utils-devel
 %else
 %global imadevname ima-evm-utils
@@ -646,6 +646,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Oct 10 2017 Troy Dawson <tdawson@redhat.com> - 4.14.0-0.rc2.6
+- Cleanup spec file conditionals
+
 * Tue Oct 03 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-0.rc2.5
 - Add build conditionals for zstd and lmdb support
 - Enable zstd support
