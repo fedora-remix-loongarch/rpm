@@ -30,8 +30,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.14.0
-%global snapver rc2
-%global rel 6
+#global snapver rc2
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -646,6 +646,9 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 12 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-1
+- Rebase to rpm 4.14.0 final (http://rpm.org/wiki/Releases/4.14.0)
+
 * Tue Oct 10 2017 Troy Dawson <tdawson@redhat.com> - 4.14.0-0.rc2.6
 - Cleanup spec file conditionals
 
