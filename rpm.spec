@@ -31,7 +31,7 @@
 
 %global rpmver 4.14.0
 #global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -66,6 +66,7 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
+Patch100: 0001-Don-t-assume-per-user-groups-in-test-suite.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -495,8 +496,7 @@ rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
 
 %if %{with check}
 %check
-make check
-[ "$(ls -A tests/rpmtests.dir)" ] && cat tests/rpmtests.log
+make check || cat tests/rpmtests.log
 %endif
 
 %post libs -p /sbin/ldconfig
@@ -646,6 +646,10 @@ make check
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 12 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-2
+- Dump out test-suite log in case of failures again
+- Don't assume per-user groups in test-suite
+
 * Thu Oct 12 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-1
 - Rebase to rpm 4.14.0 final (http://rpm.org/wiki/Releases/4.14.0)
 
