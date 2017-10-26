@@ -31,7 +31,7 @@
 
 %global rpmver 4.14.0
 #global snapver rc2
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -173,7 +173,7 @@ Requires: %{name} = %{version}-%{release}
 # A manual require is needed, see #505596
 Requires: libcap%{_isa} >= 2.16
 # Drag in SELinux support at least for transition phase
-%if %{with plugins}
+%if %{with plugins} && 0%{?fedora} >= 28
 Requires: rpm-plugin-selinux%{_isa} = %{version}-%{release}
 %endif
 # Remove temporary compat-librpm3 package from F23
@@ -646,6 +646,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 26 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-3
+- Move selinux plugin dependency to selinux-policy in Fedora >= 28 (#1493267)
+
 * Thu Oct 12 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-2
 - Dump out test-suite log in case of failures again
 - Don't assume per-user groups in test-suite
