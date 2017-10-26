@@ -17,7 +17,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.0.1
+%global rpmver 4.13.0.2
 #global snapver rc2
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(v=%{version}; echo ${v%.*}.x)}
@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}7%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -52,9 +52,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.0-python-rpmsign.patch
-Patch101: rpm-4.13.0-unknown-sigtags.patch
-Patch102: rpm-4.13.0-testsuite-nss.patch
 
 Patch133: rpm-4.13.x-pythondistdeps.patch
 Patch134: rpm-4.13.x-pythondistdeps-Makefile.patch
@@ -67,7 +64,6 @@ Patch140: rpm-4.13.x-brp-python-bytecompile-Python3-only.patch
 # Upstream PR: https://github.com/rpm-software-management/rpm/pull/154
 # rhbz#1421776
 Patch141: rpm-4.13.x-pythondistdeps.py-fix-processing-wheels.patch
-Patch142: rpm-4.13.x-fix-refcount-for-spec_type.patch
 # https://github.com/rpm-software-management/rpm/commit/124ed29259b05fdf574d5e3e145bc1201b24ae4d
 Patch143: rpm-4.13.x-RPMCALLBACK_ELEM_PROGRESS-available-header.patch
 
@@ -577,6 +573,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 26 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.2-1
+- Update to 4.13.0.2 ((http://rpm.org/wiki/Releases/4.13.0.2)
+
 * Wed Aug 23 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.13.0.1-7
 - backport patch to have headers available in RPMCALLBACK_ELEM_PROGRESS
 
