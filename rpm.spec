@@ -52,9 +52,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: rpm-4.13.0-python-rpmsign.patch
-Patch101: rpm-4.13.0-unknown-sigtags.patch
-Patch102: rpm-4.13.0-testsuite-nss.patch
 Patch103: rpm-4.13.x-writable-tmp-dir.patch
 
 Patch133: rpm-4.13.x-pythondistdeps.patch
