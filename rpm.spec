@@ -17,7 +17,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.0.1
+%global rpmver 4.13.0.2
 #global snapver rc2
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(v=%{version}; echo ${v%.*}.x)}
@@ -29,7 +29,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}2%{?dist}
+Release: %{?snapver:0.%{snapver}.}1%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -564,6 +564,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Nov 02 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.2-1
+- Update to rpm 4.13.02 (http://rpm.org/wiki/Releases/4.13.0.2)
+
 * Wed Aug 16 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.1-2
 - Really ignore unknown tags in the signature header (#1480492)
 - Fix rpmsign python module import failing (#1462671)
