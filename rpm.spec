@@ -19,19 +19,11 @@
 # build with lmdb support?
 %bcond_with lmdb
 
-# which python subpackages to build (default: all)
-# so it can be built in different modules with different subpackages
-%bcond_without python2
-%bcond_without python3
-# Note that the rpm package with Patch908 applied has to be in
-# the buildroot before platform_python enabled build happens.
-%bcond_without platform_python
-
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.14.0
 #global snapver rc2
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -72,14 +64,6 @@ Patch100: 0001-Don-t-assume-per-user-groups-in-test-suite.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.13.90-ldflags.patch
-
-# Use platform-python for bytecompilation in /usr/lib*/platform-python
-Patch908: platform-python-bytecompile.patch
-
-# Those patches are currently not part of any built RPM, however, to be
-# consistent with python-rpm-generators, we are adding it anyway.
-Patch909: platform-python-abi.patch
-Patch910: platform-python-distdeps.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
@@ -240,7 +224,6 @@ Requires: rpm-build-libs%{_isa} = %{version}-%{release}
 %description sign
 This package contains support for digitally signing RPM packages.
 
-%if %{with python2}
 %package -n python2-%{name}
 Summary: Python 2 bindings for apps which will manipulate RPM packages
 Group: Development/Libraries
@@ -257,9 +240,7 @@ supplied by RPM Package Manager libraries.
 
 This package should be installed if you want to develop Python 2
 programs that will manipulate RPM packages and databases.
-%endif # with python2
 
-%if %{with python3}
 %package -n python3-%{name}
 Summary: Python 3 bindings for apps which will manipulate RPM packages
 Group: Development/Libraries
@@ -268,6 +249,7 @@ BuildRequires: python3-devel
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Provides: %{name}-python3 = %{version}-%{release}
 Obsoletes: %{name}-python3 < %{version}-%{release}
+Obsoletes: platform-pyhton-%{name} < %{version}-%{release}
 
 %description -n python3-%{name}
 The python3-rpm package contains a module that permits applications
@@ -276,20 +258,6 @@ supplied by RPM Package Manager libraries.
 
 This package should be installed if you want to develop Python 3
 programs that will manipulate RPM packages and databases.
-%endif # with python3
-
-%if %{with platform_python}
-%package -n platform-python-%{name}
-Summary: Platform Python bindings for apps which will manipulate RPM packages
-Group: Development/Libraries
-BuildRequires: platform-python-devel
-Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
-%description -n platform-python-%{name}
-The platform-python-rpm package contains a module that permits applications
-written in the Python programming language to use the interface
-supplied by RPM Package Manager libraries.
-%endif # with platform_python
 
 %package apidocs
 Summary: API documentation for RPM libraries
@@ -405,30 +373,12 @@ done;
     --enable-python \
     --with-crypto=openssl
 
-
-%if %{with platform_python}
-# Copy the directory so python3 and platform_python do not share it,
-# as they may have the same version and the filenames could collide.
-# Do it before `make` to avoid having anything built in there.
-cp -a python platform_python
-%endif # with platform_python
-
 make %{?_smp_mflags}
 
 pushd python
-%if %{with python2}
 %{__python2} setup.py build
-%endif # with python2
-%if %{with python3}
 %{__python3} setup.py build
-%endif # with python3
 popd
-
-%if %{with platform_python}
-pushd platform_python
-%{__platform_python} setup.py build
-popd
-%endif # with platform_python
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -438,19 +388,9 @@ make DESTDIR="$RPM_BUILD_ROOT" install
 # We need to build with --enable-python for the self-test suite, but we
 # actually package the bindings built with setup.py (#531543#c26)
 pushd python
-%if %{with python2}
 %{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
-%endif # with python2
-%if %{with python3}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
-%endif # with python3
 popd
-
-%if %{with platform_python}
-pushd platform_python
-%{__platform_python} setup.py install --skip-build --root $RPM_BUILD_ROOT
-popd
-%endif # with platform_python
 
 
 # Save list of packages through cron
@@ -611,24 +551,13 @@ make check || cat tests/rpmtests.log
 %{_bindir}/rpmsign
 %{_mandir}/man8/rpmsign.8*
 
-%if %{with python2}
 %files -n python2-%{name}
 %{python2_sitearch}/%{name}/
 %{python2_sitearch}/%{name}-%{version}*.egg-info
-%endif # with python2
 
-
-%if %{with python3}
 %files -n python3-%{name}
 %{python3_sitearch}/%{name}/
 %{python3_sitearch}/%{name}-%{version}*.egg-info
-%endif # with python3
-
-%if %{with platform_python}
-%files -n platform-python-%{name}
-%{platform_python_sitearch}/%{name}/
-%{platform_python_sitearch}/%{name}-%{version}*.egg-info
-%endif # with platform_python
 
 %files devel
 %{_mandir}/man8/rpmgraph.8*
@@ -646,6 +575,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Nov 06 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.0-4
+- Remove platform-python bits
+
 * Thu Oct 26 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-3
 - Move selinux plugin dependency to selinux-policy in Fedora >= 28 (#1493267)
 
