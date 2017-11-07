@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.0
 #global snapver rc2
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -249,7 +249,7 @@ BuildRequires: python3-devel
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Provides: %{name}-python3 = %{version}-%{release}
 Obsoletes: %{name}-python3 < %{version}-%{release}
-Obsoletes: platform-pyhton-%{name} < %{version}-%{release}
+Obsoletes: platform-python-%{name} < %{version}-%{release}
 
 %description -n python3-%{name}
 The python3-rpm package contains a module that permits applications
@@ -575,6 +575,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.0-5
+- Fix typo in Obsoletes
+
 * Mon Nov 06 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.0-4
 - Remove platform-python bits
 
