@@ -21,9 +21,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.0
+%global rpmver 4.14.1
 #global snapver rc2
-%global rel 5
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -58,7 +58,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: 0001-Don-t-assume-per-user-groups-in-test-suite.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -575,6 +574,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jan 16 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-1
+- Rebase to rpm 4.14.1 (http://rpm.org/wiki/Releases/4.14.1)
+
 * Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.0-5
 - Fix typo in Obsoletes
 
