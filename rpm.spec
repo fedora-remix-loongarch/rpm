@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -428,7 +428,7 @@ done
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 
 # These live in perl-generators and python-rpm-generators now
-rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,python*}
+rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 # Axe unused cruft
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
@@ -536,6 +536,7 @@ make check || cat tests/rpmtests.log
 %{rpmhome}/sepdebugcrcfix
 %{rpmhome}/find-debuginfo.sh
 %{rpmhome}/find-lang.sh
+%{rpmhome}/python-macro-helper
 %{rpmhome}/*provides*
 %{rpmhome}/*requires*
 %{rpmhome}/*deps*
@@ -574,6 +575,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jan 18 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-2
+- Avoid nuking the new python-macro-helper along with dep generators (#1535692)
+
 * Tue Jan 16 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-1
 - Rebase to rpm 4.14.1 (http://rpm.org/wiki/Releases/4.14.1)
 
