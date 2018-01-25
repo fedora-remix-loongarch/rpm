@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -575,6 +575,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jan 25 2018 Florian Weimer <fweimer@redhat.com> - 4.14.1-3
+- Rebuild to work around gcc bug leading to librpm miscompilation (#1538648)
+
 * Thu Jan 18 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-2
 - Avoid nuking the new python-macro-helper along with dep generators (#1535692)
 
