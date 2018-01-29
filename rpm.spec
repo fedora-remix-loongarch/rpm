@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -59,6 +59,13 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # Skip automatic Python byte-compilation if *.py files are not present
 # Upstream pull request: https://github.com/rpm-software-management/rpm/pull/383
 Patch6: rpm-4.14.1-python-brp-bytecompile.patch
+
+# Downstream-only patch:
+# Add envvar that will be present during RPM build
+# - Part of a Fedora Change for F28:
+# - "Avoid /usr/bin/python in RPM build"
+# - https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
+Patch6: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
 
 # Patches already upstream:
 
@@ -578,6 +585,11 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jan 30 2018 Tomas Orsava <torsava@redhat.com> - 4.14.1-4
+- Add envvar that will be present during RPM build,
+  Part of a Fedora Change for F28: "Avoid /usr/bin/python in RPM build"
+  https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
+
 * Tue Jan 30 2018 Petr Viktorin <pviktori@redhat.com> - 4.14.1-4
 - Skip automatic Python byte-compilation if *.py files are not present
 
