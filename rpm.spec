@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -56,6 +56,9 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
+# Skip automatic Python byte-compilation if *.py files are not present
+# Upstream pull request: https://github.com/rpm-software-management/rpm/pull/383
+Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 
 # Patches already upstream:
 
@@ -575,6 +578,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jan 30 2018 Petr Viktorin <pviktori@redhat.com> - 4.14.1-4
+- Skip automatic Python byte-compilation if *.py files are not present
+
 * Thu Jan 25 2018 Florian Weimer <fweimer@redhat.com> - 4.14.1-3
 - Rebuild to work around gcc bug leading to librpm miscompilation (#1538648)
 
