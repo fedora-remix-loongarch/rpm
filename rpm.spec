@@ -65,7 +65,7 @@ Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 # - Part of a Fedora Change for F28:
 # - "Avoid /usr/bin/python in RPM build"
 # - https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
-Patch6: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
+Patch7: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
 
 # Patches already upstream:
 
