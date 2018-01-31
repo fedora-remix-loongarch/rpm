@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 5
+%global rel 6
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -443,6 +443,9 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 # Axe unused cruft
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
 
+# Avoid unnecessary dependency on /usr/bin/python
+chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
+
 %if %{with check}
 %check
 make check || cat tests/rpmtests.log
@@ -585,7 +588,11 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
-* Tue Jan 30 2018 Tomas Orsava <torsava@redhat.com> - 4.14.1-4
+* Wed Jan 31 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-6
+- Avoid unnecessary macro helper dependency on /usr/bin/python (#1538657)
+- Fix release of previous changelog entry
+
+* Tue Jan 30 2018 Tomas Orsava <torsava@redhat.com> - 4.14.1-5
 - Add envvar that will be present during RPM build,
   Part of a Fedora Change for F28: "Avoid /usr/bin/python in RPM build"
   https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
