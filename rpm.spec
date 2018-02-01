@@ -29,9 +29,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.0
+%global rpmver 4.14.1
 #global snapver rc2
-%global rel 2
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -66,7 +66,6 @@ Patch4: rpm-4.8.1-use-gpg2.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 
 # Patches already upstream:
-Patch100: 0001-Don-t-assume-per-user-groups-in-test-suite.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -489,10 +488,13 @@ done
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 
 # These live in perl-generators and python-rpm-generators now
-rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,python*}
+rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 # Axe unused cruft
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
+
+# Avoid unnecessary dependency on /usr/bin/python
+chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
 
 %if %{with check}
 %check
@@ -597,6 +599,7 @@ make check || cat tests/rpmtests.log
 %{rpmhome}/sepdebugcrcfix
 %{rpmhome}/find-debuginfo.sh
 %{rpmhome}/find-lang.sh
+%{rpmhome}/python-macro-helper
 %{rpmhome}/*provides*
 %{rpmhome}/*requires*
 %{rpmhome}/*deps*
@@ -646,6 +649,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Feb 1 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-1
+- Rebase to 4.14.1 (http://rpm.org/wiki/Releases/4.14.1)
+
 * Thu Oct 12 2017 Panu Matilainen <pmatilai@redhat.com> - 4.14.0-2
 - Dump out test-suite log in case of failures again
 - Don't assume per-user groups in test-suite
