@@ -35,7 +35,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -588,6 +588,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.1-6.1
+- Escape macros in %%changelog
+
 * Wed Jan 31 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-6
 - Avoid unnecessary macro helper dependency on /usr/bin/python (#1538657)
 - Fix release of previous changelog entry
@@ -848,7 +851,7 @@ make check || cat tests/rpmtests.log
 - Expand python subpackage obsoletion range (related: #1394125)
 
 * Mon Nov 07 2016 Panu Matilainen <pmatilai@redhat.com> - 4.13.0-3
-- Fix invalid memory access on %transfiletriggerpostun (#1284645)
+- Fix invalid memory access on %%transfiletriggerpostun (#1284645)
 
 * Fri Nov 04 2016 Thierry Vignaud <tvignaud@redhat.com> - 4.13.0-2
 - Fix package name references in python sub-packages to match reality
