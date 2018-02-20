@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 7
+%global rel 8
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -177,15 +177,23 @@ Obsoletes: compat-librpm3 < %{version}-%{release}
 This package contains the RPM shared libraries.
 
 %package build-libs
-Summary:  Libraries for building and signing RPM packages
+Summary:  Libraries for building RPM packages
+Group: Development/Libraries
+License: GPLv2+ and LGPLv2+ with exceptions
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description build-libs
+This package contains the RPM shared libraries for building packages.
+
+%package sign-libs
+Summary:  Libraries for signing RPM packages
 Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 Requires: %{_bindir}/gpg2
 
-%description build-libs
-This package contains the RPM shared libraries for building and signing
-packages.
+%description sign-libs
+This package contains the RPM shared libraries for signing packages.
 
 %package devel
 Summary:  Development files for manipulating RPM packages
@@ -194,6 +202,7 @@ License: GPLv2+ and LGPLv2+ with exceptions
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{_isa} = %{version}-%{release}
 Requires: %{name}-build-libs%{_isa} = %{version}-%{release}
+Requires: %{name}-sign-libs%{_isa} = %{version}-%{release}
 Requires: popt-devel%{_isa}
 
 %description devel
@@ -229,7 +238,7 @@ that are used to build packages using the RPM Package Manager.
 %package sign
 Summary: Package signing support
 Group: System Environment/Base
-Requires: rpm-build-libs%{_isa} = %{version}-%{release}
+Requires: rpm-sign-libs%{_isa} = %{version}-%{release}
 
 %description sign
 This package contains support for digitally signing RPM packages.
@@ -532,6 +541,8 @@ make check || cat tests/rpmtests.log
 
 %files build-libs
 %{_libdir}/librpmbuild.so.*
+
+%files sign-libs
 %{_libdir}/librpmsign.so.*
 
 %files build
@@ -589,6 +600,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Feb 20 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.1-8
+- Split rpm-build-libs to one more subpackage rpm-sign-libs
+
 * Mon Feb 19 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-7
 - Explicitly BuildRequire gcc and make
 
