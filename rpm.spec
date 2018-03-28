@@ -17,7 +17,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.13.0.2
+%global rpmver 4.13.1
 #global snapver rc2
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(v=%{version}; echo ${v%.*}.x)}
@@ -64,14 +64,9 @@ Patch140: rpm-4.13.x-brp-python-bytecompile-Python3-only.patch
 # Upstream PR: https://github.com/rpm-software-management/rpm/pull/154
 # rhbz#1421776
 Patch141: rpm-4.13.x-pythondistdeps.py-fix-processing-wheels.patch
-# https://github.com/rpm-software-management/rpm/commit/124ed29259b05fdf574d5e3e145bc1201b24ae4d
-Patch143: rpm-4.13.x-RPMCALLBACK_ELEM_PROGRESS-available-header.patch
 
 # Fedora-specific (python3) patch (RHBZ #1405483)
 Patch200: rpm-4.13.x-pythondistdeps-python3.patch
-
-# World writable empty (tmp) dirs in debuginfo packages (#641022)
-Patch280: rpm-4.13.x-writable-tmp-dir.patch
 
 # These are not yet upstream
 Patch302: rpm-4.7.1-geode-i686.patch
@@ -573,6 +568,9 @@ exit 0
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Mar 28 2018 Panu Matilainen <pmatilai@redhat.com> - 4.13.1-1
+- Update to 4.13.1 (http://rpm.org/wiki/Releases/4.13.1)
+
 * Thu Oct 26 2017 Panu Matilainen <pmatilai@redhat.com> - 4.13.0.2-1
 - Update to 4.13.0.2 ((http://rpm.org/wiki/Releases/4.13.0.2)
 
