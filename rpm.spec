@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 8
+%global rel 9
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -66,6 +66,11 @@ Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 # - "Avoid /usr/bin/python in RPM build"
 # - https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
 Patch7: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
+
+# find-debuginfo.sh: Handle application/x-pie-executable (file 5.33 output).
+# http://lists.rpm.org/pipermail/rpm-maint/2018-May/007976.html
+# https://bugzilla.redhat.com/show_bug.cgi?id=1581224
+Patch8: 4.14.1-find-debuginfo-pie.patch
 
 # Patches already upstream:
 
@@ -600,6 +605,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 22 2018 Mark Wielaard <mjw@fedoraproject.org> - 4.14.1-9
+- find-debuginfo.sh: Handle application/x-pie-executable (#1581224)
+
 * Tue Feb 20 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.1-8
 - Split rpm-build-libs to one more subpackage rpm-sign-libs
 
