@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 9
+%global rel 10
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -56,8 +56,10 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
-# Skip automatic Python byte-compilation if *.py files are not present
+# Skip automatic Python byte-compilation (outside of Python directories) if
+# *.py files are not present, and allow to disable it even if they are
 # Upstream pull request: https://github.com/rpm-software-management/rpm/pull/383
+#                        https://github.com/rpm-software-management/rpm/pull/434
 Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 
 # Downstream-only patch:
@@ -605,6 +607,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 28 2018 Miro Hrončok <mhroncok@redhat.com> - 4.14.1-10
+- Backport upstream solution to make brp-python-bytecompile automagic part opt-outable
+  https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation
+
 * Tue May 22 2018 Mark Wielaard <mjw@fedoraproject.org> - 4.14.1-9
 - find-debuginfo.sh: Handle application/x-pie-executable (#1581224)
 
