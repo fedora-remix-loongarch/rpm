@@ -1,0 +1,12 @@
+diff -up rpm-4.14.1/tests/local.at.python2 rpm-4.14.1/tests/local.at
+--- rpm-4.14.1/tests/local.at.python2	2018-06-29 11:11:42.716541572 +0300
++++ rpm-4.14.1/tests/local.at	2017-09-06 14:58:13.034317976 +0300
+@@ -17,7 +17,7 @@ def myprint(msg = ''):
+     sys.stdout.write('%s\n' % msg)
+ $1
+ EOF
+-python2 test.py
++python test.py
+ ]])
+ 
+ m4_define([RPMPY_CHECK],[

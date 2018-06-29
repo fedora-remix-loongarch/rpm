@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 11
+%global rel 12
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -73,6 +73,10 @@ Patch7: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
 # http://lists.rpm.org/pipermail/rpm-maint/2018-May/007976.html
 # https://bugzilla.redhat.com/show_bug.cgi?id=1581224
 Patch8: 4.14.1-find-debuginfo-pie.patch
+
+# More Python 3 fallout, invoke python2 explicitly to avoid deprecation
+# warnings breaking the test-suite
+Patch9: rpm-4.14.1-explicit-python2.patch
 
 # Patches already upstream:
 
@@ -605,6 +609,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 29 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-12
+- Invoke python2 explicitly from test-suite to unbreak build
+
 * Fri Jun 29 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-11
 - Remove direct ldconfig calls, use compat macros instead
 
