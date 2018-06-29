@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.1
 #global snapver rc2
-%global rel 10
+%global rel 11
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -35,7 +35,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -468,11 +468,9 @@ chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
 make check || cat tests/rpmtests.log
 %endif
 
-%post libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
-
-%post build-libs -p /sbin/ldconfig
-%postun build-libs -p /sbin/ldconfig
+# Fedora < 28 and EPEL-7 builds need these
+%ldconfig_scripts libs
+%ldconfig_scripts build-libs
 
 %files -f %{name}.lang
 %license COPYING
@@ -607,6 +605,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 29 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-11
+- Remove direct ldconfig calls, use compat macros instead
+
 * Fri Jun 15 2018 Miro Hrončok <mhroncok@redhat.com> - 4.14.1-10.1
 - Rebuilt for Python 3.7
 
