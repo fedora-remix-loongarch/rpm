@@ -35,7 +35,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -592,6 +592,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jul 02 2018 Miro Hrončok <mhroncok@redhat.com> - 4.14.2-0.rc1.1.1
+- Rebuilt for Python 3.7
+
 * Fri Jun 29 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-0.rc1.1
 - Update to rpm 4.14.2-rc1
 - Patching test-suite for python2 too painful, just sed it instead
