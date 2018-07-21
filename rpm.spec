@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 %global snapver rc1
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -35,7 +35,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.2
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
@@ -56,6 +56,8 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
+# https://github.com/rpm-software-management/rpm/pull/473
+Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
 
@@ -592,6 +594,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Sat Jul 21 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-0.rc1.2
+- Decompress DWARF compressed ELF sections
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.14.2-0.rc1.1.2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
