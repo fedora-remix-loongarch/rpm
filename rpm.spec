@@ -214,7 +214,10 @@ Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
-Requires: tar unzip gzip bzip2 cpio xz zstd
+Requires: tar unzip gzip bzip2 cpio xz
+%if %{with zstd}
+Requires: zstd
+%endif
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
 # Technically rpmbuild doesn't require any external configuration, but
