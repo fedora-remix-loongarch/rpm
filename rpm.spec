@@ -22,8 +22,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.14.2
-%global snapver rc1
-%global rel 2
+%global snapver rc2
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -597,6 +597,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Aug 08 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-0.rc2.1
+- Update to rpm 4.14.2-rc2
+
 * Sat Jul 21 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-0.rc1.2
 - Decompress DWARF compressed ELF sections
 
