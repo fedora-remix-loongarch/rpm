@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 %global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -508,6 +508,7 @@ make check || cat tests/rpmtests.log
 %{rpmhome}/rpm.supp
 %{rpmhome}/rpm2cpio.sh
 %{rpmhome}/tgpg
+%{rpmhome}/python-macro-helper
 
 %{rpmhome}/platform
 
@@ -558,7 +559,6 @@ make check || cat tests/rpmtests.log
 %{rpmhome}/sepdebugcrcfix
 %{rpmhome}/find-debuginfo.sh
 %{rpmhome}/find-lang.sh
-%{rpmhome}/python-macro-helper
 %{rpmhome}/*provides*
 %{rpmhome}/*requires*
 %{rpmhome}/*deps*
@@ -597,6 +597,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Aug 13 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-0.rc2.2
+- Move python-macro-helper to main package where the macros are (#1577860)
+
 * Wed Aug 08 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-0.rc2.1
 - Update to rpm 4.14.2-rc2
 
