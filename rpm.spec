@@ -22,8 +22,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.14.2
-%global snapver rc2
-%global rel 2
+#global snapver rc2
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -597,6 +597,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Aug 21 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-1
+- Update to rpm 4.14.2 final (http://rpm.org/wiki/Releases/4.14.2)
+
 * Mon Aug 13 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-0.rc2.2
 - Move python-macro-helper to main package where the macros are (#1577860)
 
