@@ -21,9 +21,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.1
+%global rpmver 4.14.2
 #global snapver rc2
-%global rel 9
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -56,9 +56,6 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
-# Skip automatic Python byte-compilation if *.py files are not present
-# Upstream pull request: https://github.com/rpm-software-management/rpm/pull/383
-Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 
 # Downstream-only patch:
 # Add envvar that will be present during RPM build
@@ -66,11 +63,6 @@ Patch6: rpm-4.14.1-python-brp-bytecompile.patch
 # - "Avoid /usr/bin/python in RPM build"
 # - https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build
 Patch7: rpm-4.14.1-Add-envvar-that-will-be-present-during-RPM-build.patch
-
-# find-debuginfo.sh: Handle application/x-pie-executable (file 5.33 output).
-# http://lists.rpm.org/pipermail/rpm-maint/2018-May/007976.html
-# https://bugzilla.redhat.com/show_bug.cgi?id=1581224
-Patch8: 4.14.1-find-debuginfo-pie.patch
 
 # Patches already upstream:
 
@@ -356,6 +348,10 @@ nice/ionice priorities. Should not be used on systemd systems.
 ln -s db-%{bdbver} db
 %endif
 
+# Python madness: invoke python2 explicitly to avoid deprecation warnings
+# breaking the testsuite and thus the build. Easier than managing a patch...
+sed -ie 's:^python test:python2 test:g' tests/rpmtests tests/local.at
+
 %build
 %if %{without int_bdb}
 #CPPFLAGS=-I%{_includedir}/db%{bdbver} 
@@ -605,6 +601,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Aug 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-1
+- Update to rpm 4.14.2 (http://rpm.org/wiki/Releases/4.14.2)
+
 * Tue May 22 2018 Mark Wielaard <mjw@fedoraproject.org> - 4.14.1-9
 - find-debuginfo.sh: Handle application/x-pie-executable (#1581224)
 
