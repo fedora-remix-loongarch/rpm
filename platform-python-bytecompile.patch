@@ -12,7 +12,7 @@ diff --git a/scripts/brp-python-bytecompile b/scripts/brp-python-bytecompile
 index 894fa3459..92460b982 100644
 --- a/scripts/brp-python-bytecompile
 +++ b/scripts/brp-python-bytecompile
-@@ -57,9 +57,15 @@ EOF
+@@ -58,9 +58,15 @@ EOF
  # and below /usr/lib/python3.1/, we're targeting /usr/bin/python3.1
  
  shopt -s nullglob
@@ -30,8 +30,12 @@ index 894fa3459..92460b982 100644
  	real_libdir=${python_libdir/$RPM_BUILD_ROOT/}
  	echo "Bytecompiling .py files below $python_libdir using $python_binary"
  
-@@ -88,14 +94,14 @@ if [ ! -x "$default_python" ]; then
- fi
+@@ -94,17 +100,17 @@ fi
+ 
+ # Figure out if there are files to be bytecompiled with the default_python at all
+ # this prevents unnecessary default_python invocation
+-find "$RPM_BUILD_ROOT" -type f -name "*.py" | grep -Ev "/bin/|/sbin/|/usr/lib(64)?/python[0-9]\.[0-9]|/usr/share/doc" || exit 0
++find "$RPM_BUILD_ROOT" -type f -name "*.py" | grep -Ev "/bin/|/sbin/|/usr/lib(64)?/(platform-)?python[0-9]\.[0-9]|/usr/share/doc" || exit 0
  
  # Generate normal (.pyc) byte-compiled files.
 -python_bytecompile "" $default_python "/bin/|/sbin/|/usr/lib(64)?/python[0-9]\.[0-9]|/usr/share/doc" "$RPM_BUILD_ROOT" "$depth" "/"

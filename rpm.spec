@@ -29,7 +29,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.1
+%global rpmver 4.14.2
 #global snapver rc2
 %global rel 1
 
@@ -148,7 +148,7 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 27 || 0%{?rhel} > 7
 %global imadevname ima-evm-utils-devel
 %else
 %global imadevname ima-evm-utils
@@ -649,6 +649,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Sep 6 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-1
+- Rebase to 4.14.2 (http://rpm.org/wiki/Releases/4.14.2)
+- ima-evm-utils packaging is now same as in newer Fedoras, update BR
+
 * Thu Feb 1 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.1-1
 - Rebase to 4.14.1 (http://rpm.org/wiki/Releases/4.14.1)
 
