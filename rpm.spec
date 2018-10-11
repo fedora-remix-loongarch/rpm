@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -136,12 +136,7 @@ BuildRequires: libubsan
 %endif
 
 %if %{with libimaevm}
-%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
-%global imadevname ima-evm-utils-devel
-%else
-%global imadevname ima-evm-utils
-%endif
-BuildRequires: %{imadevname} >= 1.0
+BuildRequires: ima-evm-utils-devel >= 1.0
 %endif
 
 %description
@@ -160,11 +155,9 @@ Requires: %{name} = %{version}-%{release}
 # A manual require is needed, see #505596
 Requires: libcap%{_isa} >= 2.16
 # Drag in SELinux support at least for transition phase
-%if %{with plugins} && 0%{?fedora} >= 28
+%if %{with plugins} && 0%{?fedora} < 28
 Requires: rpm-plugin-selinux%{_isa} = %{version}-%{release}
 %endif
-# Remove temporary compat-librpm3 package from F23
-Obsoletes: compat-librpm3 < %{version}-%{release}
 
 %description libs
 This package contains the RPM shared libraries.
@@ -598,6 +591,11 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-3
+- Eh, selinux plugin dependency condition was upside down (#1493267)
+- Drop no longer necessary condition over imaevm name
+- Drop no longer necessary obsolete on compat-librpm3
+
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-2
 - Fix ancient Python GIL locking bug (#1632488)
 - Use the appropriate macro for tmpfiles.d now that one exists
