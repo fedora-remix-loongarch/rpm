@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -416,15 +416,8 @@ echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/rpm.conf
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
 
-mkdir -p $RPM_BUILD_ROOT/var/lib/rpm
-for dbi in \
-    Basenames Conflictname Dirnames Group Installtid Name Obsoletename \
-    Packages Providename Requirename Triggername Sha1header Sigmd5 \
-    __db.001 __db.002 __db.003 __db.004 __db.005 __db.006 __db.007 \
-    __db.008 __db.009
-do
-    touch $RPM_BUILD_ROOT/var/lib/rpm/$dbi
-done
+# init an empty database for %ghost'ing
+./rpmdb --dbpath=$RPM_BUILD_ROOT/var/lib/rpm --initdb
 
 # plant links to relevant db utils as rpmdb_foo for documention compatibility
 %if %{without int_bdb}
@@ -464,7 +457,8 @@ make check || cat tests/rpmtests.log
 %dir %{_sysconfdir}/rpm
 
 %attr(0755, root, root) %dir /var/lib/rpm
-%attr(0644, root, root) %verify(not md5 size mtime) %ghost %config(missingok,noreplace) /var/lib/rpm/*
+%attr(0644, root, root) %ghost %config(missingok,noreplace) /var/lib/rpm/*
+%attr(0644, root, root) %ghost /var/lib/rpm/.*.lock
 
 %{_bindir}/rpm
 %{_bindir}/rpm2archive
@@ -589,6 +583,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-5
+- Own all rpmdb files and ensure the list remains up to date
+- Drop redundant verify exclusions on rpmdb ghosts
+
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-4
 - Erm, really use the macro for tmpfiles.d path
 - Erm, don't nuke buildroot at beginning of %%install
