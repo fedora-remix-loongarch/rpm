@@ -32,6 +32,9 @@
 %define bdbver 5.3.15
 %define dbprefix db
 
+# Build-dependency on systemd for the sake of one macro would be a bit much...
+%{!?_tmpfilesdir:%global _tmpfilesdir /usr/lib/tmpfiles.d}
+
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
@@ -586,6 +589,7 @@ make check || cat tests/rpmtests.log
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-5
 - Own all rpmdb files and ensure the list remains up to date
 - Drop redundant verify exclusions on rpmdb ghosts
+- Fix build when systemd is not installed (duh)
 
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-4
 - Erm, really use the macro for tmpfiles.d path
