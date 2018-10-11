@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -385,7 +385,7 @@ done;
     --enable-python \
     --with-crypto=openssl
 
-make %{?_smp_mflags}
+%make_build
 
 pushd python
 %{__python2} setup.py build
@@ -393,9 +393,7 @@ pushd python
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
-make DESTDIR="$RPM_BUILD_ROOT" install
+%make_install
 
 # We need to build with --enable-python for the self-test suite, but we
 # actually package the bindings built with setup.py (#531543#c26)
@@ -412,8 +410,8 @@ install -m 755 scripts/rpm.daily ${RPM_BUILD_ROOT}%{_sysconfdir}/cron.daily/rpm
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d
 install -m 644 scripts/rpm.log ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/rpm
 
-mkdir -p ${RPM_BUILD_ROOT}/usr/lib/tmpfiles.d
-echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}/usr/lib/tmpfiles.d/rpm.conf
+mkdir -p ${RPM_BUILD_ROOT}%{_tmpfilesdir}
+echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/rpm.conf
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
@@ -462,7 +460,7 @@ make check || cat tests/rpmtests.log
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
 
-/usr/lib/tmpfiles.d/rpm.conf
+%{_tmpfilesdir}/rpm.conf
 %dir %{_sysconfdir}/rpm
 
 %attr(0755, root, root) %dir /var/lib/rpm
@@ -591,6 +589,11 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-4
+- Erm, really use the macro for tmpfiles.d path
+- Erm, don't nuke buildroot at beginning of %%install
+- Use modern build/install helper macros
+
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-3
 - Eh, selinux plugin dependency condition was upside down (#1493267)
 - Drop no longer necessary condition over imaevm name
