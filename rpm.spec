@@ -23,14 +23,12 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 5
+%global rel 6
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
-%define bdbname libdb
 %define bdbver 5.3.15
-%define dbprefix db
 
 # Build-dependency on systemd for the sake of one macro would be a bit much...
 %{!?_tmpfilesdir:%global _tmpfilesdir /usr/lib/tmpfiles.d}
@@ -44,8 +42,6 @@ Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
-%else
-BuildRequires: libdb-devel
 %endif
 
 # Disable autoconf config.site processing (#962837)
@@ -77,13 +73,13 @@ License: GPLv2+
 Requires: coreutils
 %if %{without int_bdb}
 # db recovery tools, rpmdb_util symlinks
-Requires: %{_bindir}/%{dbprefix}_stat
+Requires: %{_bindir}/db_stat
 %endif
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
 
 %if %{without int_bdb}
-BuildRequires: %{bdbname}-devel
+BuildRequires: libdb-devel
 %endif
 
 %if %{with check}
@@ -154,9 +150,6 @@ Summary:  Libraries for manipulating RPM packages
 Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: %{name} = %{version}-%{release}
-# librpm uses cap_compare, introduced sometimes between libcap 2.10 and 2.16.
-# A manual require is needed, see #505596
-Requires: libcap%{_isa} >= 2.16
 # Drag in SELinux support at least for transition phase
 %if %{with plugins} && 0%{?fedora} < 28
 Requires: rpm-plugin-selinux%{_isa} = %{version}-%{release}
@@ -426,7 +419,7 @@ mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
 %if %{without int_bdb}
 for dbutil in dump load recover stat upgrade verify
 do
-    ln -s ../../bin/%{dbprefix}_${dbutil} $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_${dbutil}
+    ln -s ../../bin/db_${dbutil} $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_${dbutil}
 done
 %endif
 
@@ -586,6 +579,11 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-6
+- Drop duplicate BDB buildrequire
+- Drop nowadays unnecessary BDB macro foo
+- Drop nowadays unnecessary manual libcap dependency
+
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-5
 - Own all rpmdb files and ensure the list remains up to date
 - Drop redundant verify exclusions on rpmdb ghosts
