@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -60,6 +60,7 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+Patch101: 0001-Fix-ancient-python-GIL-locking-bug-on-callback-RhBug.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -597,6 +598,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-2
+- Fix ancient Python GIL locking bug (#1632488)
+- Use the appropriate macro for tmpfiles.d now that one exists
+
 * Tue Aug 21 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-1
 - Update to rpm 4.14.2 final (http://rpm.org/wiki/Releases/4.14.2)
 
