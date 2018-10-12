@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 6
+%global rel 7
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -339,6 +339,7 @@ ln -s db-%{bdbver} db
 # Python madness: invoke python2 explicitly to avoid deprecation warnings
 # breaking the testsuite and thus the build. Easier than managing a patch...
 sed -ie 's:^python test:python2 test:g' tests/rpmtests tests/local.at
+sed -ie 's:python -c:python2 -c:g' tests/atlocal.in
 
 %build
 %if %{without int_bdb}
@@ -438,7 +439,7 @@ chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
 
 %if %{with check}
 %check
-make check || cat tests/rpmtests.log
+make check || (cat tests/rpmtests.log; exit 1)
 %endif
 
 # Fedora < 28 and EPEL-7 builds need these
@@ -579,6 +580,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Oct 12 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-7
+- Actually fail build on test-suite failures again
+- Invoke python2 explicitly from test-suite to unbreak build, part II
+
 * Thu Oct 11 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-6
 - Drop duplicate BDB buildrequire
 - Drop nowadays unnecessary BDB macro foo
