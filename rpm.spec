@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 7
+%global rel 8
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -60,6 +60,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
 Patch101: 0001-Fix-ancient-python-GIL-locking-bug-on-callback-RhBug.patch
+Patch102: 0001-Resurrect-long-since-broken-Lua-library-path.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -482,6 +483,7 @@ make check || (cat tests/rpmtests.log; exit 1)
 %attr(0755, root, root) %dir %{rpmhome}
 %{rpmhome}/macros
 %{rpmhome}/macros.d
+%{rpmhome}/lua
 %{rpmhome}/rpmpopt*
 %{rpmhome}/rpmrc
 
@@ -580,6 +582,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Oct 16 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-8
+- Resurrect long since broken Lua library path
+
 * Fri Oct 12 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-7
 - Actually fail build on test-suite failures again
 - Invoke python2 explicitly from test-suite to unbreak build, part II

@@ -1,0 +1,118 @@
+From dd6c65044c41922193f520ace668e2c5e55f1004 Mon Sep 17 00:00:00 2001
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Tue, 16 Oct 2018 11:26:46 +0300
+Subject: [PATCH] Resurrect long since broken Lua library path
+
+LUA_PATH global variable is not consulted when loading libraries in
+Lua >= 5.1, package.path has replaced it. Rpm's Lua library path
+was always supposed to be /usr/lib/rpm/lua/ but this has been broken
+for the last ten years or so, oops. Make the directory a first-class
+citizen: create it on install, add a macro for it, make it actually
+work and ensure it stays that way by adding a test for it.
+---
+ Makefile.am       |  2 ++
+ macros.in         |  2 ++
+ rpmio/rpmlua.c    | 13 ++++++-------
+ tests/rpmmacro.at | 17 ++++++++++++++++-
+ 4 files changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index ff40ffbd1..813bdb834 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -249,6 +249,7 @@ install-data-local:
+ 			$(RPMCANONVENDOR) $(RPMCANONOS) $(RPMCANONGNU)
+ 	@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp
+ 	@$(MKDIR_P) $(DESTDIR)$(rpmconfigdir)/macros.d
++	@$(MKDIR_P) $(DESTDIR)$(rpmconfigdir)/lua
+ 
+ # XXX to appease distcheck we need to remove "stuff" here...
+ uninstall-local:
+@@ -257,6 +258,7 @@ uninstall-local:
+ 	@rm -rf $(DESTDIR)$(rpmconfigdir)/platform/
+ 	@rm -f $(DESTDIR)$(rpmconfigdir)/macros
+ 	@rm -rf $(DESTDIR)$(rpmconfigdir)/macros.d
++	@rm -rf $(DESTDIR)$(rpmconfigdir)/lua
+ 
+ MAINTAINERCLEANFILES = ChangeLog
+ 
+diff --git a/macros.in b/macros.in
+index 00f382da1..e0a1aea4e 100644
+--- a/macros.in
++++ b/macros.in
+@@ -149,6 +149,8 @@
+ %_rpmconfigdir		%{getconfdir}
+ #       The directory where rpm's macro files live
+ %_rpmmacrodir		%{_rpmconfigdir}/macros.d
++#	The directory where rpm's addon lua libraries live
++%_rpmluadir		%{_rpmconfigdir}/lua
+ 
+ #	The directory where sources/patches will be unpacked and built.
+ %_builddir		%{_topdir}/BUILD
+diff --git a/rpmio/rpmlua.c b/rpmio/rpmlua.c
+index 8a1fa73e4..e67d2fb52 100644
+--- a/rpmio/rpmlua.c
++++ b/rpmio/rpmlua.c
+@@ -124,13 +124,6 @@ rpmlua rpmluaNew()
+     }
+ #ifndef LUA_GLOBALSINDEX
+     lua_pushglobaltable(L);
+-#endif
+-    lua_pushliteral(L, "LUA_PATH");
+-    lua_pushfstring(L, "%s/%s", rpmConfigDir(), "/lua/?.lua");
+-#ifdef LUA_GLOBALSINDEX
+-    lua_rawset(L, LUA_GLOBALSINDEX);
+-#else
+-    lua_settable(L, -3);
+ #endif
+     lua_pushliteral(L, "print");
+     lua_pushcfunction(L, rpm_print);
+@@ -142,6 +135,12 @@ rpmlua rpmluaNew()
+ #ifndef LUA_GLOBALSINDEX
+     lua_pop(L, 1);
+ #endif
++
++    lua_getglobal(L, "package");
++    lua_pushfstring(L, "%s/%s", rpmConfigDir(), "/lua/?.lua");
++    lua_setfield(L, -2, "path");
++    lua_pop(L, 1);
++
+     rpmluaSetData(lua, "lua", lua);
+     if (stat(initlua, &st) != -1)
+ 	(void)rpmluaRunScriptFile(lua, initlua);
+diff --git a/tests/rpmmacro.at b/tests/rpmmacro.at
+index 88d2a0519..8875490db 100644
+--- a/tests/rpmmacro.at
++++ b/tests/rpmmacro.at
+@@ -303,6 +303,21 @@ runroot rpm \
+ )
+ AT_CLEANUP
+ 
++AT_SETUP([lua library path])
++AT_KEYWORDS([macros lua])
++AT_CHECK([
++AT_SKIP_IF([$LUA_DISABLED])
++f=$(rpm --eval "%{_rpmconfigdir}/lua/foo.lua")
++echo "bar = 'graak'" > ${f}
++runroot rpm \
++  --eval '%{lua:require "foo"; print(bar)}'
++rm -f ${f}
++],
++[0],
++[graak
++])
++AT_CLEANUP
++
+ AT_SETUP([%define + %undefine in nested levels 1])
+ AT_KEYWORDS([macros define undefine])
+ AT_CHECK([
+@@ -438,4 +453,4 @@ runroot rpm --macros "/data/macros.testfile" \
+ 
+ macro_2
+ ])
+-AT_CLEANUP
+\ No newline at end of file
++AT_CLEANUP
+-- 
+2.19.1
+
