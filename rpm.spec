@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2
 #global snapver rc2
-%global rel 8
+%global rel 9
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -61,6 +61,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # Patches already upstream:
 Patch101: 0001-Fix-ancient-python-GIL-locking-bug-on-callback-RhBug.patch
 Patch102: 0001-Resurrect-long-since-broken-Lua-library-path.patch
+Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -582,6 +583,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Oct 17 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-9
+- Push name/epoch/version/release macro before invoking depgens
+
 * Tue Oct 16 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-8
 - Resurrect long since broken Lua library path
 
