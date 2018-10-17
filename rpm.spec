@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -60,6 +60,7 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+Patch101: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -598,6 +599,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Oct 29 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-2
+- Push name/epoch/version/release macro before invoking depgens
+
 * Mon Oct 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-1
 - Update to rpm 4.14.2.1 (http://rpm.org/wiki/Releases/4.14.2.1)
 
