@@ -21,9 +21,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.2
+%global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 9
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -59,8 +59,6 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-Patch101: 0001-Fix-ancient-python-GIL-locking-bug-on-callback-RhBug.patch
-Patch102: 0001-Resurrect-long-since-broken-Lua-library-path.patch
 Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
 
 # These are not yet upstream
@@ -583,6 +581,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Oct 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-1
+- Rebase to rpm 4.14.2.1 (http://rpm.org/wiki/Releases/4.14.2.1)
+
 * Wed Oct 17 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2-9
 - Push name/epoch/version/release macro before invoking depgens
 
