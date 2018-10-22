@@ -21,7 +21,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.2
+%global rpmver 4.14.2.1
 #global snapver rc2
 %global rel 1
 
@@ -501,6 +501,7 @@ make check || cat tests/rpmtests.log
 %lang(sk) %{_mandir}/sk/man[18]/*.[18]*
 
 %attr(0755, root, root) %dir %{rpmhome}
+%{rpmhome}/lua
 %{rpmhome}/macros
 %{rpmhome}/macros.d
 %{rpmhome}/rpmpopt*
@@ -601,6 +602,9 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Oct 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-1
+- Update to rpm 4.14.2.1 (http://rpm.org/wiki/Releases/4.14.2.1)
+
 * Wed Aug 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2-1
 - Update to rpm 4.14.2 (http://rpm.org/wiki/Releases/4.14.2)
 
