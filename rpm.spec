@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -287,6 +287,7 @@ packages on a system.
 Summary: Rpm plugin for SELinux functionality
 Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
+Requires: selinux-policy-base
 
 %description plugin-selinux
 %{summary}
@@ -581,6 +582,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Oct 24 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-2
+- Selinux plugin requires a base policy to work (#1641631)
+
 * Mon Oct 22 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-1
 - Rebase to rpm 4.14.2.1 (http://rpm.org/wiki/Releases/4.14.2.1)
 
