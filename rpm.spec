@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -60,6 +60,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
 Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
+Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -582,6 +583,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Nov 19 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-3
+- Take prefix into account when compressing man pages etc for Flatpak builds
+
 * Wed Oct 24 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-2
 - Selinux plugin requires a base policy to work (#1641631)
 
