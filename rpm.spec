@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -61,6 +61,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # Patches already upstream:
 Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
 Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
+Patch105: rpm-4.14.2-RPMTAG_MODULARITYLABEL.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -583,6 +584,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Dec 19 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-4
+- Backport the new modularity label tag (#1650286)
+
 * Mon Nov 19 2018 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-3
 - Take prefix into account when compressing man pages etc for Flatpak builds
 
