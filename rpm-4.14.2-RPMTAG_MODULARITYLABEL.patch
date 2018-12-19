@@ -105,3 +105,14 @@ index 509277f2c..45d38698b 100644
 -- 
 2.17.2
 
+diff -up rpm-4.14.2.1/tests/rpmtests.zzz rpm-4.14.2.1/tests/rpmtests
+--- rpm-4.14.2.1/tests/rpmtests.zzz	2018-12-19 15:30:40.536065873 +0200
++++ rpm-4.14.2.1/tests/rpmtests	2018-12-19 15:29:38.368156769 +0200
+@@ -2682,6 +2682,7 @@ LONGARCHIVESIZE
+ LONGFILESIZES
+ LONGSIGSIZE
+ LONGSIZE
++MODULARITYLABEL
+ N
+ NAME
+ NEVR
