@@ -37,7 +37,6 @@ Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
 Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
-Group: System Environment/Base
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
@@ -149,7 +148,6 @@ the package like its version, a description, etc.
 
 %package libs
 Summary:  Libraries for manipulating RPM packages
-Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: %{name} = %{version}-%{release}
 # Drag in SELinux support at least for transition phase
@@ -162,7 +160,6 @@ This package contains the RPM shared libraries.
 
 %package build-libs
 Summary:  Libraries for building RPM packages
-Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
@@ -171,7 +168,6 @@ This package contains the RPM shared libraries for building packages.
 
 %package sign-libs
 Summary:  Libraries for signing RPM packages
-Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 Requires: %{_bindir}/gpg2
@@ -181,7 +177,6 @@ This package contains the RPM shared libraries for signing packages.
 
 %package devel
 Summary:  Development files for manipulating RPM packages
-Group: Development/Libraries
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{_isa} = %{version}-%{release}
@@ -202,7 +197,6 @@ will manipulate RPM packages and databases.
 
 %package build
 Summary: Scripts and executable programs used to build packages
-Group: Development/Tools
 Requires: rpm = %{version}-%{release}
 Requires: elfutils >= 0.128 binutils
 Requires: findutils sed grep gawk diffutils file patch >= 2.5
@@ -224,7 +218,6 @@ that are used to build packages using the RPM Package Manager.
 
 %package sign
 Summary: Package signing support
-Group: System Environment/Base
 Requires: rpm-sign-libs%{_isa} = %{version}-%{release}
 
 %description sign
@@ -232,7 +225,6 @@ This package contains support for digitally signing RPM packages.
 
 %package -n python2-%{name}
 Summary: Python 2 bindings for apps which will manipulate RPM packages
-Group: Development/Libraries
 BuildRequires: python2-devel
 %{?python_provide:%python_provide python2-%{name}}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
@@ -249,7 +241,6 @@ programs that will manipulate RPM packages and databases.
 
 %package -n python3-%{name}
 Summary: Python 3 bindings for apps which will manipulate RPM packages
-Group: Development/Libraries
 BuildRequires: python3-devel
 %{?python_provide:%python_provide python3-%{name}}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
@@ -267,7 +258,6 @@ programs that will manipulate RPM packages and databases.
 
 %package apidocs
 Summary: API documentation for RPM libraries
-Group: Documentation
 BuildArch: noarch
 
 %description apidocs
@@ -276,7 +266,6 @@ that will manipulate RPM packages and databases.
 
 %package cron
 Summary: Create daily logs of installed packages.
-Group: System Environment/Base
 BuildArch: noarch
 Requires: crontabs logrotate rpm = %{version}-%{release}
 
@@ -287,7 +276,6 @@ packages on a system.
 %if %{with plugins}
 %package plugin-selinux
 Summary: Rpm plugin for SELinux functionality
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 Requires: selinux-policy-base
 
@@ -296,7 +284,6 @@ Requires: selinux-policy-base
 
 %package plugin-syslog
 Summary: Rpm plugin for syslog functionality
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-syslog
@@ -304,7 +291,6 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %package plugin-systemd-inhibit
 Summary: Rpm plugin for systemd inhibit functionality
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-systemd-inhibit
@@ -313,7 +299,6 @@ transaction is running using the systemd-inhibit mechanism.
 
 %package plugin-ima
 Summary: Rpm plugin ima file signatures
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-ima
@@ -321,7 +306,6 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %package plugin-prioreset
 Summary: Rpm plugin for resetting scriptlet priorities for SysV init
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-prioreset
