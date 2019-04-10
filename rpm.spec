@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 5
+%global rel 6
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -36,7 +36,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
@@ -63,6 +63,12 @@ Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
 Patch105: rpm-4.14.2-RPMTAG_MODULARITYLABEL.patch
 Patch106: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
 Patch107: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
+
+# Python 3 string API sanity
+Patch150: 0001-In-Python-3-return-all-our-string-data-as-surrogate-.patch
+Patch151: 0001-Return-NULL-string-as-None-from-utf8FromString.patch
+# Temporary compat crutch, not upstream
+Patch152: 0001-Monkey-patch-.decode-method-to-our-strings-as-a-temp.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -570,6 +576,12 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Apr 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-6
+- Unbreak Python 3 API by returning string data as surrogate-escaped utf-8
+  string objects instead of bytes (#1693751)
+- As a temporary crutch,  monkey-patch a .decode() method to returned strings
+  to give users time to migrate from the long-standing broken behavior
+
 * Wed Apr 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-5
 - Generate minidebug for PIE executables on file >= 5.33 too
 - Backport find-debuginfo --g-libs option for glibc's benefit (#1661512)
