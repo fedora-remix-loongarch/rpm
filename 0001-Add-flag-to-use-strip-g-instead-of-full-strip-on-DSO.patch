@@ -1,0 +1,99 @@
+From 1da9e839bb573b9187403983f5a69853ab364306 Mon Sep 17 00:00:00 2001
+Message-Id: <1da9e839bb573b9187403983f5a69853ab364306.1554879119.git.pmatilai@redhat.com>
+From: Pavlina Moravcova Varekova <pmoravco@redhat.com>
+Date: Sun, 17 Mar 2019 06:47:26 +0100
+Subject: [PATCH] Add flag to use strip -g instead of full strip on DSOs
+ (RhBug:1663264)
+
+The find-debuginfo.sh flag -g had exactly this meaning. But from
+version rpm-4.13.0-alpha flag -g changes its behavior. It affects
+both libraries and executables.
+
+For some packages the original behavior was preferred. That is why
+the new find-debuginfo.sh flag --g-libs is created.
+
+Options -g and --g-libs are mutually exclusive.
+---
+ scripts/find-debuginfo.sh | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/find-debuginfo.sh b/scripts/find-debuginfo.sh
+index 6e3ba2ce0..c75d176ac 100755
+--- a/scripts/find-debuginfo.sh
++++ b/scripts/find-debuginfo.sh
+@@ -4,6 +4,7 @@
+ #
+ # Usage: find-debuginfo.sh [--strict-build-id] [-g] [-r] [-m] [-i] [-n]
+ #			   [--keep-section SECTION] [--remove-section SECTION]
++#			   [--g-libs]
+ #	 		   [-j N] [--jobs N]
+ #	 		   [-o debugfiles.list]
+ #	 		   [-S debugsourcefiles.list]
+@@ -16,6 +17,8 @@
+ #			   [builddir]
+ #
+ # The -g flag says to use strip -g instead of full strip on DSOs or EXEs.
++# The --g-libs flag says to use strip -g instead of full strip ONLY on DSOs.
++# Options -g and --g-libs are mutually exclusive.
+ # The -r flag says to use eu-strip --reloc-debug-sections.
+ # Use --keep-section SECTION or --remove-section SECTION to explicitly
+ # keep a (non-allocated) section in the main executable or explicitly
+@@ -68,6 +71,9 @@ lib_rpm_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ # With -g arg, pass it to strip on libraries or executables.
+ strip_g=false
+ 
++# With --g-libs arg, pass it to strip on libraries.
++strip_glibs=false
++
+ # with -r arg, pass --reloc-debug-sections to eu-strip.
+ strip_r=false
+ 
+@@ -135,6 +141,9 @@ while [ $# -gt 0 ]; do
+     unique_debug_src_base=$2
+     shift
+     ;;
++  --g-libs)
++    strip_glibs=true
++    ;;
+   -g)
+     strip_g=true
+     ;;
+@@ -204,6 +213,11 @@ if test -n "$build_id_seed" -a "$no_recompute_build_id" = "true"; then
+   exit 2
+ fi
+ 
++if ("$strip_g" = "true") && ("$strip_glibs" = "true"); then
++  echo >&2 "*** ERROR: -g  and --g-libs cannot be used together"
++  exit 2
++fi
++
+ i=0
+ while ((i < nout)); do
+   outs[$i]="$BUILDDIR/${outs[$i]}"
+@@ -237,6 +251,9 @@ strip_to_debug()
+   application/x-executable*) g=-g ;;
+   application/x-pie-executable*) g=-g ;;
+   esac
++  $strip_glibs && case "$(file -bi "$2")" in
++    application/x-sharedlib*) g=-g ;;
++  esac
+   eu-strip --remove-comment $r $g ${keep_remove_args} -f "$1" "$2" || exit
+   chmod 444 "$1" || exit
+ }
+@@ -409,8 +426,12 @@ do_file()
+   # libraries. Other executable ELF files (like kernel modules) don't need it.
+   if [ "$include_minidebug" = "true" -a "$strip_g" = "false" ]; then
+     skip_mini=true
++    if [ "$strip_glibs" = "false" ]; then
++      case "$(file -bi "$f")" in
++        application/x-sharedlib*) skip_mini=false ;;
++      esac
++    fi
+     case "$(file -bi "$f")" in
+-      application/x-sharedlib*) skip_mini=false ;;
+       application/x-executable*) skip_mini=false ;;
+       application/x-pie-executable*) skip_mini=false ;;
+     esac
+-- 
+2.20.1
+

@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -61,6 +61,8 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
 Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
 Patch105: rpm-4.14.2-RPMTAG_MODULARITYLABEL.patch
+Patch106: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
+Patch107: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -568,6 +570,10 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Apr 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-5
+- Generate minidebug for PIE executables on file >= 5.33 too
+- Backport find-debuginfo --g-libs option for glibc's benefit (#1661512)
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 4.14.2.1-4.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
