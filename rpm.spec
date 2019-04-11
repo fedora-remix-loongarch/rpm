@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 6
+%global rel 7
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -576,6 +576,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr 11 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-7
+- Fix excessive reference counting on faked string .decode()
+
 * Wed Apr 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-6
 - Unbreak Python 3 API by returning string data as surrogate-escaped utf-8
   string objects instead of bytes (#1693751)

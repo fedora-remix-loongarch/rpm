@@ -52,7 +52,7 @@ diff --git a/python/rpmsystem-py.h b/python/rpmsystem-py.h
 index 25938464a..803da0fc1 100644
 --- a/python/rpmsystem-py.h
 +++ b/python/rpmsystem-py.h
-@@ -19,12 +19,30 @@
+@@ -19,12 +19,29 @@
  #define PyInt_AsSsize_t PyLong_AsSsize_t
  #endif
  
@@ -76,7 +76,6 @@ index 25938464a..803da0fc1 100644
 +	    Py_DECREF(n);
 +	}
 +	if (fakedecode && o) {
-+	    Py_INCREF(fakedecode);
 +	    /* monkey-patch it into the string object as "decode" */
 +	    PyDict_SetItemString(Py_TYPE(o)->tp_dict, "decode", fakedecode);
 +	}
