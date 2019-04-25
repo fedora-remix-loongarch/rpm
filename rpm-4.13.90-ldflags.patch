@@ -5,7 +5,7 @@ diff -up rpm-4.9.1.1/macros.in.jx rpm-4.9.1.1/macros.in
    RPM_SOURCE_DIR=\"%{u2p:%{_sourcedir}}\"\
    RPM_BUILD_DIR=\"%{u2p:%{_builddir}}\"\
    RPM_OPT_FLAGS=\"%{optflags}\"\
-+  RPM_LD_FLAGS=\"%{?__global_ldflags}\"\
++  RPM_LD_FLAGS=\"%{?build_ldflags}\"\
    RPM_ARCH=\"%{_arch}\"\
    RPM_OS=\"%{_os}\"\
 -  export RPM_SOURCE_DIR RPM_BUILD_DIR RPM_OPT_FLAGS RPM_ARCH RPM_OS\

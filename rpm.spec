@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 7
+%global rel 8
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -343,7 +343,7 @@ sed -ie 's:python -c:python2 -c:g' tests/atlocal.in
 %endif
 CPPFLAGS="$CPPFLAGS -DLUA_COMPAT_APIINTCASTS"
 CFLAGS="$RPM_OPT_FLAGS %{?sanitizer_flags} -DLUA_COMPAT_APIINTCASTS"
-LDFLAGS="$LDFLAGS %{?__global_ldflags}"
+LDFLAGS="$LDFLAGS %{?build_ldflags}"
 export CPPFLAGS CFLAGS LDFLAGS
 
 autoreconf -i -f
@@ -576,6 +576,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr 25 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-8
+- Replace deprecated __global_ldflags uses with build_ldflags macro
+
 * Thu Apr 11 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-7
 - Fix excessive reference counting on faked string .decode()
 
