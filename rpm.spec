@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 8
+%global rel 9
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -76,7 +76,7 @@ Patch906: rpm-4.7.1-geode-i686.patch
 Patch907: rpm-4.13.90-ldflags.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
-# SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD 
+# SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
 License: GPLv2+
 
 Requires: coreutils
@@ -214,6 +214,8 @@ Requires: zstd
 %endif
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
+# https://fedoraproject.org/wiki/Changes/Minimal_GDB_in_buildroot
+Suggests: gdb-minimal
 # Technically rpmbuild doesn't require any external configuration, but
 # creating distro-compatible packages does. To make the common case
 # "just work" while allowing for alternatives, depend on a virtual
@@ -576,6 +578,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri May 03 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-9
+- Suggest gdb-minimal
+
 * Thu Apr 25 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-8
 - Replace deprecated __global_ldflags uses with build_ldflags macro
 
