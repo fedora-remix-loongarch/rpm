@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 9
+%global rel 10
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -63,6 +63,8 @@ Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
 Patch105: rpm-4.14.2-RPMTAG_MODULARITYLABEL.patch
 Patch106: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
 Patch107: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
+Patch108: 0001-Detect-kernel-modules-by-.modinfo-section-presence-f.patch
+Patch109: 0002-Support-build-id-generation-from-compressed-ELF-file.patch
 
 # Python 3 string API sanity
 Patch150: 0001-In-Python-3-return-all-our-string-data-as-surrogate-.patch
@@ -578,6 +580,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 21 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-10
+- Support build-id generation from compressed ELF files (#1650072)
+
 * Fri May 03 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-9
 - Suggest gdb-minimal
 
