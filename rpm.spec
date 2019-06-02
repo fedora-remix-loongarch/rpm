@@ -292,14 +292,14 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 Requires: selinux-policy-base
 
 %description plugin-selinux
-%{summary}
+%{summary}.
 
 %package plugin-syslog
 Summary: Rpm plugin for syslog functionality
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-syslog
-%{summary}
+%{summary}.
 
 %package plugin-systemd-inhibit
 Summary: Rpm plugin for systemd inhibit functionality
@@ -314,14 +314,14 @@ Summary: Rpm plugin ima file signatures
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-ima
-%{summary}
+%{summary}.
 
 %package plugin-prioreset
 Summary: Rpm plugin for resetting scriptlet priorities for SysV init
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-prioreset
-%{summary}
+%{summary}.
 
 Useful on legacy SysV init systems if you run rpm transactions with
 nice/ionice priorities. Should not be used on systemd systems.
