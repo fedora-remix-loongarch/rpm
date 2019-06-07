@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 10
+%global rel 11
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -384,8 +384,8 @@ done;
 %make_build
 
 pushd python
-%{__python2} setup.py build
-%{__python3} setup.py build
+%py2_build
+%py3_build
 popd
 
 %install
@@ -394,8 +394,8 @@ popd
 # We need to build with --enable-python for the self-test suite, but we
 # actually package the bindings built with setup.py (#531543#c26)
 pushd python
-%{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%py2_install
+%py3_install
 popd
 
 
@@ -580,6 +580,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 07 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-11
+- Use py2/3 macros for building and installing the bindings
+
 * Tue May 21 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-10
 - Support build-id generation from compressed ELF files (#1650072)
 
