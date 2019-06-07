@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 11
+%global rel 12
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -45,13 +45,8 @@ Source1: db-%{bdbver}.tar.gz
 
 # Disable autoconf config.site processing (#962837)
 Patch1: rpm-4.11.x-siteconfig.patch
-# Fedora specspo is setup differently than what rpm expects, considering
-# this as Fedora-specific patch for now
-Patch2: rpm-4.13.0-fedora-specspo.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
 Patch3: rpm-4.9.90-no-man-dirs.patch
-# gnupg2 comes installed by default, avoid need to drag in gnupg too
-Patch4: rpm-4.8.1-use-gpg2.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
@@ -65,6 +60,7 @@ Patch106: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
 Patch107: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
 Patch108: 0001-Detect-kernel-modules-by-.modinfo-section-presence-f.patch
 Patch109: 0002-Support-build-id-generation-from-compressed-ELF-file.patch
+Patch110: 0001-Use-a-pre-determined-buildhost-in-test-suite-to-avoi.patch
 
 # Python 3 string API sanity
 Patch150: 0001-In-Python-3-return-all-our-string-data-as-surrogate-.patch
@@ -580,6 +576,10 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 07 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-12
+- Use pre-determined buildhost in test-suite to avoid DNS usage
+- Drop obsolete specspo and gpg2 related patches
+
 * Fri Jun 07 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-11
 - Use py2/3 macros for building and installing the bindings
 
