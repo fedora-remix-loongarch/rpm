@@ -19,9 +19,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.2.1
-#global snapver rc2
-%global rel 14
+%global rpmver 4.14.90
+%global snapver git14653
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -42,7 +42,7 @@ Source1: db-%{bdbver}.tar.gz
 %endif
 
 # Disable autoconf config.site processing (#962837)
-Patch1: rpm-4.11.x-siteconfig.patch
+Patch1: rpm-4.15.x-siteconfig.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
 Patch3: rpm-4.9.90-no-man-dirs.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
@@ -51,25 +51,11 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-Patch103: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
-Patch104: 0001-Take-_prefix-into-account-when-compressing-man-pages.patch
-Patch105: rpm-4.14.2-RPMTAG_MODULARITYLABEL.patch
-Patch106: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
-Patch107: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
-Patch108: 0001-Detect-kernel-modules-by-.modinfo-section-presence-f.patch
-Patch109: 0002-Support-build-id-generation-from-compressed-ELF-file.patch
-Patch110: 0001-Use-a-pre-determined-buildhost-in-test-suite-to-avoi.patch
-
-# Python 3 string API sanity
-Patch150: 0001-In-Python-3-return-all-our-string-data-as-surrogate-.patch
-Patch151: 0001-Return-NULL-string-as-None-from-utf8FromString.patch
-# Temporary compat crutch, not upstream
-Patch152: 0001-Monkey-patch-.decode-method-to-our-strings-as-a-temp.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
-Patch907: rpm-4.13.90-ldflags.patch
+Patch907: rpm-4.15.x-ldflags.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -93,7 +79,7 @@ BuildRequires: fakechroot gnupg2
 
 # XXX generally assumed to be installed but make it explicit as rpm
 # is a bit special...
-BuildRequires: redhat-rpm-config
+BuildRequires: redhat-rpm-config >= 94
 BuildRequires: gcc make
 BuildRequires: gawk
 BuildRequires: elfutils-devel >= 0.112
@@ -127,6 +113,7 @@ BuildRequires: automake libtool
 %if %{with plugins}
 BuildRequires: libselinux-devel
 BuildRequires: dbus-devel
+BuildRequires: audit-libs-devel
 %endif
 
 %if %{with libimaevm}
@@ -306,7 +293,16 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 Useful on legacy SysV init systems if you run rpm transactions with
 nice/ionice priorities. Should not be used on systemd systems.
 
-%endif # with plugins
+%package plugin-audit
+Summary: Rpm plugin for logging audit events on package operations
+Group: System Environment/Base
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-audit
+%{summary}
+
+# with plugins
+%endif
 
 %prep
 %autosetup -n %{name}-%{srcver} %{?with_int_bdb:-a 1} -p1
@@ -315,16 +311,8 @@ nice/ionice priorities. Should not be used on systemd systems.
 ln -s db-%{bdbver} db
 %endif
 
-# Python madness: invoke python2 explicitly to avoid deprecation warnings
-# breaking the testsuite and thus the build. Easier than managing a patch...
-sed -ie 's:^python test:python2 test:g' tests/rpmtests tests/local.at
-sed -ie 's:python -c:python2 -c:g' tests/atlocal.in
-
 %build
-CPPFLAGS="$CPPFLAGS -DLUA_COMPAT_APIINTCASTS"
-CFLAGS="$RPM_OPT_FLAGS -DLUA_COMPAT_APIINTCASTS"
-LDFLAGS="$LDFLAGS %{?build_ldflags}"
-export CPPFLAGS CFLAGS LDFLAGS
+%set_build_flags
 
 autoreconf -i -f
 
@@ -406,11 +394,6 @@ find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 # These live in perl-generators and python-rpm-generators now
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
-# Axe unused cruft
-rm -f $RPM_BUILD_ROOT/%{rpmhome}/{tcl.req,osgideps.pl}
-
-# Avoid unnecessary dependency on /usr/bin/python
-chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
 
 %if %{with check}
 %check
@@ -463,7 +446,6 @@ make check || (cat tests/rpmtests.log; exit 1)
 %{rpmhome}/rpm.supp
 %{rpmhome}/rpm2cpio.sh
 %{rpmhome}/tgpg
-%{rpmhome}/python-macro-helper
 
 %{rpmhome}/platform
 
@@ -490,7 +472,11 @@ make check || (cat tests/rpmtests.log; exit 1)
 
 %files plugin-prioreset
 %{_libdir}/rpm-plugins/prioreset.so
-%endif # with plugins
+
+%files plugin-audit
+%{_libdir}/rpm-plugins/audit.so
+# with plugins
+%endif
 
 %files build-libs
 %{_libdir}/librpmbuild.so.*
@@ -521,7 +507,6 @@ make check || (cat tests/rpmtests.log; exit 1)
 %{rpmhome}/*.req
 %{rpmhome}/config.*
 %{rpmhome}/mkinstalldirs
-%{rpmhome}/macros.p*
 %{rpmhome}/fileattrs/*
 
 %files sign
@@ -552,6 +537,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jun 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.1
+- Update to 4.15.0 alpha
+
 * Mon Jun 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-14
 - Drop support for sanitizer build, it never really worked anyway
 - Drop leftover build-dependency on binutils-devel
