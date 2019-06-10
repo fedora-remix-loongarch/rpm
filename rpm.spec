@@ -295,7 +295,6 @@ nice/ionice priorities. Should not be used on systemd systems.
 
 %package plugin-audit
 Summary: Rpm plugin for logging audit events on package operations
-Group: System Environment/Base
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-audit
