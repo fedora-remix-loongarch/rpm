@@ -401,7 +401,7 @@ echo > %{buildroot}%{_bindir}/rpmbuild << EOF
 #!/bin/sh
 env MALLOC_CHECK_=3 /usr/bin/rpmbuild.real $@
 EOF
-chmod +x %{_bindir}/rpmbuild
+chmod +x %{buildroot}%{_bindir}/rpmbuild
 
 %if %{with check}
 %check
