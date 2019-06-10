@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -68,6 +68,8 @@ Requires: %{_bindir}/db_stat
 %endif
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
+
+BuildRequires: libasan
 
 %if %{without int_bdb}
 BuildRequires: libdb-devel
@@ -312,6 +314,7 @@ ln -s db-%{bdbver} db
 
 %build
 %set_build_flags
+export CFLAGS="$CFLAGS -fsanitize=address"
 
 autoreconf -i -f
 
