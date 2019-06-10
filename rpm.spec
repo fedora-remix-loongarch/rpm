@@ -3,7 +3,7 @@
 # just for giggles, option to build with internal Berkeley DB
 %bcond_with int_bdb
 # run internal testsuite?
-%bcond_without check
+%bcond_with check
 # build with plugins?
 %bcond_without plugins
 # build with libarchive? (needed for rpm2archive)
