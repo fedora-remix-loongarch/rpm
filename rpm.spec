@@ -495,6 +495,7 @@ make check || (cat tests/rpmtests.log; exit 0)
 
 %files build
 %{_bindir}/rpmbuild
+%{_bindir}/rpmbuild.real
 %{_bindir}/gendiff
 %{_bindir}/rpmspec
 
