@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 8
+%global rel 9
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -42,8 +42,7 @@ Source1: db-%{bdbver}.tar.gz
 %endif
 
 # Disable autoconf config.site processing (#962837)
-#Patch1: rpm-4.15.x-siteconfig.patch
-Patch1: 0001-python-Reference-proper-spec-py.c-filename.patch
+Patch1: rpm-4.15.x-siteconfig.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
 Patch3: rpm-4.9.90-no-man-dirs.patch
 # Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
