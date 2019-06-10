@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -68,8 +68,6 @@ Requires: %{_bindir}/db_stat
 %endif
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
-
-BuildRequires: libasan
 
 %if %{without int_bdb}
 BuildRequires: libdb-devel
@@ -312,9 +310,10 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 ln -s db-%{bdbver} db
 %endif
 
+find -type f -name '*.c' -exec sed -i -e '/MALLOC_CHECK_/d' {} \+
+
 %build
 %set_build_flags
-export CFLAGS="$CFLAGS -fsanitize=address"
 
 autoreconf -i -f
 
@@ -396,6 +395,13 @@ find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 # These live in perl-generators and python-rpm-generators now
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
+
+mv -f %{buildroot}%{_bindir}/rpmbuild{,.real}
+echo > %{buildroot}%{_bindir}/rpmbuild << EOF
+#!/bin/sh
+env MALLOC_CHECK_=3 /usr/bin/rpmbuild.real $@
+EOF
+chmod +x %{_bindir}/rpmbuild
 
 %if %{with check}
 %check
