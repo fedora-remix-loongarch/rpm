@@ -310,8 +310,6 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 ln -s db-%{bdbver} db
 %endif
 
-find -type f -name '*.c' -exec sed -i -e '/MALLOC_CHECK_/d' {} \+
-
 %build
 %set_build_flags
 
@@ -395,13 +393,6 @@ find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 # These live in perl-generators and python-rpm-generators now
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
-
-mv -f %{buildroot}%{_bindir}/rpmbuild{,.real}
-echo > %{buildroot}%{_bindir}/rpmbuild << EOF
-#!/bin/sh
-env MALLOC_CHECK_=3 /usr/bin/rpmbuild.real $@
-EOF
-chmod +x %{buildroot}%{_bindir}/rpmbuild
 
 %if %{with check}
 %check
@@ -495,7 +486,6 @@ make check || (cat tests/rpmtests.log; exit 0)
 
 %files build
 %{_bindir}/rpmbuild
-%{_bindir}/rpmbuild.real
 %{_bindir}/gendiff
 %{_bindir}/rpmspec
 
