@@ -298,7 +298,7 @@ Summary: Rpm plugin for logging audit events on package operations
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-audit
-%{summary}
+%{summary}.
 
 # with plugins
 %endif
