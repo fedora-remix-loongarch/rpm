@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 12
+%global rel 13
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -156,10 +156,6 @@ the package like its version, a description, etc.
 Summary:  Libraries for manipulating RPM packages
 License: GPLv2+ and LGPLv2+ with exceptions
 Requires: %{name} = %{version}-%{release}
-# Drag in SELinux support at least for transition phase
-%if %{with plugins} && 0%{?fedora} < 28
-Requires: rpm-plugin-selinux%{_isa} = %{version}-%{release}
-%endif
 
 %description libs
 This package contains the RPM shared libraries.
@@ -337,10 +333,6 @@ sed -ie 's:^python test:python2 test:g' tests/rpmtests tests/local.at
 sed -ie 's:python -c:python2 -c:g' tests/atlocal.in
 
 %build
-%if %{without int_bdb}
-#CPPFLAGS=-I%{_includedir}/db%{bdbver} 
-#LDFLAGS=-L%{_libdir}/db%{bdbver}
-%endif
 CPPFLAGS="$CPPFLAGS -DLUA_COMPAT_APIINTCASTS"
 CFLAGS="$RPM_OPT_FLAGS %{?sanitizer_flags} -DLUA_COMPAT_APIINTCASTS"
 LDFLAGS="$LDFLAGS %{?build_ldflags}"
@@ -436,10 +428,6 @@ chmod a-x $RPM_BUILD_ROOT/%{rpmhome}/python-macro-helper
 %check
 make check || (cat tests/rpmtests.log; exit 1)
 %endif
-
-# Fedora < 28 and EPEL-7 builds need these
-%ldconfig_scriptlets libs
-%ldconfig_scriptlets build-libs
 
 %files -f %{name}.lang
 %license COPYING
@@ -576,6 +564,10 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jun 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-13
+- Drop support for Fedora < 28 builds
+- Drop leftover BDB-related compiler flag foo
+
 * Fri Jun 07 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-12
 - Use pre-determined buildhost in test-suite to avoid DNS usage
 - Drop obsolete specspo and gpg2 related patches
