@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 9
+%global rel 10
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -49,6 +49,8 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+# https://github.com/rpm-software-management/rpm/issues/742
+Patch7: 0001-Revert-Run-binary-package-generation-in-parallel-thr.patch
 
 # Patches already upstream:
 
@@ -56,8 +58,6 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
-
-Patch999: test.diff
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -539,6 +539,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jun 11 00:08:50 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.90-0.git14653.10
+- Revert generation of binary packages in parallel
+
 * Mon Jun 10 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.1
 - Update to 4.15.0 alpha
 

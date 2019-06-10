@@ -1,0 +1,44 @@
+From cb9e874ba52d866a86164ae8675ab6f07a35845e Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <i.gnatenko.brain@gmail.com>
+Date: Tue, 11 Jun 2019 00:07:49 +0200
+Subject: [PATCH] Revert "Run binary package generation in parallel threads"
+
+https://github.com/rpm-software-management/rpm/issues/742
+
+This reverts commit 18c92e6fe76df334fed8d5f04b5f40b776daba8c.
+---
+ build/pack.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/build/pack.c b/build/pack.c
+index 447e3ec94..e8d4c220c 100644
+--- a/build/pack.c
++++ b/build/pack.c
+@@ -744,23 +744,12 @@ rpmRC packageBinaries(rpmSpec spec, const char *cookie, int cheating)
+     rpmRC rc = RPMRC_OK;
+     Package pkg;
+ 
+-    /* Run binary creation in parallel */
+-    #pragma omp parallel
+-    #pragma omp single
+     for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
+-	#pragma omp task
+-	{
+ 	pkg->rc = packageBinary(spec, pkg, cookie, cheating, &pkg->filename);
+-	rpmlog(RPMLOG_DEBUG,
+-		_("Finished binary package job, result %d, filename %s\n"),
+-		pkg->rc, pkg->filename);
+ 	if (pkg->rc) {
+-	    #pragma omp critical
+ 	    rc = pkg->rc;
+-	}
+-	} /* omp task */
+-	if (rc)
+ 	    break;
++	}
+     }
+ 
+     /* Now check the package set if enabled */
+-- 
+2.22.0.rc3
+
