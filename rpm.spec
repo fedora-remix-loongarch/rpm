@@ -52,6 +52,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # https://github.com/rpm-software-management/rpm/issues/742
 #Patch7: 0001-Revert-Run-binary-package-generation-in-parallel-thr.patch
 Patch7: 0001-Only-permit-one-thread-at-a-time-in-addFileToTag.patch
+Patch8: test.diff
 
 # Patches already upstream:
 
