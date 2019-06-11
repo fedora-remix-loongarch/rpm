@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 12
+%global rel 13
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -49,10 +49,10 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
-# https://github.com/rpm-software-management/rpm/issues/742
-#Patch7: 0001-Revert-Run-binary-package-generation-in-parallel-thr.patch
+# https://github.com/rpm-software-management/rpm/commit/526641ceeca12fbaa878401f8e65d17f240a9ae5
 Patch7: 0001-Only-permit-one-thread-at-a-time-in-addFileToTag.patch
-Patch8: test.diff
+# https://github.com/rpm-software-management/rpm/pull/745
+Patch8: 0001-build-Limit-copying-changelog-one-at-a-time.patch
 
 # Patches already upstream:
 
@@ -541,6 +541,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jun 11 14:59:16 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.90-0.git14653.13
+- Fix build of binary packages in parallel
+
 * Tue Jun 11 00:08:50 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.90-0.git14653.10
 - Revert generation of binary packages in parallel
 
