@@ -1,0 +1,43 @@
+From 526641ceeca12fbaa878401f8e65d17f240a9ae5 Mon Sep 17 00:00:00 2001
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Tue, 11 Jun 2019 10:50:01 +0300
+Subject: [PATCH] Only permit one thread at a time in addFileToTag()
+
+When creating packages in parallel, more than one thread can call
+this at once. As it's modifying global macro state to update file
+name and line number, things will get garbled if we permit more than
+one thread.
+
+While this is necessary for the above reason, and should fix #742,
+it shouldn't crash even without this so there's probably something
+else wrong too.
+
+Closes: #742
+---
+ build/pack.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/build/pack.c b/build/pack.c
+index 447e3ec94..ab72750be 100644
+--- a/build/pack.c
++++ b/build/pack.c
+@@ -113,6 +113,8 @@ static rpmRC addFileToTag(rpmSpec spec, const char * file,
+     if (file == NULL)
+ 	return RPMRC_OK;
+ 
++    #pragma omp critical
++    {
+     fn = rpmGetPath("%{_builddir}/%{?buildsubdir:%{buildsubdir}/}", file, NULL);
+ 
+     f = fopen(fn, "r");
+@@ -151,6 +153,7 @@ exit:
+     }
+     free(fn);
+     freeStringBuf(sb);
++    } /* omp critical */
+ 
+     return rc;
+ }
+-- 
+2.22.0
+

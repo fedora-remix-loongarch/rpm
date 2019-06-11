@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 10
+%global rel 11
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -50,7 +50,8 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # https://github.com/rpm-software-management/rpm/issues/742
-Patch7: 0001-Revert-Run-binary-package-generation-in-parallel-thr.patch
+#Patch7: 0001-Revert-Run-binary-package-generation-in-parallel-thr.patch
+Patch7: 0001-Only-permit-one-thread-at-a-time-in-addFileToTag.patch
 
 # Patches already upstream:
 
