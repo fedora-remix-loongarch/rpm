@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 13
+%global rel 14
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -55,6 +55,7 @@ Patch7: 0001-Only-permit-one-thread-at-a-time-in-addFileToTag.patch
 Patch8: 0001-build-Limit-copying-changelog-one-at-a-time.patch
 
 # Patches already upstream:
+Patch100: 0001-Don-t-fail-build-trying-to-kill-a-non-existent-proce.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -541,6 +542,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jun 13 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.14
+- Don't fail build trying to kill a non-existent process (#1720143)
+
 * Tue Jun 11 14:59:16 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.90-0.git14653.13
 - Fix build of binary packages in parallel
 
