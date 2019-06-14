@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 14
+%global rel 15
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -49,6 +49,8 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+# Temporarily re-enable buildarch macro in specs for python_provide macro use
+Patch7: rpm-4.14.90-enable-buildarch-macro.patch
 
 # Patches already upstream:
 # https://github.com/rpm-software-management/rpm/commit/526641ceeca12fbaa878401f8e65d17f240a9ae5
@@ -542,6 +544,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jun 14 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.15
+- Temporarily re-enable buildarch macro for python_provide macro use (#1720139)
+
 * Thu Jun 13 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.14
 - Don't fail build trying to kill a non-existent process (#1720143)
 
