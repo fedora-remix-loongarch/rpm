@@ -21,7 +21,7 @@
 
 %global rpmver 4.14.90
 %global snapver git14653
-%global rel 17
+%global rel 18
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -58,6 +58,7 @@ Patch101: 0001-build-Limit-copying-changelog-one-at-a-time.patch
 Patch102: 0001-Don-t-fail-build-trying-to-kill-a-non-existent-proce.patch
 # https://github.com/rpm-software-management/rpm/pull/759
 Patch103: 0001-Don-t-hog-thread-local-storage-it-s-a-scarce-resourc.patch
+Patch104: 0001-Fix-excessive-use-of-thread-local-storage-RhBug-1722.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -544,6 +545,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jun 20 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.18
+- Fix excessive TLS use, part II (#1722181)
+
 * Thu Jun 20 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.17
 - Fix excessive TLS use (#1722181)
 

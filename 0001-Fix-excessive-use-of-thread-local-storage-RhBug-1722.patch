@@ -1,0 +1,49 @@
+From b39bd1965ed2fdeadb427648ec7e911613c8398f Mon Sep 17 00:00:00 2001
+Message-Id: <b39bd1965ed2fdeadb427648ec7e911613c8398f.1561032722.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Thu, 20 Jun 2019 15:07:12 +0300
+Subject: [PATCH] Fix excessive use of thread local storage (RhBug:1722181),
+ part II
+
+This essentially reverts commit ff43d03d1f9686c9ffa9232a64e253783309feb5
+which made these all thread local. It might not be quite right, but then
+using TLS is not sensible either - threads have their own signal *mask*,
+but disposition is global, and most of what we do here is global anyway.
+In addition, the signal queue is only enabled in places where threads
+are not used (or would not be safe anyhow) so reverting for now seems
+the lesser evil.
+---
+ rpmio/rpmsq.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/rpmio/rpmsq.c b/rpmio/rpmsq.c
+index d157514e9..249a204b3 100644
+--- a/rpmio/rpmsq.c
++++ b/rpmio/rpmsq.c
+@@ -16,9 +16,9 @@
+ 
+ #include "debug.h"
+ 
+-static __thread int disableInterruptSafety;
+-static __thread sigset_t rpmsqCaught;
+-static __thread sigset_t rpmsqActive;
++static int disableInterruptSafety;
++static sigset_t rpmsqCaught;
++static sigset_t rpmsqActive;
+ 
+ typedef struct rpmsig_s * rpmsig;
+ 
+@@ -171,8 +171,8 @@ int rpmsqPoll(void)
+ 
+ int rpmsqBlock(int op)
+ {
+-    static __thread sigset_t oldMask;
+-    static __thread int blocked = 0;
++    static sigset_t oldMask;
++    static int blocked = 0;
+     sigset_t newMask;
+     int ret = 0;
+ 
+-- 
+2.21.0
+
