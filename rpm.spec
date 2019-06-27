@@ -19,9 +19,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.14.90
-%global snapver git14653
-%global rel 18
+%global rpmver 4.15.0
+%global snapver beta
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -51,14 +51,6 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-# https://github.com/rpm-software-management/rpm/commit/526641ceeca12fbaa878401f8e65d17f240a9ae5
-Patch100: 0001-Only-permit-one-thread-at-a-time-in-addFileToTag.patch
-# https://github.com/rpm-software-management/rpm/pull/745
-Patch101: 0001-build-Limit-copying-changelog-one-at-a-time.patch
-Patch102: 0001-Don-t-fail-build-trying-to-kill-a-non-existent-proce.patch
-# https://github.com/rpm-software-management/rpm/pull/759
-Patch103: 0001-Don-t-hog-thread-local-storage-it-s-a-scarce-resourc.patch
-Patch104: 0001-Fix-excessive-use-of-thread-local-storage-RhBug-1722.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -545,6 +537,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jun 27 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.1
+- Rebase to 4.15.0 beta
+
 * Thu Jun 20 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.90-0.git14653.18
 - Fix excessive TLS use, part II (#1722181)
 
