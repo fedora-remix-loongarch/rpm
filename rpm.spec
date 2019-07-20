@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 %global snapver beta
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -51,6 +51,8 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+# https://github.com/rpm-software-management/rpm/commit/4b15a9e48bd3d4bef96e8a8865044346be20d6dc
+Patch101: 0001-Do-not-set-RPMTAG_BUILDTIME-to-SOURCE_DATE_EPOCH-whe.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -537,6 +539,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Sat Jul 20 18:30:10 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.15.0-0.beta.2
+- Backport patch to not set RPMTAG_BUILDTIME to SOURCE_DATE_EPOCH
+
 * Thu Jun 27 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.1
 - Rebase to 4.15.0 beta
 
