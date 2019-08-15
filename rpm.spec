@@ -34,7 +34,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.2
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.3
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
@@ -539,6 +539,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Aug 15 2019 Miro Hrončok <mhroncok@redhat.com> - 4.15.0-0.beta.2.3
+- Rebuilt for Python 3.8
+
 * Wed Jul 31 2019 Miro Hrončok <mhroncok@redhat.com> - 4.15.0-0.beta.2.2
 - Rebuilt for libimaevm.so.1
 
