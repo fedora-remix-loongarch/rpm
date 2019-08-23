@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 %global snapver beta
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -57,8 +57,12 @@ Patch101: 0001-Do-not-set-RPMTAG_BUILDTIME-to-SOURCE_DATE_EPOCH-whe.patch
 Patch110: 0001-Support-running-rpmfcExec-without-any-piped-input-ou.patch
 Patch111: 0002-Restore-strict-order-of-build-scriptlet-stdout-stder.patch
 Patch112: 0003-Drop-the-no-longer-needed-rpmfcExec-output-duplicati.patch
+Patch113: 0001-Drop-_lto_cflags-macro-afterall.patch
 
 # These are not yet upstream
+Patch200: 0001-Fix-build-code-thread-cap-logic-for-unlimited-CPUs.patch
+Patch201: 0002-Cap-number-of-threads-on-32bit-platforms-add-a-tunab.patch
+
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
@@ -543,6 +547,10 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Aug 23 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.4
+- Cap number of threads on 32bit platforms (#1729382)
+- Drop %%_lto_cflags macro (reverted upstream)
+
 * Fri Aug 23 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.3
 - Restore strict order of build scriptlet stdout/stderr output
 

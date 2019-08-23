@@ -1,0 +1,50 @@
+From 7faf8eda1358f8a877b9b3d6e1197b814e80b50b Mon Sep 17 00:00:00 2001
+Message-Id: <7faf8eda1358f8a877b9b3d6e1197b814e80b50b.1566557361.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Tue, 13 Aug 2019 16:26:31 +0300
+Subject: [PATCH] Drop %_lto_cflags macro afterall
+
+This was only added in commit 2bb7b0cf066c97a9d92eb0bf59618896000cb29d,
+but turns out that this kind of usage is bad for build reproducability
+because the system-specific CPU count gets recorded RPMTAG_OPTFLAGS
+and the resulting binaries too (depending on gcc flags).
+In addition, gcc upstream has decided to make -flto default to
+autodetected parallelism. Since -flto can be overridden with
+by simply appending -fno-lto for the packages that need to disable it,
+there's no practical need for us to provide such a macro for disabling
+either.
+---
+ macros.in   | 2 +-
+ platform.in | 3 ---
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/macros.in b/macros.in
+index 633d5ca6e..b7da4ea2f 100644
+--- a/macros.in
++++ b/macros.in
+@@ -1025,7 +1025,7 @@ package or when debugging this package.\
+ %build_fflags %{optflags} %{?_fmoddir:-I%{_fmoddir}}
+ 
+ # Link editor flags.  This is usually called LDFLAGS in makefiles.
+-#%build_ldflags -Wl,-z,relro %{?_lto_cflags}
++#%build_ldflags -Wl,-z,relro
+ 
+ # Expands to shell code to seot the compiler/linker environment
+ # variables CFLAGS, CXXFLAGS, FFLAGS, FCFLAGS, LDFLAGS if they have
+diff --git a/platform.in b/platform.in
+index e1efc42b0..db6d2382f 100644
+--- a/platform.in
++++ b/platform.in
+@@ -59,9 +59,6 @@
+ 
+ %_smp_mflags -j%{_smp_build_ncpus}
+ 
+-# Enable LTO optimization with a maximal parallelism
+-%_lto_cflags -flto=%{_smp_build_ncpus}
+-
+ #==============================================================================
+ # ---- Build policy macros.
+ #
+-- 
+2.21.0
+
