@@ -1,5 +1,5 @@
-From 3ba0136000c986c692baab7b112aba163173d2d3 Mon Sep 17 00:00:00 2001
-Message-Id: <3ba0136000c986c692baab7b112aba163173d2d3.1566556488.git.pmatilai@redhat.com>
+From 4d16d81a1af3e43b8392e7c335f616c9c0c6e41b Mon Sep 17 00:00:00 2001
+Message-Id: <4d16d81a1af3e43b8392e7c335f616c9c0c6e41b.1566558648.git.pmatilai@redhat.com>
 From: Panu Matilainen <pmatilai@redhat.com>
 Date: Fri, 23 Aug 2019 11:09:40 +0300
 Subject: [PATCH 1/2] Fix build code thread cap logic for unlimited CPUs
@@ -12,7 +12,7 @@ limiting to 1.
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/build/parseSpec.c b/build/parseSpec.c
-index 055bdf012..61858aabd 100644
+index 055bdf012..737a1233c 100644
 --- a/build/parseSpec.c
 +++ b/build/parseSpec.c
 @@ -1036,9 +1036,8 @@ static rpmSpec parseSpec(const char *specFile, rpmSpecFlags flags,
@@ -22,7 +22,7 @@ index 055bdf012..61858aabd 100644
 -    if (ncpus <= 0)
 -	ncpus = 1;
 -    omp_set_num_threads(ncpus);
-+    if (ncpus > 0) {
++    if (ncpus > 0)
 +	omp_set_num_threads(ncpus);
  #endif
  
