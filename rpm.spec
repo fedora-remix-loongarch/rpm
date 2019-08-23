@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 %global snapver beta
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -34,7 +34,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.3
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with int_bdb}
@@ -53,6 +53,10 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # Patches already upstream:
 # https://github.com/rpm-software-management/rpm/commit/4b15a9e48bd3d4bef96e8a8865044346be20d6dc
 Patch101: 0001-Do-not-set-RPMTAG_BUILDTIME-to-SOURCE_DATE_EPOCH-whe.patch
+
+Patch110: 0001-Support-running-rpmfcExec-without-any-piped-input-ou.patch
+Patch111: 0002-Restore-strict-order-of-build-scriptlet-stdout-stder.patch
+Patch112: 0003-Drop-the-no-longer-needed-rpmfcExec-output-duplicati.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -539,6 +543,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Aug 23 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.3
+- Restore strict order of build scriptlet stdout/stderr output
+
 * Thu Aug 15 2019 Miro Hrončok <mhroncok@redhat.com> - 4.15.0-0.beta.2.3
 - Rebuilt for Python 3.8
 
