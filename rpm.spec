@@ -3,7 +3,7 @@
 # just for giggles, option to build with internal Berkeley DB
 %bcond_with int_bdb
 # run internal testsuite?
-%bcond_with check
+%bcond_without check
 # build with plugins?
 %bcond_without plugins
 # build with libarchive? (needed for rpm2archive)
@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 %global snapver beta
-%global rel 4
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -547,6 +547,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Aug 26 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.5
+- Re-enable test-suite, temporarily disabled during alpha troubleshooting
+
 * Fri Aug 23 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.4
 - Cap number of threads on 32bit platforms (#1729382)
 - Drop %%_lto_cflags macro (reverted upstream)
