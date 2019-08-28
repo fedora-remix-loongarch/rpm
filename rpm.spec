@@ -20,8 +20,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.15.0
-%global snapver beta
-%global rel 6
+%global snapver rc1
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -51,18 +51,8 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-# https://github.com/rpm-software-management/rpm/commit/4b15a9e48bd3d4bef96e8a8865044346be20d6dc
-Patch101: 0001-Do-not-set-RPMTAG_BUILDTIME-to-SOURCE_DATE_EPOCH-whe.patch
-
-Patch110: 0001-Support-running-rpmfcExec-without-any-piped-input-ou.patch
-Patch111: 0002-Restore-strict-order-of-build-scriptlet-stdout-stder.patch
-Patch112: 0003-Drop-the-no-longer-needed-rpmfcExec-output-duplicati.patch
-Patch113: 0001-Drop-_lto_cflags-macro-afterall.patch
 
 # These are not yet upstream
-Patch200: 0001-Fix-build-code-thread-cap-logic-for-unlimited-CPUs.patch
-Patch201: 0002-Cap-number-of-threads-on-32bit-platforms-add-a-tunab.patch
-
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
@@ -547,6 +537,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Aug 28 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.rc1.1
+- Update to 4.15.0-rc1
+
 * Tue Aug 27 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.beta.6
 - Fix some issues in the thread cap logic
 
