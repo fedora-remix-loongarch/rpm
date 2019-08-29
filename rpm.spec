@@ -23,7 +23,7 @@
 
 %global rpmver 4.14.2.1
 #global snapver rc2
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -61,6 +61,8 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
 Patch101: 0001-rpmfc-push-name-epoch-version-release-macro-before-i.patch
+Patch102: 0001-find-debuginfo.sh-Handle-position-independent-execut.patch
+Patch103: 0001-Add-flag-to-use-strip-g-instead-of-full-strip-on-DSO.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -599,6 +601,10 @@ make check || cat tests/rpmtests.log
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Aug 29 2019 Panu Matilainen <pmatilai@redhat.com> - 4.14.2.1-3
+- Fix minidebuginfo generation on PIE executables with file >= 5.33 (#1713866)
+- Backport find-debuginfo --g-libs option for glibc's benefit (#1661512)
+
 * Mon Oct 29 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.14.2.1-2
 - Push name/epoch/version/release macro before invoking depgens
 
