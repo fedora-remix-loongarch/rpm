@@ -20,7 +20,7 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.15.0
-%global snapver rc1
+#global snapver rc1
 %global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
@@ -537,6 +537,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Sep 26 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-1
+- Update to 4.15.0 final (https://rpm.org/wiki/Releases/4.15.0)
+
 * Wed Aug 28 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-0.rc1.1
 - Update to 4.15.0-rc1
 
