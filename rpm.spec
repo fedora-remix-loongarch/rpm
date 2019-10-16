@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -49,6 +49,9 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+# systemd-inhibit plugin: don't call dbus_shutdown, it causes problems
+# https://bugzilla.redhat.com/show_bug.cgi?id=1750575
+Patch7: 0001-Revert-Fully-shutdown-DBUS-on-systemd_inhibit-cleanu.patch
 
 # Patches already upstream:
 
@@ -537,6 +540,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Oct 15 2019 Adam Williamson <awilliam@redhat.com> - 4.15.0-2
+- Revert systemd inhibit plugin's calling of dbus_shutdown (#1750575)
+
 * Thu Sep 26 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-1
 - Update to 4.15.0 final (https://rpm.org/wiki/Releases/4.15.0)
 
