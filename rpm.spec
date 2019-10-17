@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -205,22 +205,6 @@ Requires: rpm-sign-libs%{_isa} = %{version}-%{release}
 %description sign
 This package contains support for digitally signing RPM packages.
 
-%package -n python2-%{name}
-Summary: Python 2 bindings for apps which will manipulate RPM packages
-BuildRequires: python2-devel
-%{?python_provide:%python_provide python2-%{name}}
-Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-Provides: %{name}-python = %{version}-%{release}
-Obsoletes: %{name}-python < %{version}-%{release}
-
-%description -n python2-%{name}
-The python2-rpm package contains a module that permits applications
-written in the Python programming language to use the interface
-supplied by RPM Package Manager libraries.
-
-This package should be installed if you want to develop Python 2
-programs that will manipulate RPM packages and databases.
-
 %package -n python3-%{name}
 Summary: Python 3 bindings for apps which will manipulate RPM packages
 BuildRequires: python3-devel
@@ -350,7 +334,6 @@ done;
 %make_build
 
 pushd python
-%py2_build
 %py3_build
 popd
 
@@ -360,7 +343,6 @@ popd
 # We need to build with --enable-python for the self-test suite, but we
 # actually package the bindings built with setup.py (#531543#c26)
 pushd python
-%py2_install
 %py3_install
 popd
 
@@ -516,10 +498,6 @@ make check || (cat tests/rpmtests.log; exit 0)
 %{_bindir}/rpmsign
 %{_mandir}/man8/rpmsign.8*
 
-%files -n python2-%{name}
-%{python2_sitearch}/%{name}/
-%{python2_sitearch}/%{name}-%{version}*.egg-info
-
 %files -n python3-%{name}
 %{python3_sitearch}/%{name}/
 %{python3_sitearch}/%{name}-%{version}*.egg-info
@@ -540,6 +518,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Oct 17 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-3
+- Drop python2 bindings for good (#1761211)
+
 * Tue Oct 15 2019 Adam Williamson <awilliam@redhat.com> - 4.15.0-2
 - Revert systemd inhibit plugin's calling of dbus_shutdown (#1750575)
 
