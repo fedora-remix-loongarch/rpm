@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -59,6 +59,8 @@ Patch7: 0001-Revert-Fully-shutdown-DBUS-on-systemd_inhibit-cleanu.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
+
+Patch910: 0001-Remove-problematic-sub-variants-of-armv8-and-related.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -518,6 +520,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Oct 18 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-4
+- Revert problematic sub-variants of armv8 (#1691430)
+
 * Thu Oct 17 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-3
 - Drop python2 bindings for good (#1761211)
 
