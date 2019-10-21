@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 3
+%global rel 5
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -61,6 +61,7 @@ Patch906: rpm-4.7.1-geode-i686.patch
 Patch907: rpm-4.15.x-ldflags.patch
 
 Patch910: 0001-Remove-problematic-sub-variants-of-armv8-and-related.patch
+Patch911: revert-arm64.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -542,6 +543,10 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Oct 21 2019 Stephen Gallagher <sgallagh@redhat.com> - 4.15.0-5
+- Revert aliasing arm64 to aarch64
+- Resolves: rhbz#1763831
+
 * Fri Oct 18 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.0-3
 - Revert problematic sub-variants of armv8 (#1691430)
 
