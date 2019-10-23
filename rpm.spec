@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 5
+%global rel 6
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -521,6 +521,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Oct 23 2019 Peter Robinson <pbrobinson@fedoraproject.org> 4.15.0-6
+- Revert armv8 detection improvements
+
 * Mon Oct 21 2019 Stephen Gallagher <sgallagh@redhat.com> - 4.15.0-5
 - Revert aliasing arm64 to aarch64
 - Resolves: rhbz#1763831
