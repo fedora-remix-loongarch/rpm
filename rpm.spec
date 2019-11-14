@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.0
 #global snapver rc1
-%global rel 6
+%global rel 7
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -62,6 +62,7 @@ Patch907: rpm-4.15.x-ldflags.patch
 
 Patch910: 0001-Remove-problematic-sub-variants-of-armv8-and-related.patch
 Patch911: revert-arm64.patch
+Patch912: 0001-Revert-Improve-ARM-detection.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -521,6 +522,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Nov 14 2019 Adam Williamson <awilliam@redhat.com> - 4.15.0-7
+- Really revert armv8 detection improvements (patch was not applied in -6)
+
 * Wed Oct 23 2019 Peter Robinson <pbrobinson@fedoraproject.org> 4.15.0-6
 - Revert armv8 detection improvements
 
