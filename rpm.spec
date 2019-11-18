@@ -19,9 +19,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.15.0
+%global rpmver 4.15.1
 #global snapver rc1
-%global rel 6
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -49,9 +49,6 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
-# systemd-inhibit plugin: don't call dbus_shutdown, it causes problems
-# https://bugzilla.redhat.com/show_bug.cgi?id=1750575
-Patch7: 0001-Revert-Fully-shutdown-DBUS-on-systemd_inhibit-cleanu.patch
 
 # Patches already upstream:
 
@@ -60,8 +57,6 @@ Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
 
-Patch910: 0001-Remove-problematic-sub-variants-of-armv8-and-related.patch
-Patch911: revert-arm64.patch
 Patch912: 0001-Revert-Improve-ARM-detection.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
@@ -544,6 +539,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Nov 18 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.1-1
+- Rebase to 4.15.1 (https://rpm.org/wiki/Releases/4.15.1)
+
 * Wed Oct 23 2019 Peter Robinson <pbrobinson@fedoraproject.org> 4.15.0-6
 - Revert armv8 detection improvements
 
