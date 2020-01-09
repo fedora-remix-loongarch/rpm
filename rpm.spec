@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.1
 #global snapver rc1
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -70,6 +70,7 @@ Requires: %{_bindir}/db_stat
 %endif
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
+Obsoletes: python2-rpm < %{version}-%{release}
 
 %if %{without int_bdb}
 BuildRequires: libdb-devel
@@ -517,6 +518,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Jan 9 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.1-2
+- Obsolete python2-rpm to fix upgrade path (#1775113)
+
 * Mon Nov 18 2019 Panu Matilainen <pmatilai@redhat.com> - 4.15.1-1
 - Rebase to 4.15.1 (https://rpm.org/wiki/Releases/4.15.1)
 
