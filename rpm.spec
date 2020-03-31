@@ -1,7 +1,5 @@
 # build against xz?
 %bcond_without xz
-# just for giggles, option to build with internal Berkeley DB
-%bcond_with int_bdb
 # run internal testsuite?
 %bcond_without check
 # build with plugins?
@@ -10,23 +8,31 @@
 %bcond_without libarchive
 # build with libimaevm.so
 %bcond_without libimaevm
-# build with new db format
-%bcond_with ndb
 # build with zstd support?
 %bcond_without zstd
-# build with lmdb support?
-%bcond_with lmdb
+# build with ndb backend?
+%bcond_without ndb
+# build with sqlite support?
+%bcond_without sqlite
+# build with bdb support?
+%bcond_without bdb
+# build with internal Berkeley DB?
+%bcond_with int_bdb
+# build with bdb_ro support?
+%bcond_without bdb_ro
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.15.1
-#global snapver rc1
-%global rel 2
+%global rpmver 4.15.90
+%global snapver git14971
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
+%if %{with bdb}
 %define bdbver 5.3.15
+%endif
 
 # Build-dependency on systemd for the sake of one macro would be a bit much...
 %{!?_tmpfilesdir:%global _tmpfilesdir /usr/lib/tmpfiles.d}
@@ -34,10 +40,10 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
-%if %{with int_bdb}
+%if %{with bdb} && %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %endif
 
@@ -51,6 +57,7 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+Patch100: 0001-Unset-SOURCE_DATE_EPOCH-for-the-test-suite.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -64,15 +71,11 @@ Patch912: 0001-Revert-Improve-ARM-detection.patch
 License: GPLv2+
 
 Requires: coreutils
-%if %{without int_bdb}
-# db recovery tools, rpmdb_util symlinks
-Requires: %{_bindir}/db_stat
-%endif
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
 Obsoletes: python2-rpm < %{version}-%{release}
 
-%if %{without int_bdb}
+%if %{with bdb} && %{without int_bdb}
 BuildRequires: libdb-devel
 %endif
 
@@ -107,8 +110,8 @@ BuildRequires: libarchive-devel
 %if %{with zstd}
 BuildRequires: libzstd-devel
 %endif
-%if %{with lmdb}
-BuildRequires: lmdb-devel
+%if %{with sqlite}
+BuildRequires: sqlite-devel
 %endif
 # Couple of patches change makefiles so, require for now...
 BuildRequires: automake libtool
@@ -293,7 +296,7 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %prep
 %autosetup -n %{name}-%{srcver} %{?with_int_bdb:-a 1} -p1
 
-%if %{with int_bdb}
+%if %{with bdb} && %{with int_bdb}
 ln -s db-%{bdbver} db
 %endif
 
@@ -318,16 +321,18 @@ done;
     --build=%{_target_platform} \
     --host=%{_target_platform} \
     --with-vendor=redhat \
+    %{?with_bdb: --enable-bdb} \
     %{!?with_int_bdb: --with-external-db} \
     %{!?with_plugins: --disable-plugins} \
     --with-lua \
     --with-selinux \
     --with-cap \
     --with-acl \
-    %{?with_ndb: --with-ndb} \
+    %{?with_ndb: --enable-ndb} \
     %{?with_libimaevm: --with-imaevm} \
     %{?with_zstd: --enable-zstd} \
-    %{?with_lmdb: --enable-lmdb} \
+    %{?with_sqlite: --enable-sqlite} \
+    %{?with_bdb_ro: --enable-bdb-ro} \
     --enable-python \
     --with-crypto=openssl
 
@@ -359,17 +364,13 @@ echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/rpm.conf
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
+mkdir -p $RPM_BUILD_ROOT/var/lib/rpm
 
-# init an empty database for %ghost'ing
-./rpmdb --dbpath=$RPM_BUILD_ROOT/var/lib/rpm --initdb
-
-# plant links to relevant db utils as rpmdb_foo for documention compatibility
-%if %{without int_bdb}
-for dbutil in dump load recover stat upgrade verify
-do
-    ln -s ../../bin/db_${dbutil} $RPM_BUILD_ROOT/%{rpmhome}/rpmdb_${dbutil}
+# init an empty database for %ghost'ing for all supported backends
+for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite} %{?with_bdb:bdb}; do
+    ./rpmdb --define "_db_backend ${be}" --dbpath=${PWD}/${be} --initdb
+    cp -vp ${be}/* $RPM_BUILD_ROOT/var/lib/rpm/
 done
-%endif
 
 %find_lang %{name}
 
@@ -381,8 +382,7 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 
 %if %{with check}
 %check
-# https://github.com/rpm-software-management/rpm/issues/741
-make check || (cat tests/rpmtests.log; exit 0)
+make check || (cat tests/rpmtests.log; exit 1)
 %endif
 
 %files -f %{name}.lang
@@ -518,6 +518,15 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Mar 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.1
+- Rebase to rpm 4.16 alpha (https://rpm.org/wiki/Releases/4.16.0)
+- Add bconds for and enable sqlite, ndb and bdb_ro database backends
+- Add bcond for disabling bdb backend
+- Drop lmdb bcond, the backend was removed upstream
+- Ensure all database backend files are owned
+- Fix external environment causing test-suite failures in spec build
+- Re-enable hard test-suite failures again
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.15.1-2.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
