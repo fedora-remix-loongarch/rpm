@@ -25,17 +25,17 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 1
+%global rel 2
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
 
 %if %{with bdb}
 %define bdbver 5.3.15
-%endif
 
 # Build-dependency on systemd for the sake of one macro would be a bit much...
 %{!?_tmpfilesdir:%global _tmpfilesdir /usr/lib/tmpfiles.d}
+%endif
 
 Summary: The RPM package management system
 Name: rpm
@@ -359,8 +359,10 @@ install -m 755 scripts/rpm.daily ${RPM_BUILD_ROOT}%{_sysconfdir}/cron.daily/rpm
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d
 install -m 644 scripts/rpm.log ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/rpm
 
+%if %{with bdb}
 mkdir -p ${RPM_BUILD_ROOT}%{_tmpfilesdir}
 echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/rpm.conf
+%endif
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
@@ -389,7 +391,10 @@ make check || (cat tests/rpmtests.log; exit 1)
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
 
+%if %{with bdb}
 %{_tmpfilesdir}/rpm.conf
+%endif
+
 %dir %{_sysconfdir}/rpm
 
 %attr(0755, root, root) %dir /var/lib/rpm
@@ -518,6 +523,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Mar 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.2
+- Move bdb specific systemd-tmpfiles cleanup crutch behind the bdb bcond
+
 * Tue Mar 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.1
 - Rebase to rpm 4.16 alpha (https://rpm.org/wiki/Releases/4.16.0)
 - Add bconds for and enable sqlite, ndb and bdb_ro database backends
