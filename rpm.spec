@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -371,7 +371,7 @@ mkdir -p $RPM_BUILD_ROOT/var/lib/rpm
 # init an empty database for %ghost'ing for all supported backends
 for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite} %{?with_bdb:bdb}; do
     ./rpmdb --define "_db_backend ${be}" --dbpath=${PWD}/${be} --initdb
-    cp -vp ${be}/* $RPM_BUILD_ROOT/var/lib/rpm/
+    cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
 done
 
 %find_lang %{name}
@@ -523,6 +523,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr 02 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.3
+- Fix db lock files not getting packaged
+
 * Tue Mar 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.2
 - Move bdb specific systemd-tmpfiles cleanup crutch behind the bdb bcond
 
