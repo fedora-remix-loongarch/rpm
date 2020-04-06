@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 3
+%global rel 4
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -58,6 +58,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
 Patch100: 0001-Unset-SOURCE_DATE_EPOCH-for-the-test-suite.patch
+Patch101: 0001-rpmfc-Do-not-prepend-buildroot-to-a-path-for-paramet.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -523,6 +524,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Apr 06 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.4
+- Fix invalid path passed to parametric macro generators
+
 * Thu Apr 02 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.3
 - Fix db lock files not getting packaged
 
