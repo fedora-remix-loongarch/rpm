@@ -59,7 +59,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # Patches already upstream:
 Patch100: 0001-Unset-SOURCE_DATE_EPOCH-for-the-test-suite.patch
 Patch101: 0001-rpmfc-Do-not-prepend-buildroot-to-a-path-for-paramet.patch
-Patch101: 0001-Fix-regression-causing-all-ELF-files-classified-as-O.patch
+Patch102: 0001-Fix-regression-causing-all-ELF-files-classified-as-O.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
