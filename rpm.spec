@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 6
+%global rel 7
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -46,6 +46,8 @@ Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %endif
+
+Source10: rpmdb-rebuild.service
 
 # Disable autoconf config.site processing (#962837)
 Patch1: rpm-4.15.x-siteconfig.patch
@@ -89,6 +91,7 @@ BuildRequires: fakechroot gnupg2
 # XXX generally assumed to be installed but make it explicit as rpm
 # is a bit special...
 BuildRequires: redhat-rpm-config >= 94
+BuildRequires: systemd-rpm-macros
 BuildRequires: gcc make
 BuildRequires: gawk
 BuildRequires: elfutils-devel >= 0.112
@@ -354,6 +357,8 @@ pushd python
 %py3_install
 popd
 
+mkdir -p $RPM_BUILD_ROOT%{_unitdir}
+install -m 644 %{SOURCE10} $RPM_BUILD_ROOT/%{_unitdir}
 
 # Save list of packages through cron
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/cron.daily
@@ -397,6 +402,8 @@ make check || (cat tests/rpmtests.log; exit 1)
 %if %{with bdb}
 %{_tmpfilesdir}/rpm.conf
 %endif
+
+%{_unitdir}/rpmdb-rebuild.service
 
 %dir %{_sysconfdir}/rpm
 
@@ -526,7 +533,10 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
-* Fri Apr 20 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.6
+* Wed Apr 22 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.7
+- Add rpmdb-rebuild systemd service
+
+* Fri Apr 17 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.6
 - Warn on undefined macros in buildtree setup macros (#1820349)
 
 * Thu Apr 09 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.5
