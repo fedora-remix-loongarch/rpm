@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 7
+%global rel 8
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -63,6 +63,7 @@ Patch100: 0001-Unset-SOURCE_DATE_EPOCH-for-the-test-suite.patch
 Patch101: 0001-rpmfc-Do-not-prepend-buildroot-to-a-path-for-paramet.patch
 Patch102: 0001-Fix-regression-causing-all-ELF-files-classified-as-O.patch
 Patch103: 0001-Warn-on-undefined-components-in-buildtree-macros.patch
+Patch104: 0001-Don-t-look-into-source-package-provides-in-depsolvin.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -533,6 +534,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Apr 22 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.8
+- Fix regression(s) on build dependency resolution
+
 * Wed Apr 22 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.7
 - Add rpmdb-rebuild systemd service
 

@@ -1,0 +1,65 @@
+From a4afbb62c94c6e0dc18c1bf08336aeb4a91f82de Mon Sep 17 00:00:00 2001
+Message-Id: <a4afbb62c94c6e0dc18c1bf08336aeb4a91f82de.1587559252.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Wed, 22 Apr 2020 14:12:47 +0300
+Subject: [PATCH] Don't look into source package provides in depsolving
+
+Fixes regressions from commit 75ec16e660e784d7897b37cac1a2b9b135825f25:
+the newly added provides of to-be-built packages were being used for
+dependency resolution, such as spec satifying its own buildrequires,
+and matched against conflicts in installed packages.
+
+Source packages cannot obsolete anything or provide capabilities or files
+to transactions, don't add them to rpmal at all. Explicitly skip checks
+against source provides, similarly to what we already did with obsoletes.
+
+Fixes: #1189
+---
+ lib/depends.c | 8 ++++----
+ lib/rpmal.c   | 4 ++++
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/lib/depends.c b/lib/depends.c
+index 6acb21dc3..579451926 100644
+--- a/lib/depends.c
++++ b/lib/depends.c
+@@ -1040,6 +1040,10 @@ int rpmtsCheck(rpmts ts)
+ 	checkDS(ts, dcache, p, rpmteNEVRA(p), rpmteDS(p, RPMTAG_OBSOLETENAME),
+ 		tscolor);
+ 
++	/* Skip obsoletion and provides checks for source packages (ie build) */
++	if (rpmteIsSource(p))
++	    continue;
++
+ 	/* Check provides against conflicts in installed packages. */
+ 	while (rpmdsNext(provides) >= 0) {
+ 	    checkInstDeps(ts, dcache, p, RPMTAG_CONFLICTNAME, NULL, provides, 0);
+@@ -1047,10 +1051,6 @@ int rpmtsCheck(rpmts ts)
+ 		checkInstDeps(ts, dcache, p, RPMTAG_REQUIRENAME, NULL, provides, 1);
+ 	}
+ 
+-	/* Skip obsoletion checks for source packages (ie build) */
+-	if (rpmteIsSource(p))
+-	    continue;
+-
+ 	/* Check package name (not provides!) against installed obsoletes */
+ 	checkInstDeps(ts, dcache, p, RPMTAG_OBSOLETENAME, NULL, rpmteDS(p, RPMTAG_NAME), 0);
+ 
+diff --git a/lib/rpmal.c b/lib/rpmal.c
+index 3c8acd63a..8a47d025a 100644
+--- a/lib/rpmal.c
++++ b/lib/rpmal.c
+@@ -247,6 +247,10 @@ void rpmalAdd(rpmal al, rpmte p)
+     rpmalNum pkgNum;
+     availablePackage alp;
+ 
++    /* Source packages don't provide anything to depsolving */
++    if (rpmteIsSource(p))
++	return;
++
+     if (al->size == al->alloced) {
+ 	al->alloced += al->delta;
+ 	al->list = xrealloc(al->list, sizeof(*al->list) * al->alloced);
+-- 
+2.25.3
+
