@@ -25,10 +25,10 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 8
+%global rel 9
 
-%global srcver %{version}%{?snapver:-%{snapver}}
-%global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
+%global srcver %{rpmver}%{?snapver:-%{snapver}}
+%global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
 
 %if %{with bdb}
 %define bdbver 5.3.15
@@ -42,7 +42,7 @@ Name: rpm
 Version: %{rpmver}
 Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
-Source0: http://ftp.rpm.org/releases/%{srcdir}/%{name}-%{srcver}.tar.bz2
+Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
 Source1: db-%{bdbver}.tar.gz
 %endif
@@ -301,7 +301,7 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %endif
 
 %prep
-%autosetup -n %{name}-%{srcver} %{?with_int_bdb:-a 1} -p1
+%autosetup -n rpm-%{srcver} %{?with_int_bdb:-a 1} -p1
 
 %if %{with bdb} && %{with int_bdb}
 ln -s db-%{bdbver} db
@@ -383,7 +383,7 @@ for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite} %{?with_bdb:bdb}; do
     cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
 done
 
-%find_lang %{name}
+%find_lang rpm
 
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 
@@ -396,7 +396,7 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 make check || (cat tests/rpmtests.log; exit 1)
 %endif
 
-%files -f %{name}.lang
+%files -f rpm.lang
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
 
@@ -515,15 +515,15 @@ make check || (cat tests/rpmtests.log; exit 1)
 %{_mandir}/man8/rpmsign.8*
 
 %files -n python3-%{name}
-%{python3_sitearch}/%{name}/
-%{python3_sitearch}/%{name}-%{version}*.egg-info
+%{python3_sitearch}/rpm/
+%{python3_sitearch}/rpm-%{rpmver}*.egg-info
 
 %files devel
 %{_mandir}/man8/rpmgraph.8*
 %{_bindir}/rpmgraph
 %{_libdir}/librp*[a-z].so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_includedir}/%{name}/
+%{_libdir}/pkgconfig/rpm.pc
+%{_includedir}/rpm/
 
 %files cron
 %{_sysconfdir}/cron.daily/rpm
@@ -534,6 +534,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr 23 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.9
+- Fix questionable uses of %%{name} and %%{version} in the spec
+
 * Wed Apr 22 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.8
 - Fix regression(s) on build dependency resolution
 
