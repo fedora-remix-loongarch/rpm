@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 9
+%global rel 10
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -452,6 +452,13 @@ make check || (cat tests/rpmtests.log; exit 1)
 
 %dir %{rpmhome}/fileattrs
 
+%dnl Handle rpmdb rebuild service on erasure of old to avoid ordering issues
+%dnl https://pagure.io/fesco/issue/2382
+%triggerun -- rpm < 4.15.90-0.git14971.10
+if [ -x /usr/bin/systemctl ]; then
+    systemctl --no-reload preset rpmdb-rebuild ||:
+fi
+
 %files libs
 %{_libdir}/librpmio.so.*
 %{_libdir}/librpm.so.*
@@ -534,6 +541,9 @@ make check || (cat tests/rpmtests.log; exit 1)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 4 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.10
+- Handle rpmdb-rebuild service enablement for upgrades
+
 * Thu Apr 23 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.9
 - Fix questionable uses of %%{name} and %%{version} in the spec
 
