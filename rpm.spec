@@ -21,7 +21,7 @@
 
 %global rpmver 4.15.1
 #global snapver rc1
-%global rel 2
+%global rel 3
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -51,6 +51,7 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+Patch100: 0001-Silence-spurious-error-message-from-lsetfilecon-on-E.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -518,6 +519,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 04 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.1-3
+- Silence spurious lsetfileconf() errors on unsupported filesystem (#1722766)
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.15.1-2.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
