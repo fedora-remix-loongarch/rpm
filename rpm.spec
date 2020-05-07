@@ -452,8 +452,8 @@ make check || (cat tests/rpmtests.log; exit 1)
 
 %dir %{rpmhome}/fileattrs
 
-%dnl Handle rpmdb rebuild service on erasure of old to avoid ordering issues
-%dnl https://pagure.io/fesco/issue/2382
+# Handle rpmdb rebuild service on erasure of old to avoid ordering issues
+# https://pagure.io/fesco/issue/2382
 %triggerun -- rpm < 4.15.90-0.git14971.10
 if [ -x /usr/bin/systemctl ]; then
     systemctl --no-reload preset rpmdb-rebuild ||:
