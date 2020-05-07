@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 10
+%global rel 11
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -307,6 +307,11 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 ln -s db-%{bdbver} db
 %endif
 
+# switch to sqlite db by default, including during build-time tests
+%if %{with sqlite}
+sed -i -e "/_db_backend/ s/ bdb/ sqlite/g" macros.in
+%endif
+
 %build
 %set_build_flags
 
@@ -459,6 +464,11 @@ if [ -x /usr/bin/systemctl ]; then
     systemctl --no-reload preset rpmdb-rebuild ||:
 fi
 
+%posttrans
+if [ -f /var/lib/rpm/Packages ]; then
+    touch /var/lib/rpm/.rebuilddb
+fi
+
 %files libs
 %{_libdir}/librpmio.so.*
 %{_libdir}/librpm.so.*
@@ -541,6 +551,10 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Thu May 7 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.11
+- Flag BDB databases for rebuild on next reboot whenever rpm is updated
+- Switch default database to sqlite (#1818910)
+
 * Mon May 4 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.10
 - Handle rpmdb-rebuild service enablement for upgrades
 
