@@ -25,7 +25,7 @@
 
 %global rpmver 4.15.90
 %global snapver git14971
-%global rel 11
+%global rel 12
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -64,6 +64,7 @@ Patch101: 0001-rpmfc-Do-not-prepend-buildroot-to-a-path-for-paramet.patch
 Patch102: 0001-Fix-regression-causing-all-ELF-files-classified-as-O.patch
 Patch103: 0001-Warn-on-undefined-components-in-buildtree-macros.patch
 Patch104: 0001-Don-t-look-into-source-package-provides-in-depsolvin.patch
+Patch105: 0001-Fix-regression-causing-segfault-on-database-autodete.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -551,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Tue May 12 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.12
+- Fix segfault when trying to use unknown database backend
+
 * Thu May 7 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.11
 - Flag BDB databases for rebuild on next reboot whenever rpm is updated
 - Switch default database to sqlite (#1818910)

@@ -1,0 +1,29 @@
+From 853c48ba6468ce1a516621a2fa6d1fc51e4f7410 Mon Sep 17 00:00:00 2001
+Message-Id: <853c48ba6468ce1a516621a2fa6d1fc51e4f7410.1589277227.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Thu, 2 Apr 2020 09:14:36 +0300
+Subject: [PATCH] Fix regression causing segfault on database autodetection
+
+If configuration points to non-existent backend, tryBackend() will
+segfault on the first call. Duh. Regression introduced in commit
+3eb0eed3806b41efdf86f0433d0b5d7d6c953561.
+---
+ lib/backend/dbi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/backend/dbi.c b/lib/backend/dbi.c
+index b51fc7ba3..94823b14c 100644
+--- a/lib/backend/dbi.c
++++ b/lib/backend/dbi.c
+@@ -52,7 +52,7 @@ dbiIndex dbiNew(rpmdb rdb, rpmDbiTagVal rpmtag)
+ static int tryBackend(const char *dbhome, const struct rpmdbOps_s *be)
+ {
+     int rc = 0;
+-    if (be->path) {
++    if (be && be->path) {
+ 	char *path = rstrscat(NULL, dbhome, "/", be->path, NULL);
+ 	rc = (access(path, F_OK) == 0);
+ 	free(path);
+-- 
+2.26.2
+
