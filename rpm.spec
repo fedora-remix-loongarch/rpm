@@ -40,7 +40,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
@@ -552,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Fri May 22 2020 Miro Hrončok <mhroncok@redhat.com> - 4.15.90-0.git14971.12.1
+- Rebuilt for Python 3.9
+
 * Tue May 12 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.90-0.git14971.12
 - Fix segfault when trying to use unknown database backend
 
