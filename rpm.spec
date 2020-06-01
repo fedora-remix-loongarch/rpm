@@ -23,9 +23,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.15.90
-%global snapver git14971
-%global rel 12
+%global rpmver 4.16.0
+%global snapver beta1
+%global rel 1
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -59,12 +59,6 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-Patch100: 0001-Unset-SOURCE_DATE_EPOCH-for-the-test-suite.patch
-Patch101: 0001-rpmfc-Do-not-prepend-buildroot-to-a-path-for-paramet.patch
-Patch102: 0001-Fix-regression-causing-all-ELF-files-classified-as-O.patch
-Patch103: 0001-Warn-on-undefined-components-in-buildtree-macros.patch
-Patch104: 0001-Don-t-look-into-source-package-provides-in-depsolvin.patch
-Patch105: 0001-Fix-regression-causing-segfault-on-database-autodete.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -441,8 +435,10 @@ fi
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
+%{_mandir}/man8/rpm2archive.8*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpm-misc.8*
+%{_mandir}/man8/rpm-plugins.8*
 
 # XXX this places translated manuals to wrong package wrt eg rpmbuild
 %lang(fr) %{_mandir}/fr/man[18]/*.[18]*
@@ -478,9 +474,11 @@ fi
 
 %files plugin-syslog
 %{_libdir}/rpm-plugins/syslog.so
+%{_mandir}/man8/rpm-plugin-syslog.8*
 
 %files plugin-selinux
 %{_libdir}/rpm-plugins/selinux.so
+%{_mandir}/man8/rpm-plugin-selinux.8*
 
 %files plugin-systemd-inhibit
 %{_libdir}/rpm-plugins/systemd_inhibit.so
@@ -488,12 +486,15 @@ fi
 
 %files plugin-ima
 %{_libdir}/rpm-plugins/ima.so
+%{_mandir}/man8/rpm-plugin-ima.8*
 
 %files plugin-prioreset
 %{_libdir}/rpm-plugins/prioreset.so
+%{_mandir}/man8/rpm-plugin-prioreset.8*
 
 %files plugin-audit
 %{_libdir}/rpm-plugins/audit.so
+%{_mandir}/man8/rpm-plugin-audit.8*
 # with plugins
 %endif
 
@@ -524,7 +525,6 @@ fi
 %{rpmhome}/*deps*
 %{rpmhome}/*.prov
 %{rpmhome}/*.req
-%{rpmhome}/config.*
 %{rpmhome}/mkinstalldirs
 %{rpmhome}/fileattrs/*
 
@@ -552,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jun 1 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta1.1
+- Rebase to rpm 4.16.0-beta1
+
 * Fri May 22 2020 Miro Hrončok <mhroncok@redhat.com> - 4.15.90-0.git14971.12.1
 - Rebuilt for Python 3.9
 
