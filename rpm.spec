@@ -402,6 +402,18 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 make check || (cat tests/rpmtests.log; exit 1)
 %endif
 
+# Handle rpmdb rebuild service on erasure of old to avoid ordering issues
+# https://pagure.io/fesco/issue/2382
+%triggerun -- rpm < 4.15.90-0.git14971.10
+if [ -x /usr/bin/systemctl ]; then
+    systemctl --no-reload preset rpmdb-rebuild ||:
+fi
+
+%posttrans
+if [ -f /var/lib/rpm/Packages ]; then
+    touch /var/lib/rpm/.rebuilddb
+fi
+
 %files -f rpm.lang
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
@@ -457,18 +469,6 @@ make check || (cat tests/rpmtests.log; exit 1)
 %{rpmhome}/platform
 
 %dir %{rpmhome}/fileattrs
-
-# Handle rpmdb rebuild service on erasure of old to avoid ordering issues
-# https://pagure.io/fesco/issue/2382
-%triggerun -- rpm < 4.15.90-0.git14971.10
-if [ -x /usr/bin/systemctl ]; then
-    systemctl --no-reload preset rpmdb-rebuild ||:
-fi
-
-%posttrans
-if [ -f /var/lib/rpm/Packages ]; then
-    touch /var/lib/rpm/.rebuilddb
-fi
 
 %files libs
 %{_libdir}/librpmio.so.*
