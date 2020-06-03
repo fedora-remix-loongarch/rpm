@@ -25,7 +25,7 @@
 
 %global rpmver 4.16.0
 %global snapver beta1
-%global rel 1
+%global rel 2
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -59,6 +59,7 @@ Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
+Patch100: 0001-Don-t-auto-enable-IO-flushing-on-non-rotational-disk.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -552,6 +553,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 3 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta1.2
+- Don't auto-enable _flush_io on non-rotational media, it's too costly
+
 * Mon Jun 1 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta1.1
 - Rebase to rpm 4.16.0-beta1
 
