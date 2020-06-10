@@ -25,7 +25,7 @@
 
 %global rpmver 4.16.0
 %global snapver beta1
-%global rel 3
+%global rel 4
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -61,6 +61,7 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 # Patches already upstream:
 Patch100: 0001-Don-t-auto-enable-IO-flushing-on-non-rotational-disk.patch
 Patch101: 0001-metainfo.attr-Fix-execution-of-the-generator.patch
+Patch102: 0001-Fix-completely-broken-prefix-search-on-sqlite-backen.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -554,6 +555,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 10 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta1.4
+- Fix prefix search on sqlite backend (many file triggers not running)
+
 * Mon Jun 8 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta1.3
 - Unbreak metainfo() provide generation
 
