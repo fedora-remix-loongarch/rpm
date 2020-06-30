@@ -25,7 +25,7 @@
 
 %global rpmver 4.16.0
 %global snapver beta3
-%global rel 1
+%global rel 2
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -552,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Jun 29 2020 Tom Callaway <spot@fedoraproject.org> - 4.16.0-0.beta3.2
+- rebuild for lua 5.4
+
 * Wed Jun 24 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.beta3.1
 - Rebase to beta3
 
