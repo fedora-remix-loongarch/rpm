@@ -40,7 +40,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
@@ -552,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Sun Jul 26 2020 Peter Robinson <pbrobinson@fedoraproject.org> - 4.16.0-0.beta3.2.1
+- rebuild for ima-evm-utils 1.3
+
 * Mon Jun 29 2020 Tom Callaway <spot@fedoraproject.org> - 4.16.0-0.beta3.2
 - rebuild for lua 5.4
 
