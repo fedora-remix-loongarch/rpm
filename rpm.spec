@@ -24,8 +24,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.16.0
-%global snapver beta3
-%global rel 2
+%global snapver rc1
+%global rel 1
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -40,7 +40,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.3
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
@@ -393,7 +393,7 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 
 %if %{with check}
 %check
-make check || (cat tests/rpmtests.log; exit 1)
+make check TESTSUITEFLAGS=-j%{_smp_build_ncpus} || (cat tests/rpmtests.log; exit 1)
 %endif
 
 # Handle rpmdb rebuild service on erasure of old to avoid ordering issues
@@ -552,6 +552,10 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Aug 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.rc1.1
+- Rebase to 4.16.0-rc1
+- Run test-suite in parallel
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.16.0-0.beta3.2.3
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
