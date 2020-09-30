@@ -24,7 +24,7 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.16.0
-%global snapver rc1
+#global snapver rc1
 %global rel 1
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -64,8 +64,6 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
-
-Patch912: 0001-Revert-Improve-ARM-detection.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -552,6 +550,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Sep 30 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-1
+- Rebase to 4.16.0 final (https://rpm.org/wiki/Releases/4.16.0)
+
 * Mon Aug 31 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-0.rc1.1
 - Rebase to 4.16.0-rc1
 - Run test-suite in parallel
