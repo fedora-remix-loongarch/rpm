@@ -25,7 +25,7 @@
 
 %global rpmver 4.16.0
 #global snapver rc1
-%global rel 1
+%global rel 2
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -392,6 +392,8 @@ rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 %if %{with check}
 %check
 make check TESTSUITEFLAGS=-j%{_smp_build_ncpus} || (cat tests/rpmtests.log; exit 1)
+# rpm >= 4.16.0 testsuite leaves a read-only tree behind, clean it up
+make clean
 %endif
 
 # Handle rpmdb rebuild service on erasure of old to avoid ordering issues
@@ -550,6 +552,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Oct 05 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-2
+- Clean up after test-suite which leaves a read-only tree behind
+
 * Wed Sep 30 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-1
 - Rebase to 4.16.0 final (https://rpm.org/wiki/Releases/4.16.0)
 
