@@ -1,7 +1,7 @@
 # build against xz?
 %bcond_without xz
 # run internal testsuite?
-%bcond_without check
+%bcond_with check
 # build with plugins?
 %bcond_without plugins
 # build with libarchive? (needed for rpm2archive)
@@ -555,6 +555,7 @@ fi
 %changelog
 * Wed Oct 28 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-3
 - Issue deprecation warning when creating BDB databases (#1787311)
+- Temporarily disable test-suite due to massive fakechroot breakage
 
 * Mon Oct 05 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-2
 - Clean up after test-suite which leaves a read-only tree behind
