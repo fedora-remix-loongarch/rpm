@@ -25,7 +25,7 @@
 
 %global rpmver 4.16.0
 #global snapver rc1
-%global rel 2
+%global rel 3
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -57,6 +57,7 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+Patch7: 0001-Issue-deprecation-warning-when-creating-BDB-database.patch
 
 # Patches already upstream:
 
@@ -552,6 +553,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Oct 28 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-3
+- Issue deprecation warning when creating BDB databases (#1787311)
+
 * Mon Oct 05 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-2
 - Clean up after test-suite which leaves a read-only tree behind
 

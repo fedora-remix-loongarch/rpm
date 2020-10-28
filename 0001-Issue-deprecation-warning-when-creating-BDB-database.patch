@@ -1,0 +1,28 @@
+From 5a80033676f331de2b0979fe7be9557279b6bff3 Mon Sep 17 00:00:00 2001
+Message-Id: <5a80033676f331de2b0979fe7be9557279b6bff3.1603865959.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Wed, 28 Oct 2020 08:14:55 +0200
+Subject: [PATCH] Issue deprecation warning when creating BDB databases
+
+---
+ lib/backend/db3.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/backend/db3.c b/lib/backend/db3.c
+index 68cfa6fb2..cb31676e7 100644
+--- a/lib/backend/db3.c
++++ b/lib/backend/db3.c
+@@ -874,6 +874,10 @@ static int db3_dbiOpen(rpmdb rdb, rpmDbiTagVal rpmtag, dbiIndex * dbip, int flag
+ 		oflags &= ~DB_RDONLY;
+ 		dbtype = (rpmtag == RPMDBI_PACKAGES) ?  DB_HASH : DB_BTREE;
+ 		retry_open--;
++		if (rpmtag == RPMDBI_PACKAGES) {
++		    rpmlog(RPMLOG_WARNING,
++			    "using deprecated bdb database backend");
++		}
+ 	    } else {
+ 		retry_open = 0;
+ 	    }
+-- 
+2.28.0
+
