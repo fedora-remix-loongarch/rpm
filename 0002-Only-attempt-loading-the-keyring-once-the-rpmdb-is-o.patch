@@ -1,0 +1,42 @@
+From 3cb955b77f07c70ba01d765aa6377908847608f5 Mon Sep 17 00:00:00 2001
+Message-Id: <3cb955b77f07c70ba01d765aa6377908847608f5.1606726599.git.pmatilai@redhat.com>
+In-Reply-To: <fd054a40b2ba005571455d749de0423975e77651.1606726599.git.pmatilai@redhat.com>
+References: <fd054a40b2ba005571455d749de0423975e77651.1606726599.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Mon, 23 Nov 2020 13:46:14 +0200
+Subject: [PATCH 2/2] Only attempt loading the keyring once the rpmdb is open
+
+When we do lazy rpmdb open in rpmtsInitIterator(), we also do a lazy
+keyring open. Except that since the keyring typically lives in the rpmdb,
+we PROBABLY should try open the database first. One of those "WTF I've
+been smoking" moments, lol.
+
+Prevents an ugly if mostly harmless double error anything we can't open
+the database for one reason or another.
+---
+ lib/rpmts.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/rpmts.c b/lib/rpmts.c
+index 9fa9cb0e2..8c8ae420a 100644
+--- a/lib/rpmts.c
++++ b/lib/rpmts.c
+@@ -177,12 +177,12 @@ rpmdbMatchIterator rpmtsInitIterator(const rpmts ts, rpmDbiTagVal rpmtag,
+     if (ts == NULL)
+ 	return NULL;
+ 
+-    if (ts && ts->keyring == NULL)
+-	loadKeyring(ts);
+-
+     if (ts->rdb == NULL && rpmtsOpenDB(ts, ts->dbmode))
+ 	return NULL;
+ 
++    if (ts->keyring == NULL)
++	loadKeyring(ts);
++
+     /* Parse out "N(EVR)" tokens from a label key if present */
+     if (rpmtag == RPMDBI_LABEL && keyp != NULL && strchr(keyp, '(')) {
+ 	const char *se, *s = keyp;
+-- 
+2.28.0
+
