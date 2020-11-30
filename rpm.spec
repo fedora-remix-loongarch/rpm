@@ -31,7 +31,7 @@
 
 %global rpmver 4.16.0
 #global snapver rc1
-%global rel 4
+%global rel 5
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
