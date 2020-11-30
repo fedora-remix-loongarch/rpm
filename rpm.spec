@@ -1,7 +1,13 @@
+
+# run internal testsuite?
+# fakechroot is severely broken beyond fedora 33, disable...
+%if 0%{fedora} > 33
+%bcond_with check
+%else
+%bcond_without check
+
 # build against xz?
 %bcond_without xz
-# run internal testsuite?
-%bcond_with check
 # build with plugins?
 %bcond_without plugins
 # build with libarchive? (needed for rpm2archive)
@@ -555,6 +561,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Nov 30 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-5
+- Only disable test-suite where it's actually broken
+
 * Mon Nov 30 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-4
 - Fix BDB crashing on failed open attempts (#1902395, #1898299, #1900407)
 - Fix unnecessary double failure on lazy keyring open
