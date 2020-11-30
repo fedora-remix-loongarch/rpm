@@ -5,6 +5,7 @@
 %bcond_with check
 %else
 %bcond_without check
+%endif
 
 # build against xz?
 %bcond_without xz
