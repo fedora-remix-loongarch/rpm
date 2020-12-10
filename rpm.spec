@@ -30,9 +30,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.0
+%global rpmver 4.16.1
 #global snapver rc1
-%global rel 5
+%global rel 1
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -67,8 +67,6 @@ Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 Patch7: 0001-Issue-deprecation-warning-when-creating-BDB-database.patch
 
 # Patches already upstream:
-Patch100: 0001-Stop-on-first-failure-when-trying-to-open-a-database.patch
-Patch101: 0002-Only-attempt-loading-the-keyring-once-the-rpmdb-is-o.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -562,6 +560,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Dec 10 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1-1
+- Rebase to rpm 4.16.1 (http://rpm.org/wiki/Releases/4.16.1)
+
 * Mon Nov 30 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.0-5
 - Only disable test-suite where it's actually broken
 
