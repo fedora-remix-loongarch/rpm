@@ -30,7 +30,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.1
+%global rpmver 4.16.1.1
 #global snapver rc1
 %global rel 1
 
@@ -560,6 +560,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Dec 16 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.1-1
+- Rebase to rpm 4.16.1.1 (http://rpm.org/wiki/Releases/4.16.1.1)
+
 * Thu Dec 10 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1-1
 - Rebase to rpm 4.16.1 (http://rpm.org/wiki/Releases/4.16.1)
 
