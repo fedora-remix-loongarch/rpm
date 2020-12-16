@@ -30,9 +30,10 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.1.1
+%global rpmver 4.16.1.2
 #global snapver rc1
 %global rel 1
+%global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
@@ -475,8 +476,10 @@ fi
 %dir %{rpmhome}/fileattrs
 
 %files libs
-%{_libdir}/librpmio.so.*
-%{_libdir}/librpm.so.*
+%{_libdir}/librpmio.so.%{sover}
+%{_libdir}/librpm.so.%{sover}
+%{_libdir}/librpmio.so.%{sover}.*
+%{_libdir}/librpm.so.%{sover}.*
 %if %{with plugins}
 %dir %{_libdir}/rpm-plugins
 
@@ -507,10 +510,12 @@ fi
 %endif
 
 %files build-libs
-%{_libdir}/librpmbuild.so.*
+%{_libdir}/librpmbuild.so.%{sover}
+%{_libdir}/librpmbuild.so.%{sover}.*
 
 %files sign-libs
-%{_libdir}/librpmsign.so.*
+%{_libdir}/librpmsign.so.%{sover}
+%{_libdir}/librpmsign.so.%{sover}.*
 
 %files build
 %{_bindir}/rpmbuild
@@ -560,6 +565,10 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Dec 16 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.2-1
+- Rebase to rpm 4.16.1.2 (http://rpm.org/wiki/Releases/4.16.1.2)
+- Add a spec safeguard for accidental soname bumps
+
 * Wed Dec 16 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.1-1
 - Rebase to rpm 4.16.1.1 (http://rpm.org/wiki/Releases/4.16.1.1)
 
