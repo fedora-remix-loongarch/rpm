@@ -1,7 +1,7 @@
 
 # run internal testsuite?
 # fakechroot is severely broken beyond fedora 33, disable...
-%if 0%{fedora} > 33
+%if 0%{?fedora} > 33
 %bcond_with check
 %else
 %bcond_without check
@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.1.2
 #global snapver rc1
-%global rel 2
+%global rel 3
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -573,6 +573,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Jan 19 2021 Jeff Law <law@redhat.com> - 4.16.1.2-3
+- Fix typo in test for F33 or newer
+
 * Tue Jan 19 2021 Mark Wielaard <mjw@fedoraproject.org> - 4.16.1.2-2
 - Add debugedit DWARF5 support
 
