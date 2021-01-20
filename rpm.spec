@@ -1,7 +1,7 @@
 
 # run internal testsuite?
 # fakechroot is severely broken beyond fedora 33, disable...
-%if 0%{?fedora} > 33
+%if 0%{?fedora} > 33 || 0%{?rhel} > 8
 %bcond_with check
 %else
 %bcond_without check
