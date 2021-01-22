@@ -484,7 +484,7 @@ index be5fee85b..d6a0058e9 100644
 -      dir = (char *) debug_sections[DEBUG_STR].data + idx;
 +      debug_section *sec = &debug_sections[line_strp
 +					   ? DEBUG_LINE_STR : DEBUG_STR];
-+      if (sec->data == NULL || idx >= debug_sections[DEBUG_STR].size)
++      if (sec->data == NULL || idx >= sec->size)
 +	error (1, 0, "%s: Bad string pointer index %zd for comp_dir (%s)",
 +	       dso->filename, idx, sec->name);
 +      dir = (char *) sec->data + idx;

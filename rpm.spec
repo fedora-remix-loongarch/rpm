@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.1.2
 #global snapver rc1
-%global rel 3
+%global rel 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -75,6 +75,7 @@ Patch906: rpm-4.7.1-geode-i686.patch
 Patch907: rpm-4.15.x-ldflags.patch
 
 # Not yet (all) upstream, debugedit DWARF5
+# https://code.wildebeest.org/git/user/mjw/rpm/log/?h=gcc-dwarf5-4.16.1.2
 Patch911: 0001-NFC-debugedit-Protect-macro-arguments-by-parentheses.patch
 Patch912: 0002-NFC-debugedit-Move-code-from-edit_dwarf2-to-edit_inf.patch
 Patch913: 0003-debugedit-Fix-missing-relocation-of-.debug_types-sec.patch
@@ -573,6 +574,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Fri Jan 22 2021 Mark Wielaard <mjw@fedoraproject.org> - 4.16.1.2-4
+- Fix edit_attributes_str_comp_dir in Patch916 (#1919107)
+
 * Tue Jan 19 2021 Jeff Law <law@redhat.com> - 4.16.1.2-3
 - Fix typo in test for F33 or newer
 
