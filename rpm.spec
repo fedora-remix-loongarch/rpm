@@ -48,7 +48,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
@@ -574,6 +574,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.16.1.2-4.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Jan 22 2021 Mark Wielaard <mjw@fedoraproject.org> - 4.16.1.2-4
 - Fix edit_attributes_str_comp_dir in Patch916 (#1919107)
 
