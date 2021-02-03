@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.1.2
 #global snapver rc1
-%global rel 4
+%global rel 5
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -48,7 +48,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 %if %{with bdb} && %{with int_bdb}
@@ -344,7 +344,7 @@ done;
     --build=%{_target_platform} \
     --host=%{_target_platform} \
     --with-vendor=redhat \
-    %{?with_bdb: --enable-bdb} \
+    --enable-bdb=%{?with_bdb:yes}%{!?with_bdb:no} \
     %{!?with_int_bdb: --with-external-db} \
     %{!?with_plugins: --disable-plugins} \
     --with-lua \
@@ -406,6 +406,7 @@ find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 # These live in perl-generators and python-rpm-generators now
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
+rm -rf $RPM_BUILD_ROOT/var/tmp
 
 %if %{with check}
 %check
@@ -574,6 +575,10 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Feb 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.2-5
+- Make with/without bdb build option actually work
+- Clean up unpackaged /var/tmp from the build root
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.16.1.2-4.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
