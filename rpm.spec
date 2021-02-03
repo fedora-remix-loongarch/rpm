@@ -22,7 +22,7 @@
 # build with sqlite support?
 %bcond_without sqlite
 # build with bdb support?
-%bcond_without bdb
+%bcond_with bdb
 # build with internal Berkeley DB?
 %bcond_with int_bdb
 # build with bdb_ro support?
@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.1.2
 #global snapver rc1
-%global rel 5
+%global rel 6
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -575,6 +575,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Feb 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.2-6
+- Drop support for read-write Berkeley DB format (#1787311)
+
 * Wed Feb 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.2-5
 - Make with/without bdb build option actually work
 - Clean up unpackaged /var/tmp from the build root
