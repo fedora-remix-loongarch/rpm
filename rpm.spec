@@ -30,7 +30,7 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.1.2
+%global rpmver 4.16.1.3
 #global snapver rc1
 %global rel 1
 %global sover 9
@@ -565,6 +565,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Mar 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.3-1
+- Rebase to rpm 4.16.1.3 (http://rpm.org/wiki/Releases/4.16.1.3)
+
 * Wed Dec 16 2020 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.2-1
 - Rebase to rpm 4.16.1.2 (http://rpm.org/wiki/Releases/4.16.1.2)
 - Add a spec safeguard for accidental soname bumps
