@@ -19,9 +19,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.15.1
+%global rpmver 4.15.1.1
 #global snapver rc1
-%global rel 3
+%global rel 1
 
 %global srcver %{version}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:%{name}-%(echo %{version} | cut -d'.' -f1-2).x}
@@ -519,6 +519,9 @@ make check || (cat tests/rpmtests.log; exit 0)
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Mar 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.15.1.1-1
+- Rebase to 4.15.1.1 (https://rpm.org/wiki/Releases/4.15.1.1)
+
 * Mon May 04 2020 Panu Matilainen <pmatilai@redhat.com> - 4.15.1-3
 - Silence spurious lsetfileconf() errors on unsupported filesystem (#1722766)
 
