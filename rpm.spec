@@ -25,12 +25,14 @@
 %bcond_without sqlite
 # build with bdb_ro support?
 %bcond_without bdb_ro
+# build with external debugedit?
+%bcond_with debugedit
 
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 1
+%global rel 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -180,6 +182,9 @@ Requires: findutils sed grep gawk diffutils file patch >= 2.5
 Requires: tar unzip gzip bzip2 cpio xz
 %if %{with zstd}
 Requires: zstd
+%endif
+%if %{with debugedit}
+Requires: debugedit
 %endif
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
@@ -376,6 +381,10 @@ rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 rm -rf $RPM_BUILD_ROOT/var/tmp
 
+%if %{with debugedit}
+rm -f $RPM_BUILD_ROOT/%{rpmhome}/{debugedit,sepdebugcrcfix,find-debuginfo.sh}
+%endif
+
 %if %{with check}
 %check
 make check TESTSUITEFLAGS=-j%{_smp_build_ncpus} || (cat tests/rpmtests.log; exit 1)
@@ -506,9 +515,6 @@ fi
 
 %{rpmhome}/brp-*
 %{rpmhome}/check-*
-%{rpmhome}/debugedit
-%{rpmhome}/sepdebugcrcfix
-%{rpmhome}/find-debuginfo.sh
 %{rpmhome}/find-lang.sh
 %{rpmhome}/*provides*
 %{rpmhome}/*requires*
@@ -517,6 +523,12 @@ fi
 %{rpmhome}/*.req
 %{rpmhome}/mkinstalldirs
 %{rpmhome}/fileattrs/*
+
+%if !%{with debugedit}
+%{rpmhome}/debugedit
+%{rpmhome}/sepdebugcrcfix
+%{rpmhome}/find-debuginfo.sh
+%endif
 
 %files sign
 %{_bindir}/rpmsign
@@ -542,6 +554,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Apr 26 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.2
+- Add a bcond to build with external debugedit
+
 * Mon Apr 26 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.1
 - Rebase to rpm 4.17.0 alpha (https://rpm.org/wiki/Releases/4.17.0)
 - Drop a local hack for a cosmetic Fedora 22 era rpm2cpio issue
