@@ -15,35 +15,26 @@
 %bcond_without libarchive
 # build with libimaevm.so
 %bcond_without libimaevm
+# build with fsverity support?
+%bcond_without fsverity
 # build with zstd support?
 %bcond_without zstd
 # build with ndb backend?
 %bcond_without ndb
 # build with sqlite support?
 %bcond_without sqlite
-# build with bdb support?
-%bcond_with bdb
-# build with internal Berkeley DB?
-%bcond_with int_bdb
 # build with bdb_ro support?
 %bcond_without bdb_ro
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.1.3
-#global snapver rc1
+%global rpmver 4.16.90
+%global snapver git15395
 %global rel 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
 %global srcdir %{?snapver:testing}%{!?snapver:rpm-%(echo %{rpmver} | cut -d'.' -f1-2).x}
-
-%if %{with bdb}
-%define bdbver 5.3.15
-
-# Build-dependency on systemd for the sake of one macro would be a bit much...
-%{!?_tmpfilesdir:%global _tmpfilesdir /usr/lib/tmpfiles.d}
-%endif
 
 Summary: The RPM package management system
 Name: rpm
@@ -51,21 +42,15 @@ Version: %{rpmver}
 Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
-%if %{with bdb} && %{with int_bdb}
-Source1: db-%{bdbver}.tar.gz
-%endif
 
 Source10: rpmdb-rebuild.service
 
 # Disable autoconf config.site processing (#962837)
-Patch1: rpm-4.15.x-siteconfig.patch
+Patch1: rpm-4.17.x-siteconfig.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
 Patch3: rpm-4.9.90-no-man-dirs.patch
-# Temporary band-aid for rpm2cpio whining on payload size mismatch (#1142949)
-Patch5: rpm-4.12.0-rpm2cpio-hack.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
-Patch7: 0001-Issue-deprecation-warning-when-creating-BDB-database.patch
 
 # Patches already upstream:
 
@@ -73,15 +58,6 @@ Patch7: 0001-Issue-deprecation-warning-when-creating-BDB-database.patch
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
-
-# Not yet (all) upstream, debugedit DWARF5
-# https://code.wildebeest.org/git/user/mjw/rpm/log/?h=gcc-dwarf5-4.16.1.2
-Patch911: 0001-NFC-debugedit-Protect-macro-arguments-by-parentheses.patch
-Patch912: 0002-NFC-debugedit-Move-code-from-edit_dwarf2-to-edit_inf.patch
-Patch913: 0003-debugedit-Fix-missing-relocation-of-.debug_types-sec.patch
-Patch914: 0004-NFC-debugedit-Move-code-to-separate-functions.patch
-Patch915: 0005-debugedit-Implement-DWARF-5-unit-header-and-new-form.patch
-Patch916: 0006-debugedit-Handle-DWARF-5-debug_line-and-debug_line_s.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -91,10 +67,6 @@ Requires: coreutils
 Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
 Obsoletes: python2-rpm < %{version}-%{release}
-
-%if %{with bdb} && %{without int_bdb}
-BuildRequires: libdb-devel
-%endif
 
 %if %{with check}
 BuildRequires: fakechroot gnupg2
@@ -142,6 +114,10 @@ BuildRequires: audit-libs-devel
 
 %if %{with libimaevm}
 BuildRequires: ima-evm-utils-devel >= 1.0
+%endif
+
+%if %{with fsverity}
+BuildRequires: fsverity-utils-devel
 %endif
 
 %description
@@ -308,20 +284,18 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %description plugin-audit
 %{summary}.
 
+%package plugin-fsverity
+Summary: Rpm plugin fsverity file signatures
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-fsverity
+%{summary}.
+
 # with plugins
 %endif
 
 %prep
-%autosetup -n rpm-%{srcver} %{?with_int_bdb:-a 1} -p1
-
-%if %{with bdb} && %{with int_bdb}
-ln -s db-%{bdbver} db
-%endif
-
-# switch to sqlite db by default, including during build-time tests
-%if %{with sqlite}
-sed -i -e "/_db_backend/ s/ bdb/ sqlite/g" macros.in
-%endif
+%autosetup -n rpm-%{srcver} -p1
 
 %build
 %set_build_flags
@@ -344,8 +318,6 @@ done;
     --build=%{_target_platform} \
     --host=%{_target_platform} \
     --with-vendor=redhat \
-    --enable-bdb=%{?with_bdb:yes}%{!?with_bdb:no} \
-    %{!?with_int_bdb: --with-external-db} \
     %{!?with_plugins: --disable-plugins} \
     --with-lua \
     --with-selinux \
@@ -353,6 +325,7 @@ done;
     --with-acl \
     %{?with_ndb: --enable-ndb} \
     %{?with_libimaevm: --with-imaevm} \
+    %{?with_fsverity: --with-fsverity} \
     %{?with_zstd: --enable-zstd} \
     %{?with_sqlite: --enable-sqlite} \
     %{?with_bdb_ro: --enable-bdb-ro} \
@@ -384,17 +357,12 @@ install -m 755 scripts/rpm.daily ${RPM_BUILD_ROOT}%{_sysconfdir}/cron.daily/rpm
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d
 install -m 644 scripts/rpm.log ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/rpm
 
-%if %{with bdb}
-mkdir -p ${RPM_BUILD_ROOT}%{_tmpfilesdir}
-echo "r /var/lib/rpm/__db.*" > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/rpm.conf
-%endif
-
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
 mkdir -p $RPM_BUILD_ROOT/var/lib/rpm
 
 # init an empty database for %ghost'ing for all supported backends
-for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite} %{?with_bdb:bdb}; do
+for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite}; do
     ./rpmdb --define "_db_backend ${be}" --dbpath=${PWD}/${be} --initdb
     cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
 done
@@ -430,10 +398,6 @@ fi
 %files -f rpm.lang
 %license COPYING
 %doc CREDITS doc/manual/[a-z]*
-
-%if %{with bdb}
-%{_tmpfilesdir}/rpm.conf
-%endif
 
 %{_unitdir}/rpmdb-rebuild.service
 
@@ -509,6 +473,9 @@ fi
 %{_libdir}/rpm-plugins/ima.so
 %{_mandir}/man8/rpm-plugin-ima.8*
 
+%files plugin-fsverity
+%{_libdir}/rpm-plugins/fsverity.so
+
 %files plugin-prioreset
 %{_libdir}/rpm-plugins/prioreset.so
 %{_mandir}/man8/rpm-plugin-prioreset.8*
@@ -575,6 +542,12 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon Apr 26 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.1
+- Rebase to rpm 4.17.0 alpha (https://rpm.org/wiki/Releases/4.17.0)
+- Drop a local hack for a cosmetic Fedora 22 era rpm2cpio issue
+- Drop BDB support leftovers from the spec
+- Add build conditional for fsverity plugin
+
 * Mon Mar 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.1.3-1
 - Rebase to rpm 4.16.1.3 (https://rpm.org/wiki/Releases/4.16.1.3)
 

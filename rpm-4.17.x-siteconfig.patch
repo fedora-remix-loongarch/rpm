@@ -8,5 +8,5 @@ diff -up rpm-4.11.1-rc1/macros.in.siteconfig rpm-4.11.1-rc1/macros.in
 +  CONFIG_SITE=${CONFIG_SITE:-NONE}\
 +  export CONFIG_SITE\
    \
-   %{verbose:set -x}\
+   %[%{verbose}?"set -x":""]\
    umask 022\
