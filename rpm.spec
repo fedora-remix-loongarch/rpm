@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 2
+%global rel 3
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -53,6 +53,9 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+
+# Temporarily for https://bugzilla.redhat.com/show_bug.cgi?id=1953910
+Patch10: 0001-Revert-Fix-logic-error-in-macro-file-reader.patch
 
 # Patches already upstream:
 
@@ -554,6 +557,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Apr 27 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.3
+- Temporarily revert macro file loading fix due to regression #1953910
+
 * Mon Apr 26 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.2
 - Add a bcond to build with external debugedit
 
