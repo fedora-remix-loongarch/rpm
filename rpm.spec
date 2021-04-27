@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 3
+%global rel 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -293,11 +293,21 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %{summary}.
 
 %package plugin-fsverity
-Summary: Rpm plugin fsverity file signatures
+Summary: Rpm plugin for fsverity file signatures
 Requires: rpm-libs%{_isa} = %{version}-%{release}
 
 %description plugin-fsverity
 %{summary}.
+
+%package plugin-fapolicyd
+Summary: Rpm plugin for fapolicyd support
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-fapolicyd
+%{summary}.
+
+See https://people.redhat.com/sgrubb/fapolicyd/ for information about
+the fapolicyd daemon.
 
 # with plugins
 %endif
@@ -331,6 +341,7 @@ done;
     --with-selinux \
     --with-cap \
     --with-acl \
+    --with-fapolicyd \
     %{?with_ndb: --enable-ndb} \
     %{?with_libimaevm: --with-imaevm} \
     %{?with_fsverity: --with-fsverity} \
@@ -488,6 +499,10 @@ fi
 %files plugin-fsverity
 %{_libdir}/rpm-plugins/fsverity.so
 
+%files plugin-fapolicyd
+%{_libdir}/rpm-plugins/fapolicyd.so
+%{_mandir}/man8/rpm-plugin-fapolicyd.8*
+
 %files plugin-prioreset
 %{_libdir}/rpm-plugins/prioreset.so
 %{_mandir}/man8/rpm-plugin-prioreset.8*
@@ -557,6 +572,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Tue Apr 27 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.4
+- Enable fapolicyd plugin build
+
 * Tue Apr 27 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.3
 - Temporarily revert macro file loading fix due to regression #1953910
 
