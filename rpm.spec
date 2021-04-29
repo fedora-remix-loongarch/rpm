@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 4
+%global rel 5
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -54,8 +54,7 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
-# Temporarily for https://bugzilla.redhat.com/show_bug.cgi?id=1953910
-Patch10: 0001-Revert-Fix-logic-error-in-macro-file-reader.patch
+Patch10: 0001-Ignore-comment-line-contents-in-macro-files-1659.patch
 
 # Patches already upstream:
 
@@ -572,6 +571,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Thu Apr 29 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.5
+- Proper fix for comments affecting macro file parsing (#1953910)
+
 * Tue Apr 27 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.4
 - Enable fapolicyd plugin build
 

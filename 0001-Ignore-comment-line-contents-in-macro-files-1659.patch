@@ -1,0 +1,92 @@
+From 847c6f062c267c4be643be9c202141bd330a7891 Mon Sep 17 00:00:00 2001
+Message-Id: <847c6f062c267c4be643be9c202141bd330a7891.1619695949.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Wed, 28 Apr 2021 10:20:55 +0300
+Subject: [PATCH] Ignore comment line contents in macro files (#1659)
+
+Previously %{ and similar in macro file comment line would cause the
+line continuation logic to trigger and silently eat macro definitions
+up to the next empty line. Since 75275a87cff04da65d3557f2c40ea2b526528c4c
+we permit empty lines inside macro definitions, which would cause the
+whole remaining file to be silently skipped (RhBug:1953910)
+
+Only ever parse macro file lines starting with %, and add a test for
+the case.
+
+Actual patch by Michael Schroeder, testcase by undersigned.
+
+Fixes: #1659
+---
+ rpmio/macro.c              |  8 ++++++++
+ tests/data/macros.testfile |  7 +++++++
+ tests/rpmmacro.at          | 17 +++++++++++++++++
+ 3 files changed, 32 insertions(+)
+
+diff --git a/rpmio/macro.c b/rpmio/macro.c
+index 6dfc73336..94ff5187d 100644
+--- a/rpmio/macro.c
++++ b/rpmio/macro.c
+@@ -226,6 +226,14 @@ rdcl(char * buf, size_t size, FILE *f)
+ 	    nb--;
+ 	if (*q == 0)
+ 	    break;			/* no newline found, EOF */
++	if (p == buf) {
++            while (*p && isblank(*p))
++                p++;
++            if (*p != '%') {		/* only parse actual macro */
++                *q = '\0';		/* trim trailing \r, \n */
++                break;
++            }
++        }
+ 	for (; p < q; p++) {
+ 	    switch (*p) {
+ 		case '\\':
+diff --git a/tests/data/macros.testfile b/tests/data/macros.testfile
+index 86fd883fc..f56c80578 100644
+--- a/tests/data/macros.testfile
++++ b/tests/data/macros.testfile
+@@ -5,6 +5,13 @@
+ }
+ %second %{?def:macro_2}
+ 
++# empty lines inside a %{ block
++%empty0 %{expand:
++some
++
++thing
++}
++
+ %comment1 %{expand:
+ read
+ %dnl comment
+diff --git a/tests/rpmmacro.at b/tests/rpmmacro.at
+index 072b986be..c0f114087 100644
+--- a/tests/rpmmacro.at
++++ b/tests/rpmmacro.at
+@@ -945,6 +945,23 @@ read
+ [])
+ AT_CLEANUP
+ 
++AT_SETUP([macro file empty lines])
++AT_KEYWORDS([macros])
++AT_CHECK([
++runroot rpm \
++	--macros /data/macros.testfile \
++	--eval "%{empty0}"
++],
++[0],
++[
++some
++
++thing
++
++],
++[])
++AT_CLEANUP
++
+ AT_SETUP([macro traceback])
+ AT_KEYWORDS([macros])
+ AT_CHECK([
+-- 
+2.30.2
+
