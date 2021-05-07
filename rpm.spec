@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 5
+%global rel 6
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -54,9 +54,9 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 # https://github.com/rpm-software-management/rpm/pull/473
 Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
-Patch10: 0001-Ignore-comment-line-contents-in-macro-files-1659.patch
-
 # Patches already upstream:
+Patch100: 0001-Ignore-comment-line-contents-in-macro-files-1659.patch
+Patch101: 0001-Fix-regression-wrt-Lua-reinitialization-RhBug-195809.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -571,6 +571,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Fri May 07 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.6
+- Fix regression causing a crash on Lua state reset (#1958095)
+
 * Thu Apr 29 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.5
 - Proper fix for comments affecting macro file parsing (#1953910)
 
