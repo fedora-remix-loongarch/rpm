@@ -26,13 +26,13 @@
 # build with bdb_ro support?
 %bcond_without bdb_ro
 # build with external debugedit?
-%bcond_with debugedit
+%bcond_without debugedit
 
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 7
+%global rel 8
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -575,6 +575,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 17 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.8
+- Switch to external debugedit
+
 * Mon May 17 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.7
 - Handle different find-debuginfo.sh location with external debugedit
 
