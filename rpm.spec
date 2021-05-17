@@ -32,7 +32,7 @@
 
 %global rpmver 4.16.90
 %global snapver git15395
-%global rel 6
+%global rel 7
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -314,6 +314,10 @@ the fapolicyd daemon.
 %prep
 %autosetup -n rpm-%{srcver} -p1
 
+%if %{with debugedit}
+sed -i -e "s:%%{_rpmconfigdir}/find-debuginfo.sh:%%{_bindir}/find-debuginfo.sh:g" macros.in
+%endif
+
 %build
 %set_build_flags
 
@@ -571,6 +575,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Mon May 17 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.7
+- Handle different find-debuginfo.sh location with external debugedit
+
 * Fri May 07 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.6
 - Fix regression causing a crash on Lua state reset (#1958095)
 
