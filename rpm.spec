@@ -41,7 +41,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -575,6 +575,9 @@ fi
 %doc doc/librpm/html/*
 
 %changelog
+* Wed Jun 02 2021 Python Maint <python-maint@redhat.com> - 4.16.90-0.git15395.8.1
+- Rebuilt for Python 3.10
+
 * Mon May 17 2021 Panu Matilainen <pmatilai@redhat.com> - 4.16.90-0.git15395.8
 - Switch to external debugedit
 
