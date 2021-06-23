@@ -25,14 +25,12 @@
 %bcond_without sqlite
 # build with bdb_ro support?
 %bcond_without bdb_ro
-# build with external debugedit?
-%bcond_without debugedit
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.16.90
-%global snapver git15395
-%global rel 8
+%global rpmver 4.17.0
+%global snapver beta1
+%global rel 0
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -51,12 +49,10 @@ Source10: rpmdb-rebuild.service
 Patch1: rpm-4.17.x-siteconfig.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
 Patch3: rpm-4.9.90-no-man-dirs.patch
-# https://github.com/rpm-software-management/rpm/pull/473
-Patch6: 0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 
 # Patches already upstream:
-Patch100: 0001-Ignore-comment-line-contents-in-macro-files-1659.patch
-Patch101: 0001-Fix-regression-wrt-Lua-reinitialization-RhBug-195809.patch
+Patch100: 0001-Also-add-rendered-Japanese-man-pages.patch
+Patch101: 0002-Don-t-depend-on-translation-sub-directories.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -74,6 +70,7 @@ Obsoletes: python2-rpm < %{version}-%{release}
 
 %if %{with check}
 BuildRequires: fakechroot gnupg2
+BuildRequires: debugedit >= 0.3
 %endif
 
 # XXX generally assumed to be installed but make it explicit as rpm
@@ -185,9 +182,7 @@ Requires: tar unzip gzip bzip2 cpio xz
 %if %{with zstd}
 Requires: zstd
 %endif
-%if %{with debugedit}
-Requires: debugedit
-%endif
+Requires: debugedit >= 0.3
 Requires: pkgconfig >= 1:0.24
 Requires: /usr/bin/gdb-add-index
 # https://fedoraproject.org/wiki/Changes/Minimal_GDB_in_buildroot
@@ -314,10 +309,6 @@ the fapolicyd daemon.
 %prep
 %autosetup -n rpm-%{srcver} -p1
 
-%if %{with debugedit}
-sed -i -e "s:%%{_rpmconfigdir}/find-debuginfo.sh:%%{_bindir}/find-debuginfo.sh:g" macros.in
-%endif
-
 %build
 %set_build_flags
 
@@ -389,6 +380,9 @@ for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite}; do
     cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
 done
 
+# some packages invoke find-debuginfo directly, preserve compat for now
+ln -s ../../bin/find-debuginfo $RPM_BUILD_ROOT/usr/lib/rpm/find-debuginfo.sh
+
 %find_lang rpm
 
 find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
@@ -397,10 +391,6 @@ find $RPM_BUILD_ROOT -name "*.la"|xargs rm -f
 rm -f $RPM_BUILD_ROOT/%{rpmhome}/{perldeps.pl,perl.*,pythond*}
 rm -f $RPM_BUILD_ROOT/%{_fileattrsdir}/{perl*,python*}
 rm -rf $RPM_BUILD_ROOT/var/tmp
-
-%if %{with debugedit}
-rm -f $RPM_BUILD_ROOT/%{rpmhome}/{debugedit,sepdebugcrcfix,find-debuginfo.sh}
-%endif
 
 %if %{with check}
 %check
@@ -423,7 +413,7 @@ fi
 
 %files -f rpm.lang
 %license COPYING
-%doc CREDITS doc/manual/[a-z]*
+%doc CREDITS docs/manual/[a-z]*
 
 %{_unitdir}/rpmdb-rebuild.service
 
@@ -544,12 +534,7 @@ fi
 %{rpmhome}/*.req
 %{rpmhome}/mkinstalldirs
 %{rpmhome}/fileattrs/*
-
-%if !%{with debugedit}
-%{rpmhome}/debugedit
-%{rpmhome}/sepdebugcrcfix
 %{rpmhome}/find-debuginfo.sh
-%endif
 
 %files sign
 %{_bindir}/rpmsign
@@ -572,9 +557,14 @@ fi
 
 %files apidocs
 %license COPYING
-%doc doc/librpm/html/*
+%doc docs/librpm/html/*
 
 %changelog
+* Tue Jun 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-0.beta1.1
+- Rebase to 4.17.0 beta1
+- Pull additional upstream patches to avoid pandoc dependency
+- Add back /usr/lib/rpm/find-debuginfo.sh as a compat symlink
+
 * Wed Jun 02 2021 Python Maint <python-maint@redhat.com> - 4.16.90-0.git15395.8.1
 - Rebuilt for Python 3.10
 

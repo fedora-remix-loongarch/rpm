@@ -1,0 +1,25 @@
+From 9772abc058ae7183dbfb2356ec0af0a3d610c2c9 Mon Sep 17 00:00:00 2001
+Message-Id: <9772abc058ae7183dbfb2356ec0af0a3d610c2c9.1624424665.git.pmatilai@redhat.com>
+From: Florian Festi <ffesti@redhat.com>
+Date: Tue, 22 Jun 2021 16:52:35 +0200
+Subject: [PATCH 1/2] Also add rendered Japanese man pages
+
+---
+ docs/man/Makefile.am | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/docs/man/Makefile.am b/docs/man/Makefile.am
+index 124a94d94..595444ad5 100644
+--- a/docs/man/Makefile.am
++++ b/docs/man/Makefile.am
+@@ -63,6 +63,7 @@ EXTRA_DIST += fr/rpm.8
+ man_ja_man8dir = $(mandir)/ja/man8
+ man_ja_man8_DATA = ja/rpm.8 ja/rpm2cpio.8 ja/rpmbuild.8 ja/rpmgraph.8
+ EXTRA_DIST += ja/rpm.8.md ja/rpm2cpio.8.md ja/rpmbuild.8.md ja/rpmgraph.8.md
++EXTRA_DIST += ja/rpm.8 ja/rpm2cpio.8 ja/rpmbuild.8 ja/rpmgraph.8
+ 
+ man_ko_man8dir = $(mandir)/ko/man8
+ man_ko_man8_DATA = ko/rpm.8 ko/rpm2cpio.8
+-- 
+2.31.1
+
