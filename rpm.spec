@@ -107,6 +107,9 @@ BuildRequires: sqlite-devel
 # Couple of patches change makefiles so, require for now...
 BuildRequires: automake libtool
 
+# Temporary! Work around bugs in beta1 makefiles
+BuildRequires: pandoc
+
 %if %{with plugins}
 BuildRequires: libselinux-devel
 BuildRequires: dbus-devel
@@ -562,8 +565,8 @@ fi
 %changelog
 * Tue Jun 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-0.beta1.1
 - Rebase to 4.17.0 beta1
-- Pull additional upstream patches to avoid pandoc dependency
 - Add back /usr/lib/rpm/find-debuginfo.sh as a compat symlink
+- Add temporary buildrequire on pandoc due to makefile bugs in beta1
 
 * Wed Jun 02 2021 Python Maint <python-maint@redhat.com> - 4.16.90-0.git15395.8.1
 - Rebuilt for Python 3.10
