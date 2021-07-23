@@ -39,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.2
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -563,6 +563,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.17.0-0.beta1.0.2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Tue Jun 22 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-0.beta1.1
 - Rebase to 4.17.0 beta1
 - Add back /usr/lib/rpm/find-debuginfo.sh as a compat symlink
