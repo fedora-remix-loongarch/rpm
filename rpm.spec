@@ -29,7 +29,7 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.17.0
-%global snapver beta1
+%global snapver rc1
 %global rel 0
 %global sover 9
 
@@ -39,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.2
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -51,8 +51,6 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Also-add-rendered-Japanese-man-pages.patch
-Patch101: 0002-Don-t-depend-on-translation-sub-directories.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -306,6 +304,16 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 See https://people.redhat.com/sgrubb/fapolicyd/ for information about
 the fapolicyd daemon.
 
+%package plugin-dbus-announce
+Summary: Rpm plugin for announcing transactions on the DBUS
+Requires: rpm-libs%{_isa} = %{version}-%{release}
+
+%description plugin-dbus-announce
+The plugin announces basic information about rpm transactions to the
+system DBUS - like packages installed or removed.  Other programs can
+subscribe to the signals to get notified when packages on the system
+change.
+
 # with plugins
 %endif
 
@@ -507,6 +515,11 @@ fi
 %{_libdir}/rpm-plugins/audit.so
 %{_mandir}/man8/rpm-plugin-audit.8*
 # with plugins
+
+%files plugin-dbus-announce
+%{_libdir}/rpm-plugins/dbus_announce.so
+%{_mandir}/man8/rpm-plugin-dbus-announce.8*
+%{_sysconfdir}/dbus-1/system.d/org.rpm.conf
 %endif
 
 %files build-libs
@@ -563,6 +576,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Thu Aug 19 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-0.rc1.1
+- Rebase to 4.17.0 rc1
+
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.17.0-0.beta1.0.2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
