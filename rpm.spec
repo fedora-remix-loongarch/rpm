@@ -29,8 +29,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.17.0
-%global snapver rc1
-%global rel 0
+#global snapver rc1
+%global rel 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -576,6 +576,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Sep 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-1
+- Rebase to 4.17.0 final (https://rpm.org/wiki/Releases/4.17.0)
+
 * Thu Aug 19 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-0.rc1.1
 - Rebase to 4.17.0 rc1
 
