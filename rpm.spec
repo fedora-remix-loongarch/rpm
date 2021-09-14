@@ -39,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -576,6 +576,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 4.17.0-1.1
+- Rebuilt with OpenSSL 3.0.0
+
 * Fri Sep 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-1
 - Rebase to 4.17.0 final (https://rpm.org/wiki/Releases/4.17.0)
 
