@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global rel 1
+%global rel 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -39,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -576,6 +576,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Nov 08 2021 Peter Robinson <pbrobinson@fedoraproject.org> - 4.17.0-2
+- Rebuils for ima-evm-utils 1.4 soname bump
+
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 4.17.0-1.1
 - Rebuilt with OpenSSL 3.0.0
 
