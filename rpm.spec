@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global rel 1
+%global rel 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -297,6 +297,9 @@ Requires: rpm-libs%{_isa} = %{version}-%{release}
 %package plugin-fapolicyd
 Summary: Rpm plugin for fapolicyd support
 Requires: rpm-libs%{_isa} = %{version}-%{release}
+Provides: fapolicyd-plugin = %{version}-%{release}
+# fapolicyd-dnf-plugin currently at 1.0.4
+Obsoletes: fapolicyd-dnf-plugin < 1.0.5
 
 %description plugin-fapolicyd
 %{summary}.
@@ -576,6 +579,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Jan 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-2
+- Fix fapolicyd plugin dependencies to replace fapolicyd-dnf-plugin (#2007639)
+
 * Fri Sep 03 2021 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-1
 - Rebase to 4.17.0 final (https://rpm.org/wiki/Releases/4.17.0)
 
