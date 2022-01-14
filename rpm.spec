@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global rel 3
+%global rel 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -51,6 +51,7 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
+Patch100: 0001-Fix-spurious-transfiletriggerpostun-execution-RhBug-.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -579,6 +580,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Jan 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-4
+- Fix spurious %%transfiletriggerpostun execution (#2023311)
+
 * Fri Jan 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-3
 - Fix fapolicyd plugin dependencies to replace fapolicyd-dnf-plugin (#2007639)
 
