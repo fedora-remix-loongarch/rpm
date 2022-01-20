@@ -39,7 +39,7 @@
 Summary: The RPM package management system
 Name: rpm
 Version: %{rpmver}
-Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}
+Release: %{?snapver:0.%{snapver}.}%{rel}%{?dist}.1
 Url: http://www.rpm.org/
 Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
@@ -580,6 +580,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Thu Jan 20 2022 Björn Esser <besser82@fedoraproject.org> - 4.17.0-4.1
+- Rebuild (ima-evm-utils)
+
 * Fri Jan 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-4
 - Fix spurious %%transfiletriggerpostun execution (#2023311)
 
