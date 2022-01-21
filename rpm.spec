@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global baserelease 5
+%global baserelease 6
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -580,6 +580,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 4.17.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Thu Jan 20 2022 Björn Esser <besser82@fedoraproject.org> - 4.17.0-5
 - Rebuild (ima-evm-utils)
 - Use baserelease for rpm release tag to make rpmdev-bumpspec work
