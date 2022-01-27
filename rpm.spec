@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global baserelease 6
+%global baserelease 7
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -45,6 +45,11 @@ Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
 Source10: rpmdb-rebuild.service
 
+Source20: rpmdb-migrate.service
+Source21: rpmdb_migrate
+
+# Set rpmdb path to /usr/lib/sysimage/rpm
+Patch0: rpm-4.17.x-rpm_dbpath.patch
 # Disable autoconf config.site processing (#962837)
 Patch1: rpm-4.17.x-siteconfig.patch
 # In current Fedora, man-pages pkg owns all the localized man directories
@@ -377,6 +382,10 @@ popd
 
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 install -m 644 %{SOURCE10} $RPM_BUILD_ROOT/%{_unitdir}
+install -m 644 %{SOURCE20} $RPM_BUILD_ROOT/%{_unitdir}
+
+mkdir -p $RPM_BUILD_ROOT%{rpmhome}
+install -m 755 %{SOURCE21} $RPM_BUILD_ROOT/%{rpmhome}
 
 # Save list of packages through cron
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/cron.daily
@@ -387,12 +396,12 @@ install -m 644 scripts/rpm.log ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/rpm
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 mkdir -p $RPM_BUILD_ROOT%{rpmhome}/macros.d
-mkdir -p $RPM_BUILD_ROOT/var/lib/rpm
+mkdir -p $RPM_BUILD_ROOT/usr/lib/sysimage/rpm
 
 # init an empty database for %ghost'ing for all supported backends
 for be in %{?with_ndb:ndb} %{?with_sqlite:sqlite}; do
     ./rpmdb --define "_db_backend ${be}" --dbpath=${PWD}/${be} --initdb
-    cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
+    cp -va ${be}/. $RPM_BUILD_ROOT/usr/lib/sysimage/rpm/
 done
 
 # some packages invoke find-debuginfo directly, preserve compat for now
@@ -414,16 +423,32 @@ make check TESTSUITEFLAGS=-j%{_smp_build_ncpus} || (cat tests/rpmtests.log; exit
 make clean
 %endif
 
+%pre
+# Symlink all rpmdb files to the new location if we're still using /var/lib/rpm
+if [ -d /var/lib/rpm ]; then
+    mkdir -p /usr/lib/sysimage/rpm
+    rpmdb_files=$(find /var/lib/rpm -maxdepth 1 -type f | sed 's|^/var/lib/rpm/||g' | sort)
+    for rpmdb_file in ${rpmdb_files[@]}; do
+        ln -sfr /var/lib/rpm/${rpmdb_file} /usr/lib/sysimage/rpm/${rpmdb_file}
+    done
+fi
+
+%triggerun -- rpm < 4.15.90-0.git14971.10
 # Handle rpmdb rebuild service on erasure of old to avoid ordering issues
 # https://pagure.io/fesco/issue/2382
-%triggerun -- rpm < 4.15.90-0.git14971.10
 if [ -x /usr/bin/systemctl ]; then
     systemctl --no-reload preset rpmdb-rebuild ||:
 fi
 
+%triggerun -- rpm < 4.17.0-7
+# Handle rpmdb migrate service on erasure of old to avoid ordering issues
+if [ -x /usr/bin/systemctl ]; then
+    systemctl --no-reload preset rpmdb-migrate ||:
+fi
+
 %posttrans
-if [ -f /var/lib/rpm/Packages ]; then
-    touch /var/lib/rpm/.rebuilddb
+if [ -d /var/lib/rpm ]; then
+    touch /var/lib/rpm/.migratedb
 fi
 
 %files -f rpm.lang
@@ -431,12 +456,13 @@ fi
 %doc CREDITS docs/manual/[a-z]*
 
 %{_unitdir}/rpmdb-rebuild.service
+%{_unitdir}/rpmdb-migrate.service
 
 %dir %{_sysconfdir}/rpm
 
-%attr(0755, root, root) %dir /var/lib/rpm
-%attr(0644, root, root) %ghost %config(missingok,noreplace) /var/lib/rpm/*
-%attr(0644, root, root) %ghost /var/lib/rpm/.*.lock
+%attr(0755, root, root) %dir /usr/lib/sysimage/rpm
+%attr(0644, root, root) %ghost %config(missingok,noreplace) /usr/lib/sysimage/rpm/*
+%attr(0644, root, root) %ghost /usr/lib/sysimage/rpm/.*.lock
 
 %{_bindir}/rpm
 %{_bindir}/rpm2archive
@@ -580,6 +606,10 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Jan 26 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-7
+- Migrate rpmdb to /usr/lib/sysimage/rpm (#2042099)
+  https://fedoraproject.org/wiki/Changes/RelocateRPMToUsr
+
 * Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 4.17.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
