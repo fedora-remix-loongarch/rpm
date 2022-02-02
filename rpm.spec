@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global rel 3
+%global rel 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -52,6 +52,7 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
 Patch100: 0001-Fix-spurious-transfiletriggerpostun-execution-RhBug-.patch
+Patch101: 0001-Really-fix-spurious-transfiletriggerpostun-execution.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -580,6 +581,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Feb 02 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-4
+- Really fix spurious %%transfiletriggerpostun execution (#2023311, #2048168)
+
 * Fri Jan 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-3
 - Fix spurious %%transfiletriggerpostun execution (#2023311)
 
