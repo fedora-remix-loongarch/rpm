@@ -434,13 +434,6 @@ if [ -d /var/lib/rpm ]; then
     done
 fi
 
-%triggerun -- rpm < 4.15.90-0.git14971.10
-# Handle rpmdb rebuild service on erasure of old to avoid ordering issues
-# https://pagure.io/fesco/issue/2382
-if [ -x /usr/bin/systemctl ]; then
-    systemctl --no-reload preset rpmdb-rebuild ||:
-fi
-
 %triggerun -- rpm < 4.17.0-7
 # Handle rpmdb migrate service on erasure of old to avoid ordering issues
 if [ -x /usr/bin/systemctl ]; then
