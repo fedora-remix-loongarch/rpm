@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global baserelease 8
+%global baserelease 9
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -128,6 +128,11 @@ BuildRequires: ima-evm-utils-devel >= 1.0
 %if %{with fsverity}
 BuildRequires: fsverity-utils-devel
 %endif
+
+# For the rpmdb migration scriptlet (#2055033)
+Requires(pre): coreutils
+Requires(pre): findutils
+Requires(pre): sed
 
 %description
 The RPM Package Manager (RPM) is a powerful command line driven
@@ -600,6 +605,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Feb 16 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-9
+- Add dependencies for the rpmdb migration scriptlet (#2055033)
+
 * Wed Feb 02 2022 Panu Matilainen <pmatilai@redhat.com> - 4.17.0-8
 - Really fix spurious %%transfiletriggerpostun execution (#2023311, #2048168)
 
