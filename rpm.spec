@@ -450,7 +450,7 @@ if [ -d /var/lib/rpm ]; then
     touch /var/lib/rpm/.migratedb
 fi
 if [ ! -d /var/lib/rpm ] && [ -d /usr/lib/sysimage/rpm ] && [ ! -f /usr/lib/sysimage/rpm/.rpmdbdirsymlink_created ]; then
-    ln -sfr /var/lib/rpm /usr/lib/sysimage/rpm
+    ln -sfr /usr/lib/sysimage/rpm /var/lib/rpm
     touch /usr/lib/sysimage/rpm/.rpmdbdirsymlink_created
 fi
 
