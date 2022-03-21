@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.0
 #global snapver rc1
-%global baserelease 9
+%global baserelease 10
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -449,6 +449,10 @@ fi
 if [ -d /var/lib/rpm ]; then
     touch /var/lib/rpm/.migratedb
 fi
+if [ ! -d /var/lib/rpm ] && [ -d /usr/lib/sysimage/rpm ] && [ ! -f /usr/lib/sysimage/rpm/.rpmdbdirsymlink_created ]; then
+    ln -sfr /var/lib/rpm /usr/lib/sysimage/rpm
+    touch /usr/lib/sysimage/rpm/.rpmdbdirsymlink_created
+fi
 
 %files -f rpm.lang
 %license COPYING
@@ -605,6 +609,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Mar 21 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-10
+- Create rpmdb directory symlink in posttrans by default (#2066427)
+
 * Wed Feb 16 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-9
 - Add dependencies for the rpmdb migration scriptlet (#2055033)
 
