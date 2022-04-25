@@ -1,0 +1,31 @@
+From 329e2ec47f6cd3bc7ecf85abd9f2ab179c59914f Mon Sep 17 00:00:00 2001
+Message-Id: <329e2ec47f6cd3bc7ecf85abd9f2ab179c59914f.1650871821.git.pmatilai@redhat.com>
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+Date: Thu, 14 Apr 2022 15:38:11 -0400
+Subject: [PATCH] Fix OpenPGP key ID parsing regression
+
+This fixes a regression in 598a771d8b4f4f480d4990ccf59b978d537201dd,
+which caused RPM to parse key flags from a hashed key ID subpacket.  As
+a result, RPM would wrongly reject a signature that had both key ID and
+key usage flags subpackets in the hashed section.
+
+(backported from commit 7f830132fe717d4b31c035bb3d08379451e3cd81)
+---
+ rpmio/rpmpgp.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/rpmio/rpmpgp.c b/rpmio/rpmpgp.c
+index deea65eae..242b34e19 100644
+--- a/rpmio/rpmpgp.c
++++ b/rpmio/rpmpgp.c
+@@ -528,6 +528,7 @@ static int pgpPrtSubType(const uint8_t *h, size_t hlen, pgpSigType sigtype,
+ 		_digp->saved |= PGPDIG_SAVED_ID;
+ 		memcpy(_digp->signid, p+1, sizeof(_digp->signid));
+ 	    }
++	    break;
+ 	case PGPSUBTYPE_KEY_FLAGS: /* Key usage flags */
+ 	    /* Subpackets in the unhashed section cannot be trusted */
+ 	    if (!hashed)
+-- 
+2.35.1
+

@@ -28,9 +28,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.17.0
-#global snapver rc1
-%global baserelease 10
+%global rpmver 4.18.0
+%global snapver alpha1
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,8 +56,8 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Fix-spurious-transfiletriggerpostun-execution-RhBug-.patch
-Patch101: 0001-Really-fix-spurious-transfiletriggerpostun-execution.patch
+Patch100: 0001-Fix-OpenPGP-key-ID-parsing-regression.patch
+Patch101: 0001-Revert-Fix-shared-colored-files-not-removed-on-erasu.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -567,11 +567,13 @@ fi
 %{_bindir}/rpmbuild
 %{_bindir}/gendiff
 %{_bindir}/rpmspec
+%{_bindir}/rpmlua
 
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmspec.8*
+%{_mandir}/man8/rpmlua.8*
 
 %{rpmhome}/brp-*
 %{rpmhome}/check-*
@@ -584,6 +586,7 @@ fi
 %{rpmhome}/mkinstalldirs
 %{rpmhome}/fileattrs/*
 %{rpmhome}/find-debuginfo.sh
+%{rpmhome}/rpmuncompress
 
 %files sign
 %{_bindir}/rpmsign
@@ -609,6 +612,10 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Apr 25 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha1.1
+- Rebase to 4.18.0 alpha (https://fedoraproject.org/wiki/Changes/RPM-4.18)
+- Add patches for two late discovered regressions
+
 * Mon Mar 21 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-10
 - Create rpmdb directory symlink in posttrans by default (#2066427)
 
