@@ -1,0 +1,59 @@
+From 1bbe9d449543916ae44834c323d1640f2c8486e7 Mon Sep 17 00:00:00 2001
+Message-Id: <1bbe9d449543916ae44834c323d1640f2c8486e7.1650960341.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Tue, 26 Apr 2022 11:00:41 +0300
+Subject: [PATCH] Fix rpmbuild -br not building .src.rpm regression
+ (RhBug:2078744)
+
+Successful rpmbuild -br needs to produce an src.rpm, this was untested
+in the testsuite and commit ad8b9bd2ca93cf4319680f056bb40bfc24661991
+missed this twist in the logic. Fixing is an obvious one-liner now,
+add a test to ensure it doesn't happen again.
+---
+ rpmbuild.c        |  2 ++
+ tests/rpmbuild.at | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/rpmbuild.c b/rpmbuild.c
+index de78976ff..1e8c1ce09 100644
+--- a/rpmbuild.c
++++ b/rpmbuild.c
+@@ -667,6 +667,8 @@ int main(int argc, char *argv[])
+ 	    break;
+ 	/* fallthrough */
+     case 'r':
++	ba->buildAmount |= RPMBUILD_PACKAGESOURCE;
++	/* fallthrough */
+     case 'd':
+ 	ba->buildAmount |= RPMBUILD_BUILDREQUIRES;
+ 	ba->buildAmount |= RPMBUILD_DUMPBUILDREQUIRES;
+diff --git a/tests/rpmbuild.at b/tests/rpmbuild.at
+index b7bd0d7f0..8746fa501 100644
+--- a/tests/rpmbuild.at
++++ b/tests/rpmbuild.at
+@@ -1707,6 +1707,22 @@ runroot rpmbuild \
+ )
+ AT_CLEANUP
+ 
++# Test that -br creates an src.rpm on success
++AT_SETUP([rpmbuild -br success])
++AT_KEYWORDS([build])
++AT_CHECK([
++RPMDB_INIT
++
++runroot rpmbuild \
++  -br  /data/SPECS/mini.spec
++],
++[0],
++[Wrote: /build/SRPMS/mini-1-1.src.rpm
++],
++[],
++)
++AT_CLEANUP
++
+ # ------------------------------
+ # Check dynamic build requires
+ AT_SETUP([rpmbuild -bd with errors])
+-- 
+2.35.1
+
