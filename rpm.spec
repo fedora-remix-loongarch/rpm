@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver alpha1
-%global baserelease 3
+%global baserelease 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -58,8 +58,7 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 # Patches already upstream:
 Patch100: 0001-Fix-OpenPGP-key-ID-parsing-regression.patch
 Patch101: 0001-Revert-Fix-shared-colored-files-not-removed-on-erasu.patch
-Patch102: 0001-Fix-rpmbuild-br-not-building-.src.rpm-regression-RhB.patch
-Patch103: 0001-Fix-regression-on-dynamic-buildrequires-with-ba-node.patch
+Patch102: 0001-Fix-regressions-on-dynamic-buildrequires-cli-switche.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -614,6 +613,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Apr 26 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha1.4
+- Further dynamic buildrequires cli switch regression fixes (#2078744)
+
 * Tue Apr 26 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha1.3
 - Fix rpmbuild -ba --nodeps regression wrt dynamic buildrequires (#2078744)
 
