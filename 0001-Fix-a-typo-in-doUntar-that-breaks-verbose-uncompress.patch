@@ -1,0 +1,27 @@
+From bb36aac905cf8eb470f085574641d92c8d8ca20f Mon Sep 17 00:00:00 2001
+Message-Id: <bb36aac905cf8eb470f085574641d92c8d8ca20f.1651042591.git.pmatilai@redhat.com>
+From: Mikolaj Izdebski <mizdebsk@redhat.com>
+Date: Wed, 27 Apr 2022 07:54:58 +0200
+Subject: [PATCH] Fix a typo in doUntar that breaks verbose uncompression
+
+See https://bugzilla.redhat.com/show_bug.cgi?id=2079127
+---
+ build/parsePrep.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/parsePrep.c b/build/parsePrep.c
+index 8cd2b84e6..bee820d11 100644
+--- a/build/parsePrep.c
++++ b/build/parsePrep.c
+@@ -130,7 +130,7 @@ static char *doUntar(rpmSpec spec, uint32_t c, int quietly)
+     }
+ 
+     buf = rpmExpand("%{__rpmuncompress} -x ",
+-		    quietly ? "" : "-v", sp->path, NULL);
++		    quietly ? "" : "-v ", sp->path, NULL);
+     rstrcat(&buf,
+ 	"\nSTATUS=$?\n"
+ 	"if [ $STATUS -ne 0 ]; then\n"
+-- 
+2.35.1
+
