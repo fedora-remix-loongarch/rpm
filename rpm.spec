@@ -29,8 +29,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.18.0
-%global snapver alpha1
-%global baserelease 6
+%global snapver alpha2
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,11 +56,7 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Fix-OpenPGP-key-ID-parsing-regression.patch
-Patch101: 0001-Revert-Fix-shared-colored-files-not-removed-on-erasu.patch
-Patch102: 0001-Fix-regressions-on-dynamic-buildrequires-cli-switche.patch
-Patch103: 0001-Fix-a-typo-in-doUntar-that-breaks-verbose-uncompress.patch
-Patch104: 0001-Fix-regression-in-rubygem-unpacking-2040.patch
+Patch100: 0001-Prevent-uncontrolled-sqlite-WAL-growth-during-large-.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -615,6 +611,10 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon May 23 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha2.1
+- Rebase to 4.18.0-0.alpha2
+- Prevent uncontrolled sqlite WAL growth during large transactions
+
 * Thu Apr 28 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha1.6
 - Fix rubygem unpack regression, causing rubygem builds to fail
 

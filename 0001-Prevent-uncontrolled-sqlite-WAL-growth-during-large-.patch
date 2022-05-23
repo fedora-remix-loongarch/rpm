@@ -1,0 +1,39 @@
+From 33c8b214425c2860fdfe485d597e210b9723a792 Mon Sep 17 00:00:00 2001
+Message-Id: <33c8b214425c2860fdfe485d597e210b9723a792.1653292401.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Mon, 23 May 2022 10:42:13 +0300
+Subject: [PATCH] Prevent uncontrolled sqlite WAL growth during large
+ transactions
+
+Sqlite WAL threshold of 1000 pages is way too low for rpmdb as a single
+header often exceeds that, but disabling the checkpointing entirely can
+cause the WAL to grow to multiple gigabytes during large distro update
+transactions, which isn't healty either. Bump the threshold to 10000
+pages which caps the WAL size to tens of megabytes, which hopefully
+is a reasonable balance between performance on rotational disks (anybody
+remember those?) and diskpace consumption.
+
+Also drop no longer meaningful link to %_flush_io configuration.
+---
+ lib/backend/sqlite.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/lib/backend/sqlite.c b/lib/backend/sqlite.c
+index 31f77e845..d5389736b 100644
+--- a/lib/backend/sqlite.c
++++ b/lib/backend/sqlite.c
+@@ -180,9 +180,8 @@ static int sqlite_init(rpmdb rdb, const char * dbhome)
+ 		int one = 1;
+ 		/* Annoying but necessary to support non-privileged readers */
+ 		sqlite3_file_control(sdb, NULL, SQLITE_FCNTL_PERSIST_WAL, &one);
+-
+-		if (!rpmExpandNumeric("%{?_flush_io}"))
+-		    sqlexec(sdb, "PRAGMA wal_autocheckpoint = 0");
++		/* Sqlite default threshold is way too low for rpmdb */
++		sqlexec(sdb, "PRAGMA wal_autocheckpoint = 10000");
+ 	    }
+ 	}
+ 
+-- 
+2.35.3
+
