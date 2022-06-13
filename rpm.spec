@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver alpha2
-%global baserelease 1
+%global baserelease 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -611,6 +611,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 4.18.0-0.alpha2.2
+- Rebuilt for Python 3.11
+
 * Mon May 23 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.alpha2.1
 - Rebase to 4.18.0-0.alpha2
 - Prevent uncontrolled sqlite WAL growth during large transactions
