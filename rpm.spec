@@ -29,8 +29,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.18.0
-%global snapver alpha2
-%global baserelease 2
+%global snapver beta1
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,7 +56,6 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Prevent-uncontrolled-sqlite-WAL-growth-during-large-.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -611,6 +610,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Jun 28 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.beta1.1
+- Rebase to 4.18.0-beta1 (https://rpm.org/wiki/Releases/4.18.0)
+
 * Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 4.18.0-0.alpha2.2
 - Rebuilt for Python 3.11
 
