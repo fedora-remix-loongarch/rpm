@@ -28,9 +28,9 @@
 
 %define rpmhome /usr/lib/rpm
 
-%global rpmver 4.17.0
+%global rpmver 4.17.1
 #global snapver rc1
-%global baserelease 10
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,8 +56,6 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Fix-spurious-transfiletriggerpostun-execution-RhBug-.patch
-Patch101: 0001-Really-fix-spurious-transfiletriggerpostun-execution.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -609,6 +607,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Jul 01 2022 Michal Domonkos <mdomonko@redhat.com> - 4.17.1-1
+- Rebase to rpm 4.17.1 (http://rpm.org/wiki/Releases/4.17.1)
+
 * Mon Mar 21 2022 Neal Gompa <ngompa@fedoraproject.org> - 4.17.0-10
 - Create rpmdb directory symlink in posttrans by default (#2066427)
 
