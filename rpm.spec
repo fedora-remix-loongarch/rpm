@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.1
 #global snapver rc1
-%global baserelease 1
+%global baserelease 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,6 +56,7 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
+Patch100: 0001-Use-explicit-default-branch-in-autosetup-S-git.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -607,6 +608,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Jul 11 2022 Michal Domonkos <mdomonko@redhat.com> - 4.17.1-2
+- Fix %%autosetup -S git regression wrt default git branch
+
 * Fri Jul 01 2022 Michal Domonkos <mdomonko@redhat.com> - 4.17.1-1
 - Rebase to rpm 4.17.1 (http://rpm.org/wiki/Releases/4.17.1)
 
