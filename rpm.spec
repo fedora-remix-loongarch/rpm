@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver beta1
-%global baserelease 1
+%global baserelease 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,6 +56,8 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
+Patch100: 0001-Use-explicit-default-branch-in-autosetup-S-git.patch
+Patch101: 0002-Exclude-.src.rpm-from-check-buildroot.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -610,6 +612,10 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Jul 11 2022 Michal Domonkos <mdomonko@redhat.com> - 4.18.0-0.beta1.2
+- Fix check-buildroot regression wrt bundled SRPM (#2104150)
+- Fix %%autosetup -S git regression wrt default git branch
+
 * Tue Jun 28 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.beta1.1
 - Rebase to 4.18.0-beta1 (https://rpm.org/wiki/Releases/4.18.0)
 

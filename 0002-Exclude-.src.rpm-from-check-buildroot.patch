@@ -1,0 +1,31 @@
+From 7a9edfccdb667045ecaeeb591161bf08f14066c9 Mon Sep 17 00:00:00 2001
+From: Florian Festi <ffesti@redhat.com>
+Date: Wed, 6 Jul 2022 13:19:59 +0200
+Subject: [PATCH 2/2] Exclude *.src.rpm from check-buildroot
+
+With the SRPMs now containing the expanded spec file they are bound to
+have the build root included in the header. Turns out some people
+package SRPMs to rebuild them locally e.g. against the local kernel.
+
+Resolves: rhbz#2104150
+
+Backported from commit aa701a8f483e2b1f57764c5d9129e27271d96b38
+---
+ scripts/check-buildroot | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/scripts/check-buildroot b/scripts/check-buildroot
+index 74c3b469b..d97820633 100755
+--- a/scripts/check-buildroot
++++ b/scripts/check-buildroot
+@@ -28,6 +28,7 @@ NCPUS=${RPM_BUILD_NCPUS:-1}
+ 
+ find "$RPM_BUILD_ROOT" \! \( \
+     -name '*.pyo' -o -name '*.pyc' -o -name '*.elc' -o -name '.packlist' \
++    -o -name '*.src.rpm' \
+     \) -type f -print0 | \
+     LANG=C xargs -0r -P$NCPUS -n16 grep -lF "$RPM_BUILD_ROOT" >>$tmp
+ 
+-- 
+2.36.1
+
