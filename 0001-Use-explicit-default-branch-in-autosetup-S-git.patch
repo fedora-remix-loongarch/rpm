@@ -1,0 +1,40 @@
+From 8b9da98e4c9e256c7c6ecca7f1e5bdbbce29e5da Mon Sep 17 00:00:00 2001
+From: Michal Domonkos <mdomonko@redhat.com>
+Date: Mon, 11 Jul 2022 13:14:49 +0200
+Subject: [PATCH] Use explicit default branch in %autosetup -S git
+
+Commit 3a6b1d8fbf846d3f1b139d343fdfddebe99ae42b assumed "master" as the
+default git branch to track, however the name can be changed globally,
+so make it explicit.
+
+Given the choice now, go with "main" as the general trend, e.g:
+https://fedoraproject.org/wiki/Changes/GitRepos-master-to-main
+---
+ macros.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/macros.in b/macros.in
+index 406622d2f..cf4f77331 100644
+--- a/macros.in
++++ b/macros.in
+@@ -1163,7 +1163,7 @@ package or when debugging this package.\
+ 
+ # Git
+ %__scm_setup_git(q)\
+-%{__git} init %{-q}\
++%{__git} init %{-q} --initial-branch=main\
+ %{__git} config user.name "%{__scm_username}"\
+ %{__git} config user.email "%{__scm_usermail}"\
+ %{__git} config gc.auto 0\
+@@ -1172,7 +1172,7 @@ package or when debugging this package.\
+ 	--author "%{__scm_author}" -m "%{NAME}-%{VERSION} base"\
+ %{__git} branch rpm-build \
+ %{__git} checkout rpm-build \
+-%{__git} branch --set-upstream-to=master
++%{__git} branch --set-upstream-to=main
+ 
+ %__scm_apply_git(qp:m:)\
+ %{__git} apply --index --reject %{-p:-p%{-p*}} -\
+-- 
+2.36.1
+
