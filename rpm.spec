@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver beta1
-%global baserelease 2
+%global baserelease 3
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -612,6 +612,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 4.18.0-0.beta1.3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Mon Jul 11 2022 Michal Domonkos <mdomonko@redhat.com> - 4.18.0-0.beta1.2
 - Fix check-buildroot regression wrt bundled SRPM (#2104150)
 - Fix %%autosetup -S git regression wrt default git branch
