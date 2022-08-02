@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver beta1
-%global baserelease 3
+%global baserelease 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
