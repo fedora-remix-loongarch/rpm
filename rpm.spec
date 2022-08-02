@@ -56,13 +56,14 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Use-explicit-default-branch-in-autosetup-S-git.patch
 Patch101: 0002-Exclude-.src.rpm-from-check-buildroot.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
+# Hotfix, needs revert or fix upstream
+Patch908: rpm-4.17.1-revert-autopatch-branch.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -612,6 +613,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Aug 02 2022 Michal Domonkos <mdomonko@redhat.com> - 4.18.0-0.beta1.4
+- Revert %%autosetup -S git patch due to another regression
+
 * Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 4.18.0-0.beta1.3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
