@@ -30,7 +30,7 @@
 
 %global rpmver 4.17.1
 #global snapver rc1
-%global baserelease 2
+%global baserelease 3
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,12 +56,13 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Use-explicit-default-branch-in-autosetup-S-git.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
+# Hotfix, needs revert or fix upstream
+Patch908: rpm-4.17.1-revert-autopatch-branch.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -608,6 +609,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Aug 02 2022 Michal Domonkos <mdomonko@redhat.com> - 4.17.1-3
+- Revert %%autosetup -S git patch due to another regression
+
 * Mon Jul 11 2022 Michal Domonkos <mdomonko@redhat.com> - 4.17.1-2
 - Fix %%autosetup -S git regression wrt default git branch
 
