@@ -29,8 +29,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.18.0
-%global snapver beta1
-%global baserelease 4
+%global snapver rc1
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,14 +56,11 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch101: 0002-Exclude-.src.rpm-from-check-buildroot.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
 # Probably to be upstreamed in slightly different form
 Patch907: rpm-4.15.x-ldflags.patch
-# Hotfix, needs revert or fix upstream
-Patch908: rpm-4.17.1-revert-autopatch-branch.patch
 
 # Partially GPL/LGPL dual-licensed and some bits with BSD
 # SourceLicense: (GPLv2+ and LGPLv2+ with exceptions) and BSD
@@ -613,6 +610,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Fri Sep 02 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.1
+- Rebase to 4.18.0-rc1 (https://rpm.org/wiki/Releases/4.18.0)
+
 * Tue Aug 02 2022 Michal Domonkos <mdomonko@redhat.com> - 4.18.0-0.beta1.4
 - Revert %%autosetup -S git patch due to another regression
 
