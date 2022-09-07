@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver rc1
-%global baserelease 2
+%global baserelease 3
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,6 +56,7 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
+Patch100: 0001-Fix-buffer-overrun-from-commit-4420c78beb86cc6739227.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -610,6 +611,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Sep 07 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.3
+- Fix buffer overrun on rpmdb queries involving ^ in version
+
 * Wed Sep 07 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.2
 - Break selinux-policy <-> rpm-plugin-selinux ordering loop (#1851266)
 
