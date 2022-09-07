@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver rc1
-%global baserelease 1
+%global baserelease 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -253,7 +253,7 @@ packages on a system.
 %package plugin-selinux
 Summary: Rpm plugin for SELinux functionality
 Requires: rpm-libs%{_isa} = %{version}-%{release}
-Requires: selinux-policy-base
+Requires(meta): selinux-policy-base
 
 %description plugin-selinux
 %{summary}.
@@ -610,6 +610,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Sep 07 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.2
+- Break selinux-policy <-> rpm-plugin-selinux ordering loop (#1851266)
+
 * Fri Sep 02 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.1
 - Rebase to 4.18.0-rc1 (https://rpm.org/wiki/Releases/4.18.0)
 
