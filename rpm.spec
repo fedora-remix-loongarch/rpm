@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 %global snapver rc1
-%global baserelease 3
+%global baserelease 4
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -57,6 +57,7 @@ Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
 Patch100: 0001-Fix-buffer-overrun-from-commit-4420c78beb86cc6739227.patch
+Patch101: 0001-Fix-a-memory-leak-in-the-new-directory-dance-in-ensu.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -611,6 +612,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Sep 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.4
+- Fix a largish directory walk related memory leak in transactions
+
 * Wed Sep 07 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.3
 - Fix buffer overrun on rpmdb queries involving ^ in version
 
