@@ -29,8 +29,8 @@
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.18.0
-%global snapver rc1
-%global baserelease 4
+#global snapver rc1
+%global baserelease 1
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -56,8 +56,6 @@ Patch1: rpm-4.17.x-siteconfig.patch
 Patch3: rpm-4.9.90-no-man-dirs.patch
 
 # Patches already upstream:
-Patch100: 0001-Fix-buffer-overrun-from-commit-4420c78beb86cc6739227.patch
-Patch101: 0001-Fix-a-memory-leak-in-the-new-directory-dance-in-ensu.patch
 
 # These are not yet upstream
 Patch906: rpm-4.7.1-geode-i686.patch
@@ -612,6 +610,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Wed Sep 21 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-1
+- Rebase to rpm 4.18.0 (https://rpm.org/wiki/Releases/4.18.0)
+
 * Wed Sep 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-0.rc1.4
 - Fix a largish directory walk related memory leak in transactions
 
