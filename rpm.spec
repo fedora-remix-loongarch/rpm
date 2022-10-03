@@ -30,7 +30,7 @@
 
 %global rpmver 4.18.0
 #global snapver rc1
-%global baserelease 1
+%global baserelease 2
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -109,9 +109,6 @@ BuildRequires: sqlite-devel
 %endif
 # Couple of patches change makefiles so, require for now...
 BuildRequires: automake libtool
-
-# Temporary! Work around bugs in beta1 makefiles
-BuildRequires: pandoc
 
 %if %{with plugins}
 BuildRequires: libselinux-devel
@@ -610,6 +607,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Mon Oct 03 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-2
+- Drop the temporary build-dependency on pandoc before it grows a beard
+
 * Wed Sep 21 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-1
 - Rebase to rpm 4.18.0 (https://rpm.org/wiki/Releases/4.18.0)
 
