@@ -32,7 +32,7 @@
 
 %global rpmver 4.18.0
 #global snapver rc1
-%global baserelease 4
+%global baserelease 5
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -619,6 +619,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Tue Nov 01 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-5
+- Test build
+
 * Fri Oct 14 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-4
 - Add an option for building with Sequoia crypto
 
