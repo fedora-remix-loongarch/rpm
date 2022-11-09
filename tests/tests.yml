@@ -1,8 +1,15 @@
 ---
 - hosts: localhost
+  ignore_errors: true
   tags:
     - classic
   tasks:
+    - command: dnf upgrade -y
+      register: dnfup
+    - debug: var=dnfup
+    - command: rpm -qa --qf "%{dbinstance} %{nevra} %{rsaheader:pgpsig}\n"
+      register: rpmqa
+    - debug: var=rpmqa
     - dnf:
         name: "*"
         state: latest
