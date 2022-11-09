@@ -7,7 +7,7 @@
     - command: dnf upgrade -y
       register: dnfup
     - debug: var=dnfup
-    - command: rpm -qa --qf "%{dbinstance} %{nevra} %{rsaheader:pgpsig}\n"
+    - command: rpm -qa --nosignature --qf "%{dbinstance} %{nevra} %{rsaheader:pgpsig}\n"
       register: rpmqa
     - debug: var=rpmqa
     - dnf:
