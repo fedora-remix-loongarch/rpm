@@ -26,13 +26,13 @@
 # build with bdb_ro support?
 %bcond_without bdb_ro
 # build with sequoia crypto?
-%bcond_without sequoia
+%bcond_with sequoia
 
 %define rpmhome /usr/lib/rpm
 
 %global rpmver 4.18.0
 #global snapver rc1
-%global baserelease 5
+%global baserelease 6
 %global sover 9
 
 %global srcver %{rpmver}%{?snapver:-%{snapver}}
@@ -619,6 +619,9 @@ fi
 %doc docs/librpm/html/*
 
 %changelog
+* Thu Nov 10 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-6
+- Revert back to internal OpenPGP parser for V3 signature support (#2141686)
+
 * Tue Nov 01 2022 Panu Matilainen <pmatilai@redhat.com> - 4.18.0-5
 - Switch to Sequoia crypto (https://fedoraproject.org/wiki/Changes/RpmSequoia)
 
